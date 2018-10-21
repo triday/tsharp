@@ -1,0 +1,63 @@
+{
+  "name": "tsharp",
+  "version": "1.0.0",
+  "description": "使用方法\r ```\r mkdir testproj\r cd testproj\r git clone https://github.com/triday/webproject.git . \r rm .git -rf\r npm init\r ```",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --config webpack/dev.js",
+    "prod": "webpack -p --config webpack/prod.js",
+    "server": "webpack-dev-server --open --config webpack/dev.js",
+    "config-user": "gulp config-user-init",
+    "clean": "gulp clean-all && npx rimraf node_modules",
+    "reinstall": "npm run clean && npm i"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/triday/webproject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/triday/webproject/issues"
+  },
+  "homepage": "https://github.com/triday/webproject#readme",
+  "devDependencies": {
+    "autoprefixer": "^9.1.5",
+    "clean-webpack-plugin": "^0.1.19",
+    "copy-webpack-plugin": "^4.5.2",
+    "css-loader": "^1.0.0",
+    "csv-loader": "^3.0.2",
+    "fancy-log": "^1.3.2",
+    "file-loader": "^2.0.0",
+    "gulp": "^3.9.1",
+    "gulp-aliyun-oss": "^0.1.1",
+    "gulp-bump": "^3.1.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-filter": "^5.1.0",
+    "gulp-ftp": "^1.1.0",
+    "gulp-git": "^2.8.0",
+    "gulp-prompt": "^1.1.0",
+    "gulp-sequence": "^1.0.0",
+    "gulp-tag-version": "^1.3.1",
+    "gulp-zip": "^4.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.4.3",
+    "path": "^0.12.7",
+    "plugin-error": "^1.0.1",
+    "postcss-loader": "^3.0.0",
+    "requiredir": "^1.0.7",
+    "sass-loader": "^7.1.0",
+    "source-map-loader": "^0.2.4",
+    "style-loader": "^0.23.0",
+    "ts-loader": "^5.2.1",
+    "typescript": "^3.1.1",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9",
+    "webpack-merge": "^4.1.4"
+  },
+  "dependencies": {}
+}
