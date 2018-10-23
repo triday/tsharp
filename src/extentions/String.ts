@@ -1,4 +1,12 @@
 /// <reference path="./String.d.ts" />
+
+if (!String.isNullOrEmpty) {
+    String.isNullOrEmpty = (val) => !val;
+}
+if (!String.isNullOrWhiteSpace) {
+    String.isNullOrWhiteSpace = (val) => !val || !(val.trim())
+}
+
 if (!String.prototype.startsWithPattern) {
     String.prototype.startsWithPattern = function (str) {
         var reg = new RegExp("^" + str);
@@ -14,7 +22,6 @@ if (!String.prototype.endsWithPattern) {
 if (!String.prototype.trimStart) {
     String.prototype.trimStart = function () {
         return this.replace(/^\s*/g, '');
-
     }
 }
 if (!String.prototype.trimEnd) {
@@ -56,31 +63,7 @@ if (!String.prototype.trimEnd) {
 
 
 
-// String.prototype.isEmpty = function () {
-//     if (this != null && this.length > 0) {
-//         return true;
-//     }
-//     return false;
-// }
 
-// String.prototype.padLeft = function (width, paddingChar) {
-//     var res = this || '';
-//     if (paddingChar != null) {
-//         while (this.length < width) {
-//             res = paddingChar + res;
-//         }
-//     }
-//     return res;
-// }
-// String.prototype.padRight = function (width, paddingChar) {
-//     var res = this || '';
-//     if (paddingChar != null) {
-//         while (this.length < width) {
-//             res = res + paddingChar;
-//         }
-//     }
-//     return res;
-// }
 // String.prototype.replaceAll = function (s1, s2) {
 //     return this.replace(new RegExp(s1, "gm"), s2);
 // }
