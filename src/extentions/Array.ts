@@ -57,12 +57,12 @@ if (!Array.prototype.singleOrDefault) {
         if (this.length > 1) {
             throw new Error('The array length is not equals 1.');
         } if (this.length === 1) {
-            return this[0]
+            return this[0];
         }
     }
 }
 if(!Array.prototype.contains){
     Array.prototype.contains = function (needle) {
-        return this.indexOf(needle)>=0
+        return this.indexOf(needle)>=0;
     }
 }

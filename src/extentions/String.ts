@@ -6,6 +6,29 @@ if (!String.isNullOrEmpty) {
 if (!String.isNullOrWhiteSpace) {
     String.isNullOrWhiteSpace = (val) => !val || !(val.trim())
 }
+if (!String.format) {
+    String.format = (fmt, ...args) => {
+        if (String.isNullOrEmpty(fmt)) return fmt;
+        let result = fmt;
+        if (args.length === 1 && typeof args[0] === "object") {
+            for (let key in args[0]) {
+                if (args[0][key] != undefined) {
+                    var reg = new RegExp("({" + key + "})", "g");
+                    result = result.replace(reg, args[0][key]);
+                }
+            }
+        } else {
+            for (var i = 0; i < args.length; i++) {
+                if (args[i] != undefined) {
+                    var reg = new RegExp("({)" + i + "(})", "g");
+                    result = result.replace(reg, args[i]);
+                }
+            }
+        }
+
+        return result;
+    }
+}
 
 if (!String.prototype.startsWithPattern) {
     String.prototype.startsWithPattern = function (str) {
@@ -30,56 +53,30 @@ if (!String.prototype.trimEnd) {
     }
 }
 
+if (!String.prototype.replaceAll) {
+    String.prototype.replaceAll = function (substr, newSubStr) {
+        return String.isNullOrEmpty(substr) ? this : this.replace(new RegExp(substr, "gm"), newSubStr);
+    }
+}
 
-// //格式化字符串函数
-// String.prototype.format = function (args) {
-//     var result = this;
-//     if (arguments.length > 0) {
-//         if (arguments.length == 1 && typeof (args) == "object") {
-//             for (var key in args) {
-//                 if (args[key] != undefined) {
-//                     var reg = new RegExp("({" + key + "})", "g");
-//                     result = result.replace(reg, args[key]);
-//                 }
-//             }
-//         }
-//         else {
-//             for (var i = 0; i < arguments.length; i++) {
-//                 if (arguments[i] != undefined) {
-//                     //var reg = new RegExp("({[" + i + "]})", "g");
-//                     var reg = new RegExp("({)" + i + "(})", "g");
-//                     result = result.replace(reg, arguments[i]);
-//                 }
-//             }
-//         }
-//     }
-//     return result;
-// }
-// //格式化字符串函数
-// String.format = function (fmt, args) {
-//     var newargs = Array.prototype.slice.call(arguments, 1)
-//     return String.prototype.format.apply(fmt, newargs);
-// }
-
-
-
-
-// String.prototype.replaceAll = function (s1, s2) {
-//     return this.replace(new RegExp(s1, "gm"), s2);
-// }
-
-// function equals(str1, str2) {
-//     if (str1 == str2) {
-//         return true;
-//     }
-//     return false;
-// }
-
-// //忽略大小写比较字符串
-// function equalsIgnoreCase(str1, str2) {
-
-//     if (str1.toUpperCase() == str2.toUpperCase()) {
-//         return true;
-//     }
-//     return false;
-// }
+if (!String.prototype.equals) {
+    String.prototype.equals = function (other, ignoreCase = false) {
+        if (ignoreCase && other) {
+            return String(this).toLowerCase() === other.toLowerCase();
+        } else {
+            return String(this) === other;
+        }
+    }
+}
+if (!String.prototype.contains) {
+    String.prototype.contains = function (substr, ignoreCase = false) {
+        if (!ignoreCase) {
+            return String(this).indexOf(substr) >= 0;
+        } else {
+            if (substr === null || substr === undefined) {
+                return false;
+            }
+            return String(this).toLowerCase().indexOf(substr.toLowerCase()) >= 0;
+        }
+    }
+}
