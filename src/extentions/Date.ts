@@ -6,7 +6,7 @@ function padStart(string: string, length: number, pad: string): string {
 }
 Date.prototype.format = function (mask: string): string {
     const weeks:string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-          timeZone:number = this.date.getTimezoneOffset() / 60,
+          timeZone:number = this.getTimezoneOffset() / 60,
           timeZoneString:string = padStart(String(timeZone * -1).replace(/^(.)?(\d)/, '$10$200'), 5, '+'),
           mYear: number = this.getFullYear(),
           mMonth: number = this.getMonth(),
