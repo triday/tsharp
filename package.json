@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "mocha -r ts-node/register ./test/**/test_*.ts",
+    "test": "mocha --reporter mochawesome",
     "dev": "webpack --config webpack/dev.js && gulp dts",
     "prod": "webpack -p --config webpack/prod.js  && gulp dts",
     "server": "webpack-dev-server --open --config webpack/dev.js",
@@ -44,6 +44,7 @@
     "gulp-zip": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
     "mocha": "^5.2.0",
+    "mochawesome": "^3.1.1",
     "path": "^0.12.7",
     "plugin-error": "^1.0.1",
     "requiredir": "^1.0.7",
