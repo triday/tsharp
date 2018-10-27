@@ -1,13 +1,9 @@
 /// <reference path="./Date.d.ts" />
 
-function padStart(string: string, length: number, pad: string): string {
-    if (!string || string.length >= length) return string
-    return `${Array((length + 1) - string.length).join(pad)}${string}`
-}
 Date.prototype.format = function (mask: string): string {
     const weeks:string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
           timeZone:number = this.getTimezoneOffset() / 60,
-          timeZoneString:string = padStart(String(timeZone * -1).replace(/^(.)?(\d)/, '$10$200'), 5, '+'),
+          timeZoneString:string = String(timeZone * -1).replace(/^(.)?(\d)/, '$10$200').padStart(5, '+'),
           mYear: number = this.getFullYear(),
           mMonth: number = this.getMonth(),
           mDay: number = this.getDate(),
@@ -24,11 +20,11 @@ Date.prototype.format = function (mask: string): string {
             case 'M':
                 return String(mMonth + 1)
             case 'MM':
-                return padStart(String(mMonth + 1), 2, '0')
+                return String(mMonth + 1).padStart( 2, '0')
             case 'D':
                 return String(mDay)
             case 'DD':
-                return padStart(String(mDay), 2, '0')
+                return String(mDay).padStart( 2, '0')
             case 'd':
                 return String(mWeek)
             case 'dddd':
@@ -36,15 +32,15 @@ Date.prototype.format = function (mask: string): string {
             case 'H':
                 return String(mHour)
             case 'HH':
-                return padStart(String(mHour), 2, '0')
+                return String(mHour).padStart( 2, '0')
             case 'm':
                 return String(mMinute)
             case 'mm':
-                return padStart(String(mMinute), 2, '0')
+                return String(mMinute).padStart( 2, '0')
             case 's':
                 return String(mSecond)
             case 'ss':
-                return padStart(String(mSecond), 2, '0')
+                return String(mSecond).padStart( 2, '0')
             case 'Z':
                 return `${timeZoneString.slice(0, -2)}:00`
             case 'ZZ':
