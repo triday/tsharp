@@ -1,13 +1,17 @@
 /// <reference path="Number.d.ts" />
 
 if (!Number.prototype.isBetween) {
-    Number.prototype.isBetween = function (val1, val2) {
+    Number.prototype.isBetween = function (val1, val2, includeEqual = true) {
         if (isNaN(val1) || isNaN(val2)) return false;
-        return (val1 - this) * (val2 - this) <= 0;
+        return includeEqual ? ((val1 - this) * (val2 - this) <= 0) :
+            ((val1 - this) * (val2 - this) < 0);
     }
 }
 if (!Number.prototype.limitRange) {
     Number.prototype.limitRange = function (min, max) {
+        if (isNaN(this) || isNaN(min) || isNaN(max)) return this;
+        if (min === max) return min;
+        if (min > max) [min, max] = [max, min];
         if (this < min) return min;
         if (this > max) return max;
         return this;
@@ -32,7 +36,7 @@ if (!Number.prototype.format) {
             return formatKindF(this, len);
         }
         if (kind === 'G' || kind === 'g') {
-            return formatKindG(this, len);
+            return formatKindG(this, len, kind === 'G');
         }
         if (kind === 'N' || kind === 'n') {
             return formatKindN(this, len);
@@ -49,12 +53,12 @@ if (!Number.prototype.format) {
         return this.toString();
         function formatKindD(value: number, len: number): string {
             let valueStr = value.toFixed(0);
-            if (isNaN(len) || valueStr.length >= len) return valueStr;
+            let numberLen = valueStr[0] === '-' ? valueStr.length - 1 : valueStr.length;
+            if (isNaN(len) || numberLen >= len) return valueStr;
             if (valueStr[0] === '-') {
-                return valueStr.slice(0, 1) + zeroString(len - valueStr.length) + valueStr.slice(1);
-            }
-            {
-                return zeroString(len - valueStr.length) + valueStr;
+                return valueStr.slice(0, 1) + zeroString(len - numberLen) + valueStr.slice(1);
+            } else {
+                return zeroString(len - numberLen) + valueStr;
             }
         }
         function formatKindE(value: number, len: number, toUpper: boolean): string {
@@ -64,41 +68,32 @@ if (!Number.prototype.format) {
         function formatKindF(value: number, len: number): string {
             return isNaN(len) ? value.toFixed(2) : value.toFixed(len);
         }
-        function formatKindG(value: number, len: number): string {
-            return isNaN(len) ? value.toPrecision() : value.toPrecision(len);
+        function formatKindG(value: number, len: number, toUpper: boolean): string {
+            let valueStr = isNaN(len) ? value.toPrecision() : value.toPrecision(len);
+            return toUpper ? valueStr.toUpperCase() : valueStr;
         }
         function formatKindN(value: number, len: number): string {
-            return formatKindF(value, len).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+            return formatKindF(value, len).replace(/(\d{1,3})(?=(\d{3})+(?:$|\.))/g, "$1,");
         }
         function formatKindR(value: number, len: number): string {
-            let valueStr = value.toString();
-            if (isNaN(len) || valueStr.length >= len) return valueStr;
-            if (valueStr[0] === '-') {
-                return valueStr.slice(0, 1) + zeroString(len - valueStr.length) + valueStr.slice(1);
-            }
-            {
-                return zeroString(len - valueStr.length) + valueStr;
-            }
+            return value.toString();
         }
         function formatKindP(value: number, len: number): string {
-            return `{formatKindF(value*100,len)} %`
+            return `${formatKindN(value * 100, len)}%`
         }
         function formatKindX(value: number, len: number, toUpper: boolean): string {
             let valueStr = Math.round(value).toString(16);
+            let numberLen = valueStr[0] === '-' ? valueStr.length - 1 : valueStr.length;
+            if (isNaN(len) || numberLen >= len) return toUpper ? valueStr.toUpperCase() : valueStr;
             if (valueStr[0] === '-') {
-                valueStr = valueStr.slice(0, 1) + zeroString(len - valueStr.length) + valueStr.slice(1);
-            }
-            {
-                valueStr = zeroString(len - valueStr.length) + valueStr;
+                valueStr = valueStr.slice(0, 1) + zeroString(len - numberLen) + valueStr.slice(1);
+            } else {
+                valueStr = zeroString(len - numberLen) + valueStr;
             }
             return toUpper ? valueStr.toUpperCase() : valueStr;
         }
         function zeroString(len: number) {
-            let res = ''
-            for (let i = 0; i < len; i++) {
-                res += '0';
-            }
-            return res;
+            return new Array(len + 1).join('0');
         }
     }
 
