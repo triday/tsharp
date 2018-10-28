@@ -9,23 +9,37 @@ function isPlainObject(obj: object): boolean {
 function isArray(array: any[]): boolean {
     return array instanceof Array
 }
-Object.prototype.merge = function (deep: boolean = false, ...items: any[]): object {
+
+Object.clone = function (obj: Json, deep?: boolean): object {
+    var result: Json = {}
+    Object.keys(obj).forEach(name => {
+        if (deep && (isPlainObject(obj[name])) || isArray(obj[name])) {
+            result[name] = Object.clone(obj[name], deep)
+        }
+        else {
+            result[name] = obj[name]
+        }
+    })
+    return result
+}
+
+Object.merge = function (...items: any[]): object {
     let array: any[] = [...items],
-        target: any = this,
+        target: any = Object.clone(array[0], true),
         clone: any[] | object = null
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 1; i < array.length; i++) {
         let item = array[i]
-        Object.keys(item).forEach(name=>{
+        Object.keys(item).forEach(name => {
             let src = target[name],
                 copy = item[name]
-            if (deep && (isPlainObject(copy) || isArray(copy))) {
+            if ((isPlainObject(copy) || isArray(copy))) {
                 if (isPlainObject(copy)) {
                     clone = src && isPlainObject(src) ? src : {}
                 }
                 if (isArray(copy)) {
                     clone = src && isArray(src) ? src : []
                 }
-                target[name] = clone.merge(deep, copy)
+                target[name] = Object.merge(clone, copy)
             }
             else {
                 target[name] = copy
@@ -33,13 +47,4 @@ Object.prototype.merge = function (deep: boolean = false, ...items: any[]): obje
         })
     }
     return target
-}
-
-Object.prototype.clone = function (deep:boolean = false): object {
-    let result: Json = {},
-        obj = this
-    Object.keys(obj).forEach(name=>{
-        result[name] = {}.merge(deep, obj[name])
-    })
-    return result
 }
