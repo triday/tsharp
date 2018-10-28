@@ -8,19 +8,19 @@ if (!Number.prototype.isBetween) {
     }
 }
 if (!Number.prototype.limitRange) {
-    Number.prototype.limitRange = function (min, max) {
-        if (isNaN(this) || isNaN(min) || isNaN(max)) return this;
-        if (min === max) return min;
-        if (min > max) [min, max] = [max, min];
+    Number.prototype.limitRange = function (val1, val2) {
+        if (isNaN(this) || isNaN(val1) || isNaN(val2)) return this;
+        if (val1 === val2) return val1;
+        let [min, max] = (val1 < val2) ? [val1, val2] : [val2, val1];
         if (this < min) return min;
         if (this > max) return max;
         return this;
     }
 }
 if (!Number.prototype.format) {
+    /*参考 https://docs.microsoft.com/zh-cn/dotnet/standard/base-types/standard-numeric-format-strings*/
     Number.prototype.format = function (fmt?) {
         if (!fmt) return this.toString();
-        // https://docs.microsoft.com/zh-cn/dotnet/standard/base-types/standard-numeric-format-strings
         let match = fmt.match(/^([DdEeFfGgNnPpRrXx])(\d{0,2})$/);
         if (!match) throw new Error('Invalid format text');
         if (isNaN(this) || !isFinite(this)) return this.toString()
