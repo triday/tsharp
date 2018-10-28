@@ -1,0 +1,61 @@
+[
+    {
+        "id": "X0001",
+        "name": "张三",
+        "sex": "男",
+        "tel": "+86 158980765",
+        "birthDay": "2002-3-9",
+        "address": {
+            "province": "陕西省",
+            "city": "西安市"
+        },
+        "scores": [
+            {
+                "classname": "数学",
+                "score": 97
+            },
+            {
+                "classname": "语文",
+                "score": 87
+            },
+            {
+                "classname": "英语",
+                "score": 80
+            }
+        ],
+        "interest": [
+            "篮球",
+            "足球",
+            "乒乓球"
+        ]
+    },
+    {
+        "id": "X0002",
+        "name": "李四",
+        "sex": "男",
+        "tel": "+86 158982965",
+        "birthDay": "2002-9-19",
+        "address": {
+            "province": "陕西省",
+            "city": "渭南市"
+        },
+        "scores": [
+            {
+                "classname": "数学",
+                "score": 99
+            },
+            {
+                "classname": "语文",
+                "score": 98
+            },
+            {
+                "classname": "英语",
+                "score": 100
+            }
+        ],
+        "interest": [
+            "跆拳道",
+            "乒乓球"
+        ]
+    }
+]
