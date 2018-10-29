@@ -1,4 +1,4 @@
-import "../../src/extentions/Array"
+import "../../src/index"
 import "mocha"
 import * as assert from "assert";
 describe("Array", () => {
@@ -224,9 +224,6 @@ describe("Array", () => {
         it(`[${numArray}] min is 1`, () => {
             assert.equal(numArray.min(), 1);
         });
-        // it("[] min is NaN", () => {
-        //     assert.equal(isNaN(emptyArray.min()), true);
-        // });
     });
     describe("max", () => {
         let objArray = [{ a: 100 }, { a: 200 }, { a: 300 }];
@@ -242,8 +239,29 @@ describe("Array", () => {
     });
     describe("average", () => {
         let objArray = [{ a: 100 }, { a: 200 }, { a: 300 }];
+
         it("[{a:100},{a:200},{a:300}] sum is 600", () => {
             assert.equal(objArray.average(p => p.a), 200);
         });
+
+
     });
+    describe("range",()=>{
+        it("range(5).toString() equals '0,1,2,3,4'", () => {
+            assert.equal(Array.range(5).toString(), '0,1,2,3,4');
+        });
+        it("range(2,7).toString() equals '2,3,4,5,6'", () => {
+            assert.equal(Array.range(2,7).toString(), '2,3,4,5,6');
+        });
+        it("range(7,2).toString() equals ''", () => {
+            assert.equal(Array.range(7,2).toString(), '');
+        });
+        it("range(2,7,1.5).toString() equals '2,3.5,5,6.5'", () => {
+            assert.equal(Array.range(2,7,1.5).toString(), '2,3.5,5,6.5');
+        });
+        it("range(7,2,-2).toString() equals '7,5,3'", () => {
+            assert.equal(Array.range(7,2,-2).toString(), '7,5,3');
+        });
+    });
+
 });

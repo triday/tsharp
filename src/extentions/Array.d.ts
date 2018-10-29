@@ -107,9 +107,54 @@ interface Array<T> {
      */
     count(predicate?: (value: T, index: number, array: T[]) => any): number;
 
-    min(selector?: (value: T, index: number, array: T[]) => number):number;
-    max(selector?: (value: T, index: number, array: T[]) => number):number;
-    sum(selector?: (value: T, index: number, array: T[]) => number):number;
-    average(selector?: (value: T, index: number, array: T[]) => number):number;
+    /**
+    * 将序列的每个元素投影到新的数组，并将结果数组合并为一个数组。
+    * @param selector 应用于每个元素的转换函数。 
+    * @returns 一个 新数组，其元素为对 数组 的每个元素调用转换函数的结果。
+    */
+    selectMany<U>(selector: (value: T, index: number, array: T[]) => U[]): U[];
+
+    min(selector?: (value: T, index: number, array: T[]) => number): number;
+    max(selector?: (value: T, index: number, array: T[]) => number): number;
+    sum(selector?: (value: T, index: number, array: T[]) => number): number;
+    average(selector?: (value: T, index: number, array: T[]) => number): number;
+
+    replaceNullOrUndefined(item: T): T[];
+    replaceNullOrUndefined(factory: (index: number, array: T[]) => T): T[];
+
+    distinct(comparer?: (a: T, b: T) => boolean):T[];
+    except(other:T[],comparer?: (a: T, b: T) => boolean):T[];
+    intersect(other:T[],comparer?: (a: T, b: T) => boolean):T[];
+    union(other:T[],comparer?: (a: T, b: T) => boolean):T[];
 }
+
+interface ArrayConstructor {
+    range(stop: number): number[];
+    range(start: number, stop: number, step?: number): number[];
+    repeat<T>(item: T, count: number): T[]
+}
+/**
+Aggregate
+
+Cast
+OfType
+
+GroupBy
+GroupJoin
+Join
+
+OrderBy
+OrderByDescending
+SequenceEqual
+
+Skip
+SkipWhile
+Take
+TakeWhile
+
+ThenBy
+ThenByDescending
+
+Zip
+ * */
 

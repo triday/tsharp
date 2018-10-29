@@ -115,3 +115,114 @@ if (!Array.prototype.average) {
         return this.sum(selector) / this.length;
     }
 }
+if (!Array.prototype.selectMany) {
+    Array.prototype.selectMany = function <T, U>(selector: (value: T, index: number, array: T[]) => U[]): U[] {
+        return this.reduce((prev: U[], current: T, index: number) => {
+            if (current && selector) {
+                let itemRes = selector(current, index, this);
+                return itemRes ? prev.concat(itemRes) : prev;
+            }
+        }, new Array<U>())
+    }
+}
+if (!Array.prototype.replaceNullOrUndefined) {
+    Array.prototype.replaceNullOrUndefined = function <T>(itemOrFactory: T | ((index: number, array: T[]) => T)): T[] {
+        let res: T[] = [];
+        this.array.forEach((element: T, index: number) => {
+            if (element === null || element === undefined) {
+                if (typeof itemOrFactory == "function") {
+                    res.push((itemOrFactory as (index: number, array: T[]) => T)(index, this));
+                } else {
+                    res.push(itemOrFactory);
+                }
+            } else {
+                res.push(element);
+            }
+        });
+        return res;
+    }
+}
+
+if (!Array.prototype.distinct) {
+    Array.prototype.distinct = function <T>(comparer: (a: T, b: T) => boolean): T[] {
+        let res = new Array<T>();
+        this.forEach((element: T) => {
+            if (!res.contains(element,comparer)) {
+                res.push(element);
+            }
+        });
+        return res;
+    }
+}
+if (!Array.prototype.except) {
+    Array.prototype.except = function <T>(other: T[], comparer: (a: T, b: T) => boolean): T[] {
+        other = (!other) ? [] : other.distinct();
+        let res = new Array<T>();
+        this.forEach((element: T) => {
+            if (!res.contains(element,comparer) && !other.contains(element,comparer)) {
+                res.push(element);
+            }
+        });
+        return res;
+    }
+}
+if(!Array.prototype.intersect){
+    Array.prototype.except = function <T>(other: T[], comparer: (a: T, b: T) => boolean): T[] {
+        other = (!other) ? [] : other.distinct();
+        let res = new Array<T>();
+        this.forEach((element: T) => {
+            if (!res.contains(element,comparer) && other.contains(element,comparer)) {
+                res.push(element);
+            }
+        });
+        return res;
+    }
+}
+
+if (!Array.prototype.union) {
+    Array.prototype.union = function <T>(other: T[], comparer: (a: T, b: T) => boolean): T[] {
+        other = (!other) ? [] : other.distinct();
+        let res = new Array<T>();
+        this.forEach((element: T) => {
+            if (!res.contains(element,comparer)) {
+                res.push(element);
+            }
+        });
+        other.forEach((element: T) => {
+            if (!res.contains(element,comparer)) {
+                res.push(element);
+            }
+        });
+        return res;
+    }
+}
+
+if (!Array.range) {
+    Array.range = function () {
+        let start: number, stop: number, step: number;
+        if (arguments.length == 1) [start, stop, step] = [0, arguments[0], 1];
+        else if (arguments.length == 2) [start, stop, step] = [arguments[0], arguments[1], 1];
+        else[start, stop, step] = [arguments[0], arguments[1], arguments[2]];
+        if (step === 0) throw new Error('range() step argument must not be zero');
+        let res = [];
+        if (step > 0) {
+            for (let i = start; i < stop; i += step) {
+                res.push(i);
+            }
+        } else {
+            for (let i = start; i > stop; i += step) {
+                res.push(i);
+            }
+        }
+        return res;
+    }
+}
+if (!Array.repeat) {
+    Array.repeat = function <T>(item: T, count: number): T[] {
+        let res = new Array<T>();
+        for (let i = 0; i < count; i++) {
+            res.push(item);
+        }
+        return res;
+    }
+}
