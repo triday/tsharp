@@ -3,7 +3,7 @@ function padStart(string: string, length: number, pad: string): string {
     if (!string || string.length >= length) return string
     return `${Array((length + 1) - string.length).join(pad)}${string}`
 }
-Date.prototype.format = function (mask: string): string {
+function format (mask: string): string {
     const weeks: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
         timeZone: number = this.getTimezoneOffset() / 60,
         timeZoneString: string = padStart(String(timeZone * -1).replace(/^(.)?(\d)/, '$10$200'), 5, '+'),
@@ -37,3 +37,8 @@ Date.prototype.format = function (mask: string): string {
         }
     })
 };
+
+Object.defineProperty(Date.prototype,'format',{
+    value:format,
+    enumerable:false
+})
