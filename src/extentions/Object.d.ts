@@ -1,4 +1,10 @@
 declare interface Object {
     merge(...items:object[]):object,
-    clone(obj:object,deep?:boolean):object
+    /**
+     * 
+     * @param obj 
+     * @param deep 
+     */
+    clone(obj:object,deep?:boolean):object,
+    compare(obj1:object,obj2:object):boolean
 }
