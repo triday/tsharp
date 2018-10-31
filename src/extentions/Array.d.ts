@@ -121,39 +121,46 @@ interface Array<T> {
 
     replaceNullOrUndefined(item: T): T[];
     replaceNullOrUndefined(factory: (index: number, array: T[]) => T): T[];
+    ignoreNullOrUndefined(): T[];
 
-    distinct(comparer?: (a: T, b: T) => boolean):T[];
-    except(other:T[],comparer?: (a: T, b: T) => boolean):T[];
-    intersect(other:T[],comparer?: (a: T, b: T) => boolean):T[];
-    union(other:T[],comparer?: (a: T, b: T) => boolean):T[];
+    distinct(comparer?: (a: T, b: T) => boolean): T[];
+    except(other: T[], comparer?: (a: T, b: T) => boolean): T[];
+    intersect(other: T[], comparer?: (a: T, b: T) => boolean): T[];
+    union(other: T[], comparer?: (a: T, b: T) => boolean): T[];
+    skip(count: number): T[];
+    skipWhere(predicate: (value: T, index: number, array: T[]) => boolean): T[];
+
+    take(count: number): T[];
+    takeWhere(predicate: (value: T, index: number, array: T[]) => boolean): T[];
+
+    orderBy(...keySelectors: (((value: T) => any) | [(value: T) => any, boolean])[]): T[];
+
+    clone(): T[];
+
+    equals(other: T[], deep?: boolean, ignoreNaN?: boolean): boolean;
+
+    toDictionary(keySelector: (value: T, index: number, array: T[]) => string): { [key: string]: T }
+    toDictionary<U>(keySelector: (value: T, index: number, array: T[]) => string, elementSelector: (value: T, index: number, array: T[]) => U): { [key: string]: U }
+    toDictionary(keySelector: (value: T, index: number, array: T[]) => number): { [key: number]: T }
+    toDictionary<U>(keySelector: (value: T, index: number, array: T[]) => number, elementSelector: (value: T, index: number, array: T[]) => U): { [key: number]: U }
+
+    toLookup(keySelector: (value: T, index: number, array: T[]) => string): { [key: string]: T[] }
+    toLookup<U>(keySelector: (value: T, index: number, array: T[]) => string, elementSelector: (value: T, index: number, array: T[]) => U): { [key: string]: U[] }
+    toLookup(keySelector: (value: T, index: number, array: T[]) => number): { [key: number]: T[] }
+    toLookup<U>(keySelector: (value: T, index: number, array: T[]) => number, elementSelector: (value: T, index: number, array: T[]) => U): { [key: number]: U[] }
 }
-
 interface ArrayConstructor {
     range(stop: number): number[];
     range(start: number, stop: number, step?: number): number[];
     repeat<T>(item: T, count: number): T[]
 }
+
 /**
-Aggregate
-
-Cast
-OfType
-
 GroupBy
 GroupJoin
 Join
 
-OrderBy
-OrderByDescending
-SequenceEqual
-
-Skip
-SkipWhile
-Take
-TakeWhile
-
-ThenBy
-ThenByDescending
+toTree
 
 Zip
  * */

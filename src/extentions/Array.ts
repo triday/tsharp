@@ -125,6 +125,17 @@ if (!Array.prototype.selectMany) {
         }, new Array<U>())
     }
 }
+if (!Array.prototype.ignoreNullOrUndefined) {
+    Array.prototype.ignoreNullOrUndefined = function <T>() {
+        let res: T[] = []
+        this.forEach((element: T) => {
+            if (element !== null && element !== undefined) {
+                res.push(element);
+            }
+        });
+        return res;
+    }
+}
 if (!Array.prototype.replaceNullOrUndefined) {
     Array.prototype.replaceNullOrUndefined = function <T>(itemOrFactory: T | ((index: number, array: T[]) => T)): T[] {
         let res: T[] = [];
@@ -147,7 +158,7 @@ if (!Array.prototype.distinct) {
     Array.prototype.distinct = function <T>(comparer: (a: T, b: T) => boolean): T[] {
         let res = new Array<T>();
         this.forEach((element: T) => {
-            if (!res.contains(element,comparer)) {
+            if (!res.contains(element, comparer)) {
                 res.push(element);
             }
         });
@@ -159,19 +170,19 @@ if (!Array.prototype.except) {
         other = (!other) ? [] : other.distinct();
         let res = new Array<T>();
         this.forEach((element: T) => {
-            if (!res.contains(element,comparer) && !other.contains(element,comparer)) {
+            if (!res.contains(element, comparer) && !other.contains(element, comparer)) {
                 res.push(element);
             }
         });
         return res;
     }
 }
-if(!Array.prototype.intersect){
+if (!Array.prototype.intersect) {
     Array.prototype.except = function <T>(other: T[], comparer: (a: T, b: T) => boolean): T[] {
         other = (!other) ? [] : other.distinct();
         let res = new Array<T>();
         this.forEach((element: T) => {
-            if (!res.contains(element,comparer) && other.contains(element,comparer)) {
+            if (!res.contains(element, comparer) && other.contains(element, comparer)) {
                 res.push(element);
             }
         });
@@ -184,15 +195,151 @@ if (!Array.prototype.union) {
         other = (!other) ? [] : other.distinct();
         let res = new Array<T>();
         this.forEach((element: T) => {
-            if (!res.contains(element,comparer)) {
+            if (!res.contains(element, comparer)) {
                 res.push(element);
             }
         });
         other.forEach((element: T) => {
-            if (!res.contains(element,comparer)) {
+            if (!res.contains(element, comparer)) {
                 res.push(element);
             }
         });
+        return res;
+    }
+}
+
+if (!Array.prototype.skip) {
+    Array.prototype.skip = function (count) {
+        return this.slice(count);
+    }
+}
+if (!Array.prototype.skipWhere) {
+    Array.prototype.skipWhere = function <T>(predicate: (value: T, index: number, array: T[]) => boolean): T[] {
+        for (let i = 0; i < this.length; i++) {
+            if (!predicate(this[i], i, this)) {
+                return this.slice(i);
+            }
+        }
+        return new Array<T>();
+    }
+}
+
+if (!Array.prototype.take) {
+    Array.prototype.take = function (count) {
+        return this.slice(0, count);
+    }
+}
+if (!Array.prototype.takeWhere) {
+    Array.prototype.takeWhere = function <T>(predicate: (value: T, index: number, array: T[]) => boolean): T[] {
+        let res = new Array<T>();
+        for (let i = 0; i < this.length; i++) {
+            if (predicate(this[i], i, this)) {
+                res.push(this[i]);
+            } else {
+                break;
+            }
+        }
+        return res;
+    }
+}
+if (!Array.prototype.orderBy) {
+    Array.prototype.orderBy = function <T>(...keySelectors: (((value: T) => any) | [(value: T) => any, boolean])[]): T[] {
+        if (keySelectors.length == 0) {
+            return this.clone().sort();
+        } else {
+            return this.clone().sort((a: T, b: T) => {
+                for (let i = 0; i < keySelectors.length; i++) {
+                    let item = keySelectors[i];
+                    let keySelector: (value: T) => any;
+                    let reversed: boolean;
+                    if (typeof item === "function") {
+                        [keySelector, reversed] = [item as (value: T) => any, false];
+                    } else {
+                        [keySelector, reversed] = item as [(value: T) => any, boolean];
+                    }
+                    let key_a = keySelector(a);
+                    let key_b = keySelector(b);
+                    if (key_a !== key_b) {
+                        if (reversed) { return (key_a > key_b) ? -1 : 1; }
+                        else { return (key_a > key_b) ? 1 : -1; }
+                    }
+                }
+                return 0;
+            });
+        }
+
+    }
+}
+if (!Array.prototype.clone) {
+    Array.prototype.clone = function () {
+        return this.slice(0);
+    }
+}
+if (!Array.prototype.equals) {
+    Array.prototype.equals = function <T>(other: T[], deep: boolean = true, ignoreNaN: boolean = true): boolean {
+        if (!other || other.length != this.length) return false;
+        return deep ? deepEquals(other) : simpleEquals(other);
+        function deepEquals(second: T[]): boolean {
+            for (let i = 0; i < this.length; i++) {
+                let thisItem = this[i];
+                let otherItem = second[i];
+                if (thisItem !== otherItem &&
+                    !isObjectEquals(thisItem, otherItem) &&
+                    !isArrayEquals(thisItem, otherItem) &&
+                    !isNaNEquals(thisItem, otherItem)) {
+                    return false
+                }
+            }
+            return true;
+        }
+        function isArrayEquals(a: T, b: T): boolean {
+            if (a instanceof Array && b instanceof Array) {
+                return a.equals(b, deep, ignoreNaN);
+            }
+            return false;
+        }
+        function isObjectEquals(a: T, b: T): boolean {
+            //TODO ...
+            return a === b;
+        }
+        function isNaNEquals(a: any, b: any): boolean {
+            return ignoreNaN && isNaN(a) && isNaN(b);
+        }
+        function simpleEquals(second: any[], ): boolean {
+            for (let i = 0; i < this.length; i++) {
+                if (this[i] !== second[i] &&
+                    !isNaNEquals(this[i], second[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+}
+if (!Array.prototype.toDictionary) {
+    Array.prototype.toDictionary = function <T, U>(keySelector: (value: T, index: number, array: T[]) => string | number, elementSelector?: (value: T, index: number, array: T[]) => U): { [key: string]: U | T } | { [key: number]: U | T } {
+        let res: any = {};
+        this.forEach((current: T, index: number) => {
+            let key = keySelector(current, index, this);
+            let value = elementSelector ? elementSelector(current, index, this) : current;
+            res[key] = value;
+        }, {});
+        return res;
+    }
+}
+if (!Array.prototype.toLookup) {
+    Array.prototype.toLookup = function <T, U>(keySelector: (value: T, index: number, array: T[]) => string | number, elementSelector?: (value: T, index: number, array: T[]) => U): { [key: string]: U[] | T[] } | { [key: number]: U[] | T[] } {
+        let res: any = {};
+        this.forEach((current: T, index: number) => {
+            let key = keySelector(current, index, this);
+            let value = elementSelector ? elementSelector(current, index, this) : current;
+            if (key in res) {
+                res[key].push(value);
+            } else {
+                res[key] = [value];
+            }
+        }, {});
         return res;
     }
 }

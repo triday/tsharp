@@ -63,4 +63,6 @@ declare interface String {
      * @returns 如果为 true 表示包含了子串，否则表示不包含子串。
      */
     contains(substr: string, ignoreCase?: boolean): boolean;
+
+    reverse():string;
 }

@@ -1,6 +1,8 @@
 import "../../src/index"
 import "mocha"
 import * as assert from "assert";
+import { Student, People } from "./models"
+
 describe("Array", () => {
     let data_array = [1, 2, 3, 4, 5];
     let hex_array = ['ff', 'fe', 'f0', '01'];
@@ -246,22 +248,99 @@ describe("Array", () => {
 
 
     });
-    describe("range",()=>{
+    describe("range", () => {
         it("range(5).toString() equals '0,1,2,3,4'", () => {
             assert.equal(Array.range(5).toString(), '0,1,2,3,4');
         });
         it("range(2,7).toString() equals '2,3,4,5,6'", () => {
-            assert.equal(Array.range(2,7).toString(), '2,3,4,5,6');
+            assert.equal(Array.range(2, 7).toString(), '2,3,4,5,6');
         });
         it("range(7,2).toString() equals ''", () => {
-            assert.equal(Array.range(7,2).toString(), '');
+            assert.equal(Array.range(7, 2).toString(), '');
         });
         it("range(2,7,1.5).toString() equals '2,3.5,5,6.5'", () => {
-            assert.equal(Array.range(2,7,1.5).toString(), '2,3.5,5,6.5');
+            assert.equal(Array.range(2, 7, 1.5).toString(), '2,3.5,5,6.5');
         });
         it("range(7,2,-2).toString() equals '7,5,3'", () => {
-            assert.equal(Array.range(7,2,-2).toString(), '7,5,3');
+            assert.equal(Array.range(7, 2, -2).toString(), '7,5,3');
         });
     });
 
+    describe("orderby", () => {
+        let allStudents = [
+            { id: "x001", name: '张三', age: 13 },
+            { id: "x002", name: '李四', age: 17 },
+            { id: "x003", name: '王五', age: 14 },
+            { id: "x004", name: '吴六', age: 11 },
+            { id: "x007", name: '李七', age: 13 },
+            { id: "x005", name: '郑八', age: 15 },
+            { id: "x006", name: '赵七', age: 13 },
+        ]
+        it("order by id", () => {
+            let res = allStudents.orderBy(p => p.id);
+            assert.equal(res[0].id, 'x001');
+            assert.equal(res[6].id, 'x007');
+        });
+        it("order by id desc", () => {
+            let res = allStudents.orderBy([p => p.id, true]);
+            assert.equal(res[0].id, 'x007');
+            assert.equal(res[6].id, 'x001');
+        });
+        it("order by age desc,id", () => {
+            let res = allStudents.orderBy([p => p.age, true], p => p.id);
+
+            assert.deepEqual(res[0], { id: "x002", name: '李四', age: 17 });
+            assert.deepEqual(res[1], { id: "x005", name: '郑八', age: 15 });
+            assert.deepEqual(res[2], { id: "x003", name: '王五', age: 14 });
+            assert.deepEqual(res[3], { id: "x001", name: '张三', age: 13 });
+            assert.deepEqual(res[4], { id: "x006", name: '赵七', age: 13 });
+            assert.deepEqual(res[5], { id: "x007", name: '李七', age: 13 });
+            assert.deepEqual(res[6], { id: "x004", name: '吴六', age: 11 });
+        });
+        it("order by age desc,id desc", () => {
+            let res = allStudents.orderBy([p => p.age, true], [p => p.id, true]);
+
+            assert.deepEqual(res[0], { id: "x002", name: '李四', age: 17 });
+            assert.deepEqual(res[1], { id: "x005", name: '郑八', age: 15 });
+            assert.deepEqual(res[2], { id: "x003", name: '王五', age: 14 });
+            assert.deepEqual(res[3], { id: "x007", name: '李七', age: 13 });
+            assert.deepEqual(res[4], { id: "x006", name: '赵七', age: 13 });
+            assert.deepEqual(res[5], { id: "x001", name: '张三', age: 13 });
+            assert.deepEqual(res[6], { id: "x004", name: '吴六', age: 11 });
+        });
+    });
+
+    describe("toDictionary", () => {
+        let allStudents = [
+            { id: "x001", name: '张三', age: 13, state: true },
+            { id: "x002", name: '李四', age: 17, state: true },
+            { id: "x003", name: '王五', age: 14, state: true },
+            { id: "x004", name: '吴六', age: 11, state: true },
+            { id: "x007", name: '李七', age: 13, state: true },
+            { id: "x005", name: '郑八', age: 15, state: true },
+            { id: "x006", name: '赵七', age: 13, state: true },
+        ]
+        it("to dictionary by id", () => {
+            let expected = {
+                x001: { id: "x001", name: '张三', age: 13, state: true },
+                x002: { id: "x002", name: '李四', age: 17, state: true },
+                x003: { id: "x003", name: '王五', age: 14, state: true },
+                x004: { id: "x004", name: '吴六', age: 11, state: true },
+                x007: { id: "x007", name: '李七', age: 13, state: true },
+                x005: { id: "x005", name: '郑八', age: 15, state: true },
+                x006: { id: "x006", name: '赵七', age: 13, state: true },
+            };
+            assert.deepEqual(allStudents.toDictionary(p => p.id), expected);
+        });
+        it("to dictionary by age", () => {
+            let expected = {
+                17: { id: "x002", name: '李四', age: 17, state: true },
+                14: { id: "x003", name: '王五', age: 14, state: true },
+                11: { id: "x004", name: '吴六', age: 11, state: true },
+                15: { id: "x005", name: '郑八', age: 15, state: true },
+                13: { id: "x006", name: '赵七', age: 13, state: true },
+            };
+            assert.deepEqual(allStudents.toDictionary(p => p.age), expected);
+        });
+    });
 });
