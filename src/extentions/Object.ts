@@ -48,3 +48,24 @@ Object.merge = function (...items: any[]): object {
     }
     return target
 }
+
+Object.compare = function (obj1: Json, obj2: Json): boolean {
+    var status = true,
+        keys = Object.keys(obj2)
+    for (var i = 0; i < keys.length; i++) {
+        var name = keys[i],
+            src = obj1[name],
+            copy = obj2[name]
+        if ((isPlainObject(copy) && isPlainObject(src)) || (isArray(copy) && isArray(src))) {
+            status = Object.compare(src,copy)
+            if(!status) break
+        }
+        else {
+            if(isNaN(copy) && isNaN(src)) status = true
+            else  status = copy === src
+        }
+        if(!status) break
+    }
+
+    return status
+}
