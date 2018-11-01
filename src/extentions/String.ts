@@ -85,3 +85,8 @@ if (!String.prototype.reverse) {
         return this.split('').reverse().join('');
     }
 }
+if (!String.prototype.toChars) {
+    String.prototype.toChars = function () {
+        return this.split('');
+    }
+}

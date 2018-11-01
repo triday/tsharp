@@ -178,7 +178,7 @@ if (!Array.prototype.except) {
     }
 }
 if (!Array.prototype.intersect) {
-    Array.prototype.except = function <T>(other: T[], comparer: (a: T, b: T) => boolean): T[] {
+    Array.prototype.intersect = function <T>(other: T[], comparer: (a: T, b: T) => boolean): T[] {
         other = (!other) ? [] : other.distinct();
         let res = new Array<T>();
         this.forEach((element: T) => {
@@ -330,20 +330,109 @@ if (!Array.prototype.toDictionary) {
 }
 if (!Array.prototype.toLookup) {
     Array.prototype.toLookup = function <T, U>(keySelector: (value: T, index: number, array: T[]) => string | number, elementSelector?: (value: T, index: number, array: T[]) => U): { [key: string]: U[] | T[] } | { [key: number]: U[] | T[] } {
-        let res: any = {};
-        this.forEach((current: T, index: number) => {
-            let key = keySelector(current, index, this);
-            let value = elementSelector ? elementSelector(current, index, this) : current;
-            if (key in res) {
-                res[key].push(value);
-            } else {
-                res[key] = [value];
+        return toLookUpInternal(this, keySelector, elementSelector);
+    }
+}
+function toLookUpInternal<T>(array: T[], keySelector: (value: T, index: number, array: T[]) => any, elementSelector?: (value: T, index: number, array: T[]) => any): any {
+    let res: any = {};
+    array.forEach((current: T, index: number) => {
+        let key = keySelector(current, index, this);
+        let value = elementSelector ? elementSelector(current, index, this) : current;
+        if (key in res) {
+            res[key].push(value);
+        } else {
+            res[key] = [value];
+        }
+    }, {});
+    return res;
+}
+if (!Array.prototype.innerJoin) {
+    Array.prototype.innerJoin = function <T, U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[] {
+        let lookup_a = toLookUpInternal(this, leftKeySelector);
+        let lookup_b = toLookUpInternal(right || new Array<U>(), rightKeySelector);
+        let all_keys = Object.keys(lookup_a).intersect(Object.keys(lookup_b));
+        let res: R[] = [];
+        all_keys.forEach((key) => {
+            let left_arr = lookup_a[key] as T[];
+            let right_arr = lookup_b[key] as U[];
+            for (let i = 0; i < left_arr.length; i++) {
+                for (let j = 0; j < right_arr.length; j++) {
+                    let item_result = resultSelector(left_arr[i], right_arr[j]);
+                    if (item_result) res.push(item_result);
+                }
             }
-        }, {});
+        });
         return res;
     }
 }
-
+if (!Array.prototype.outerJoin) {
+    Array.prototype.outerJoin = function <T, U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[] {
+        let lookup_a = toLookUpInternal(this, leftKeySelector);
+        let lookup_b = toLookUpInternal(right || new Array<U>(), rightKeySelector);
+        let all_keys = Object.keys(lookup_a).union(Object.keys(lookup_b));
+        let res: R[] = [];
+        all_keys.forEach((key) => {
+            let left_arr = (lookup_a[key] || [undefined]) as T[];
+            let right_arr = (lookup_b[key] || [undefined]) as U[];
+            for (let i = 0; i < left_arr.length; i++) {
+                for (let j = 0; j < right_arr.length; j++) {
+                    let item_result = resultSelector(left_arr[i], right_arr[j]);
+                    if (item_result) res.push(item_result);
+                }
+            }
+        });
+        return res;
+    }
+}
+if (!Array.prototype.leftJoin) {
+    Array.prototype.leftJoin = function <T, U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[] {
+        let lookup_a = toLookUpInternal(this, leftKeySelector);
+        let lookup_b = toLookUpInternal(right || new Array<U>(), rightKeySelector);
+        let all_keys = Object.keys(lookup_a);
+        let res: R[] = [];
+        all_keys.forEach((key) => {
+            let left_arr = lookup_a[key] as T[];
+            let right_arr = (lookup_b[key] || [undefined]) as U[];
+            for (let i = 0; i < left_arr.length; i++) {
+                for (let j = 0; j < right_arr.length; j++) {
+                    let item_result = resultSelector(left_arr[i], right_arr[j]);
+                    if (item_result) res.push(item_result);
+                }
+            }
+        });
+        return res;
+    }
+}
+if (!Array.prototype.rightJoin) {
+    Array.prototype.rightJoin = function <T, U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[] {
+        let lookup_a = toLookUpInternal(this, leftKeySelector);
+        let lookup_b = toLookUpInternal(right || new Array<U>(), rightKeySelector);
+        let all_keys = Object.keys(lookup_b);
+        let res: R[] = [];
+        all_keys.forEach((key) => {
+            let left_arr = (lookup_a[key] || [undefined]) as T[];
+            let right_arr = lookup_b[key] as U[];
+            for (let i = 0; i < left_arr.length; i++) {
+                for (let j = 0; j < right_arr.length; j++) {
+                    let item_result = resultSelector(left_arr[i], right_arr[j]);
+                    if (item_result) res.push(item_result);
+                }
+            }
+        });
+        return res;
+    }
+}
+if (!Array.prototype.zip) {
+    Array.prototype.zip = function <T, U, R>(other: U[], resultSelector: (left: T, right: U) => R): R[] {
+        let len = Math.min(this.length, other.length);
+        let res: R[] = [];
+        for (let i = 0; i < len; i++) {
+            let item_result = resultSelector(this[i], other[i]);
+            if (item_result) res.push(item_result);
+        }
+        return res;
+    }
+}
 if (!Array.range) {
     Array.range = function () {
         let start: number, stop: number, step: number;

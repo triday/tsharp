@@ -64,5 +64,7 @@ declare interface String {
      */
     contains(substr: string, ignoreCase?: boolean): boolean;
 
-    reverse():string;
+    reverse(): string;
+
+    toChars(): string[];
 }

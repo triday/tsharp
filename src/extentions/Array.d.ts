@@ -148,6 +148,13 @@ interface Array<T> {
     toLookup<U>(keySelector: (value: T, index: number, array: T[]) => string, elementSelector: (value: T, index: number, array: T[]) => U): { [key: string]: U[] }
     toLookup(keySelector: (value: T, index: number, array: T[]) => number): { [key: number]: T[] }
     toLookup<U>(keySelector: (value: T, index: number, array: T[]) => number, elementSelector: (value: T, index: number, array: T[]) => U): { [key: number]: U[] }
+
+    innerJoin<U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[];
+    outerJoin<U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[];
+    leftJoin<U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[];
+    rightJoin<U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[];
+
+    zip<U, R>(other:U[],resultSelector: (left: T, right: U) => R):R[];
 }
 interface ArrayConstructor {
     range(stop: number): number[];
@@ -156,9 +163,6 @@ interface ArrayConstructor {
 }
 
 /**
-GroupBy
-GroupJoin
-Join
 
 toTree
 

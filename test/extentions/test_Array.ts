@@ -343,4 +343,128 @@ describe("Array", () => {
             assert.deepEqual(allStudents.toDictionary(p => p.age), expected);
         });
     });
+
+    describe("innerJoin", () => {
+        let allStudents = [
+            { id: "x001", name: "张三", class: "c001" },
+            { id: "x002", name: "李四", class: "c001" },
+            { id: "x003", name: "王五", class: "c001" },
+            { id: "x004", name: "吴六", class: "c002" },
+            { id: "x007", name: "李七", class: "c002" },
+            { id: "x005", name: "郑八", class: "c002" },
+            { id: "x006", name: "赵七", class: "c004" },
+        ]
+        let allClasses = [
+            { id: "c001", name: "一班" },
+            { id: "c002", name: '二班' },
+            { id: "c003", name: '三班' },
+        ]
+        it("inner join will ignore 'c004' and 'c003' ", () => {
+            let res = allStudents.innerJoin(allClasses, p => p.class, p => p.id, (l, r) => {
+                return {
+                    studentId: l.id,
+                    studentName: l.name,
+                    classId: r.id,
+                    className: r.name
+                }
+            });
+            // res.forEach(p=>console.log(JSON.stringify(p,null,0)));
+            assert.equal(res.count(), 6);
+            assert.equal(res.count(p => p.classId == 'c003' || p.classId == 'c004'), 0);
+        });
+    });
+    describe("outerJoin", () => {
+        let allStudents = [
+            { id: "x001", name: "张三", class: "c001" },
+            { id: "x002", name: "李四", class: "c001" },
+            { id: "x003", name: "王五", class: "c001" },
+            { id: "x004", name: "吴六", class: "c002" },
+            { id: "x007", name: "李七", class: "c002" },
+            { id: "x005", name: "郑八", class: "c002" },
+            { id: "x006", name: "赵七", class: "c004" },
+        ]
+        let allClasses = [
+            { id: "c001", name: "一班" },
+            { id: "c002", name: '二班' },
+            { id: "c003", name: '三班' },
+        ]
+        it("outer join will select all class", () => {
+            let res = allStudents.outerJoin(allClasses, p => p.class, p => p.id, (l, r) => {
+                return {
+                    studentId: l && l.id,
+                    studentName: l && l.name,
+                    classId: r && r.id,
+                    className: r && r.name
+                }
+            });
+            res.forEach(p => console.log(JSON.stringify(p, null, 0)));
+            assert.equal(res.count(), 8);
+            assert.equal(res.count(p => p.classId == 'c003'), 1);
+            assert.equal(res.where(p => p.classId === 'c003').first().studentId, undefined);
+            assert.equal(res.count(p => p.studentId == 'x006'), 1);
+            assert.equal(res.where(p => p.studentId === 'x006').first().classId, undefined);
+        });
+    });
+    describe("leftJoin", () => {
+        let allStudents = [
+            { id: "x001", name: "张三", class: "c001" },
+            { id: "x002", name: "李四", class: "c001" },
+            { id: "x003", name: "王五", class: "c001" },
+            { id: "x004", name: "吴六", class: "c002" },
+            { id: "x007", name: "李七", class: "c002" },
+            { id: "x005", name: "郑八", class: "c002" },
+            { id: "x006", name: "赵七", class: "c004" },
+        ]
+        let allClasses = [
+            { id: "c001", name: "一班" },
+            { id: "c002", name: '二班' },
+            { id: "c003", name: '三班' },
+        ]
+        it("left join will ignore 'c003'", () => {
+            let res = allStudents.leftJoin(allClasses, p => p.class, p => p.id, (l, r) => {
+                return {
+                    studentId: l.id,
+                    studentName: l.name,
+                    classId: r && r.id,
+                    className: r && r.name
+                }
+            });
+            res.forEach(p => console.log(JSON.stringify(p, null, 0)));
+            assert.equal(res.count(), 7);
+            assert.equal(res.count(p => p.classId == 'c003'), 0);
+            assert.equal(res.count(p => p.studentId == 'x006'), 1);
+            assert.equal(res.where(p => p.studentId === 'x006').first().classId, undefined);
+        });
+    });
+    describe("rightJoin", () => {
+        let allStudents = [
+            { id: "x001", name: "张三", class: "c001" },
+            { id: "x002", name: "李四", class: "c001" },
+            { id: "x003", name: "王五", class: "c001" },
+            { id: "x004", name: "吴六", class: "c002" },
+            { id: "x007", name: "李七", class: "c002" },
+            { id: "x005", name: "郑八", class: "c002" },
+            { id: "x006", name: "赵七", class: "c004" },
+        ]
+        let allClasses = [
+            { id: "c001", name: "一班" },
+            { id: "c002", name: '二班' },
+            { id: "c003", name: '三班' },
+        ]
+        it("right join will ignore 'c004'", () => {
+            let res = allStudents.rightJoin(allClasses, p => p.class, p => p.id, (l, r) => {
+                return {
+                    studentId: l && l.id,
+                    studentName: l && l.name,
+                    classId: r.id,
+                    className: r.name
+                }
+            });
+            res.forEach(p => console.log(JSON.stringify(p, null, 0)));
+            assert.equal(res.count(), 7);
+            assert.equal(res.count(p => p.classId == 'c003'), 1);
+            assert.equal(res.where(p => p.classId === 'c003').first().studentId, undefined);
+            assert.equal(res.count(p => p.studentId == 'x006'), 0);
+        });
+    });
 });
