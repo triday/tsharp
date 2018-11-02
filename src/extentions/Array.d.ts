@@ -1,3 +1,5 @@
+/// <reference path="../types/TNode.ts" />
+
 interface Array<T> {
     /**
      * 判断数组中是否包含特定的元素。
@@ -154,18 +156,26 @@ interface Array<T> {
     leftJoin<U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[];
     rightJoin<U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[];
 
-    zip<U, R>(other:U[],resultSelector: (left: T, right: U) => R):R[];
+    zip<U1, R>(other1: U1[], resultSelector: (item: T, otherItem1: U1) => R): R[];
+    zip<U1, U2, R>(other1: U1[], other2: U2[], resultSelector: (item: T, otherItem1: U1, otherItem2: U2) => R): R[];
+    zip<U1, U2, U3, R>(other1: U1[], other2: U2[], other3: U3[], resultSelector: (item: T, otherItem1: U1, otherItem2: U2, otherItem3: U3) => R): R[];
+    zip<U1, U2, U3, U4, R>(other1: U1[], other2: U2[], other3: U3[], other4: U4, resultSelector: (item: T, otherItem1: U1, otherItem2: U2, otherItem3: U3, otherItem4: U4) => R): R[];
+
+    toTree<K>(keySelector: (item: T) => K, parentKeySelector: (item: T) => K): TreeNode<T>[];
 }
 interface ArrayConstructor {
     range(stop: number): number[];
     range(start: number, stop: number, step?: number): number[];
     repeat<T>(item: T, count: number): T[]
 }
+declare interface TreeNode<T> {
+    value: T;
+    childrens: TreeNode<T>[];
+}
 
 /**
 
 toTree
 
-Zip
  * */
 

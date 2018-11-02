@@ -319,14 +319,18 @@ if (!Array.prototype.equals) {
 }
 if (!Array.prototype.toDictionary) {
     Array.prototype.toDictionary = function <T, U>(keySelector: (value: T, index: number, array: T[]) => string | number, elementSelector?: (value: T, index: number, array: T[]) => U): { [key: string]: U | T } | { [key: number]: U | T } {
-        let res: any = {};
-        this.forEach((current: T, index: number) => {
-            let key = keySelector(current, index, this);
-            let value = elementSelector ? elementSelector(current, index, this) : current;
-            res[key] = value;
-        }, {});
-        return res;
+        return toDictionaryInternal(this, keySelector, elementSelector);
     }
+
+}
+function toDictionaryInternal<T>(array: T[], keySelector: (value: T, index: number, array: T[]) => any, elementSelector?: (value: T, index: number, array: T[]) => any): any {
+    let res: any = {};
+    array.forEach((current: T, index: number) => {
+        let key = keySelector(current, index, this);
+        let value = elementSelector ? elementSelector(current, index, this) : current;
+        res[key] = value;
+    }, {});
+    return res;
 }
 if (!Array.prototype.toLookup) {
     Array.prototype.toLookup = function <T, U>(keySelector: (value: T, index: number, array: T[]) => string | number, elementSelector?: (value: T, index: number, array: T[]) => U): { [key: string]: U[] | T[] } | { [key: number]: U[] | T[] } {
@@ -423,14 +427,44 @@ if (!Array.prototype.rightJoin) {
     }
 }
 if (!Array.prototype.zip) {
-    Array.prototype.zip = function <T, U, R>(other: U[], resultSelector: (left: T, right: U) => R): R[] {
-        let len = Math.min(this.length, other.length);
-        let res: R[] = [];
-        for (let i = 0; i < len; i++) {
-            let item_result = resultSelector(this[i], other[i]);
-            if (item_result) res.push(item_result);
+    Array.prototype.zip = function (): any {
+        let minLen = this.length;
+        for (let i = 0; i < arguments.length - 1; i++) {
+            if (arguments[i].length < minLen) minLen = arguments[i].length;
+        }
+        let selector = arguments[arguments.length - 1];
+        let res: any[] = [];
+        for (let i = 0; i < minLen; i++) {
+            let args = [this[i]];
+            for (let j = 0; j < arguments.length - 1; j++) {
+                args.push(arguments[j][i]);
+            }
+            res.push(selector.apply(this, args));
         }
         return res;
+    }
+}
+if (!Array.prototype.toTree) {
+    Array.prototype.toTree = function <T, K>(keySelector: (item: T) => K, parentKeySelector: (item: T) => K): TreeNode<T>[] {
+
+        let entries = (this as T[]).select(p => {
+            let node: TreeNode<T> = { value: p, childrens: [] }
+            return {
+                key: keySelector(p),
+                parentKey: parentKeySelector(p),
+                node: node,
+                flag: false
+            }
+        });
+        let entry = toDictionaryInternal(entries, p => p.key);
+        for (let key in entry) {
+            let value = entry[key];
+            if (value.parentKey in entry) {
+                entry[value.parentKey].node.childrens.push(value.node);
+                value.flag=true;
+            }
+        }
+        return entries.where(p=>p.flag===false).select(p=>p.node);
     }
 }
 if (!Array.range) {

@@ -467,4 +467,44 @@ describe("Array", () => {
             assert.equal(res.count(p => p.studentId == 'x006'), 0);
         });
     });
+
+    describe("zip", () => {
+        const main = [1, 2, 3, 4, 5, 6];
+        const other1 = [6, 5, 4, 3, 2, 1]
+        const other2 = ["a", "b", "c"]
+        it("zip one array", () => {
+            let res = main.zip(other1, (a, b) => `${a}_${b}`);
+            assert.deepEqual(res, ["1_6", "2_5", "3_4", "4_3", "5_2", "6_1"]);
+        });
+        it("zip two array", () => {
+            let res = main.zip(other1, other2, (a, b, c) => `${a}${b}${c}`);
+            assert.deepEqual(res, ["16a", "25b", "34c"]);
+        });
+        it("zip three array", () => {
+            let res = main.zip(other1, other2, other2, (a, b, c, d) => `${a}${b}${c}${d}`);
+            assert.deepEqual(res, ["16aa", "25bb", "34cc"]);
+        });
+        it("zip four array", () => {
+            let res = main.zip(other1, other2, other2, other1, (a, b, c, d, e) => `${a}${b}${c}${d}${e}`);
+            assert.deepEqual(res, ["16aa6", "25bb5", "34cc4"]);
+        });
+    });
+    describe("toTree", () => {
+        const datas = [
+            { name: "node1", id: "X001", parent: "" },
+            { name: "node2", id: "X002", parent: "" },
+            { name: "node3", id: "X003", parent: "" },
+            { name: "node4", id: "X004", parent: "X002" },
+            { name: "node5", id: "X005", parent: "X001" },
+            { name: "node6", id: "X006", parent: "X004" },
+            { name: "node7", id: "X007", parent: "X004" },
+            { name: "node8", id: "X008", parent: "X004" },
+            { name: "node9", id: "X009", parent: "X007" },
+        ]
+        it("to tree", () => {
+            let res = datas.toTree(p => p.id, p => p.parent);
+            assert.equal(res.length, 3);
+
+        });
+    });
 });
