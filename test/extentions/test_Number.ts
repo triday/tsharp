@@ -2,91 +2,91 @@ import "../../src/extentions/Number"
 import "mocha"
 import * as assert from "assert";
 describe("Number", () => {
-    describe("isBetween", () => {
+    describe("inRange", () => {
         it("5 is between in [3,8]", () => {
             let num = 5;
-            assert.equal(num.isBetween(3, 8), true);
+            assert.equal(num.inRange(3, 8), true);
         });
 
         it("3 is between in [3,8]", () => {
             let num = 3;
-            assert.equal(num.isBetween(3, 8), true);
+            assert.equal(num.inRange(3, 8), true);
         });
         it("8 is between in [3,8]", () => {
             let num = 8;
-            assert.equal(num.isBetween(3, 8), true);
+            assert.equal(num.inRange(3, 8), true);
         });
         it("2 is not between in [3,8]", () => {
             let num = 2;
-            assert.equal(num.isBetween(3, 8), false);
+            assert.equal(num.inRange(3, 8), false);
         });
         it("9 is not between in [3,8]", () => {
             let num = 9;
-            assert.equal(num.isBetween(3, 8), false);
+            assert.equal(num.inRange(3, 8), false);
         });
         it("3 is not between in (3,8)", () => {
             let num = 3;
-            assert.equal(num.isBetween(3, 8, false), false);
+            assert.equal(num.inRange(3, 8, false), false);
         });
         it("8 is not between in (3,8)", () => {
             let num = 8;
-            assert.equal(num.isBetween(3, 8, false), false);
+            assert.equal(num.inRange(3, 8, false), false);
         });
         it("5 is between in [8,3]", () => {
             let num = 5;
-            assert.equal(num.isBetween(8, 3), true);
+            assert.equal(num.inRange(8, 3), true);
         });
         it("5 is between in [5,5]", () => {
             let num = 5;
-            assert.equal(num.isBetween(5, 5), true);
+            assert.equal(num.inRange(5, 5), true);
         });
         it("5 is not between in (5,5)", () => {
             let num = 5;
-            assert.equal(num.isBetween(5, 5, false), false);
+            assert.equal(num.inRange(5, 5, false), false);
         });
         it("5 is between in [3,Infinity]", () => {
             let num = 5;
-            assert.equal(num.isBetween(3, Infinity), true);
+            assert.equal(num.inRange(3, Infinity), true);
         });
         it("5 is between in [Infinity,3]", () => {
             let num = 5;
-            assert.equal(num.isBetween(Infinity, 3), true);
+            assert.equal(num.inRange(Infinity, 3), true);
         });
         it("5 is not between in [3,-Infinity]", () => {
             let num = 5;
-            assert.equal(num.isBetween(3, -Infinity), false);
+            assert.equal(num.inRange(3, -Infinity), false);
         });
         it("5 is between in [-Infinity,3]", () => {
             let num = 5;
-            assert.equal(num.isBetween(-Infinity, 3), false);
+            assert.equal(num.inRange(-Infinity, 3), false);
         });
         it("-5 is not between in [3,-Infinity]", () => {
             let num = -5;
-            assert.equal(num.isBetween(3, -Infinity), true);
+            assert.equal(num.inRange(3, -Infinity), true);
         });
         it("-5 is between in [-Infinity,3]", () => {
             let num = -5;
-            assert.equal(num.isBetween(-Infinity, 3), true);
+            assert.equal(num.inRange(-Infinity, 3), true);
         });
         it("5 is not between in [3,NaN]", () => {
             let num = 5;
-            assert.equal(num.isBetween(3, NaN), false);
+            assert.equal(num.inRange(3, NaN), false);
         });
         it("NaN is not between in [-Infinity, Infinity]", () => {
             let num = NaN;
-            assert.equal(num.isBetween(-Infinity, Infinity), false);
+            assert.equal(num.inRange(-Infinity, Infinity), false);
         });
         it("5 is between in (-Infinity, Infinity)", () => {
             let num = 5;
-            assert.equal(num.isBetween(-Infinity, Infinity), true);
+            assert.equal(num.inRange(-Infinity, Infinity), true);
         });
         it("Infinity is between in (-Infinity, Infinity)", () => {
             let num = Infinity;
-            assert.equal(num.isBetween(-Infinity, Infinity), false);
+            assert.equal(num.inRange(-Infinity, Infinity), false);
         });
         it("-Infinity is between in (-Infinity, Infinity)", () => {
             let num = -Infinity;
-            assert.equal(num.isBetween(-Infinity, Infinity), false);
+            assert.equal(num.inRange(-Infinity, Infinity), false);
         });
     });
     describe("limitRange", () => {

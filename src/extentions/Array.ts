@@ -1,4 +1,176 @@
-/// <reference path="Array.d.ts" />
+interface Array<T> {
+
+    /**
+     * 判断数组中是否包含特定的元素。
+     * @param value 要判定的元素。
+     * @param comparer 比较函数。
+     * @returns 如果包含判定的元素，则返回 true ，否则返回 false 。
+     */
+    contains(value: T, comparer?: (a: T, b: T) => boolean): boolean;
+    /**
+     * 确定序列中的所有元素是否满足条件。
+     * @param predicate 用于测试每个元素是否满足条件的函数。
+     * @returns 如果本数组中的每个元素都通过指定的测试函数，或者序列为空，则为 true；否则为 false。
+     */
+    all(predicate: (value: T, index: number, array: T[]) => boolean): boolean;
+    /**
+     * 确定序列中存在满足测试函数的元素。
+     * @param predicate 用于测试每个元素是否满足条件的函数。
+     * @returns 如果本数组中在满足测试函数的元素，则为 true；否则为 false。
+     */
+    any(callbackfn: (value: T, index: number, array: T[]) => boolean): boolean;
+    /**
+     * 将序列中的每个元素投影到新表中。
+     * @param selector 应用于每个元素的转换函数。 
+     * @returns 一个 新数组，其元素为对 数组 的每个元素调用转换函数的结果。
+     */
+    select<U>(selector: (value: T, index: number, array: T[]) => U): U[];
+
+    /**
+     * 基于过滤函数选择符合条件的元素。
+     * @param predicate 用于测试每个源元素是否满足条件的函数。
+     * @returns 符合条件的元素组成的新数组。
+     */
+    where(predicate: (value: T, index: number, array: T[]) => any): T[];
+    /**
+     * 选择数组中的第一个元素，如果数组为空，则抛出异常。
+     * @returns 返回数组中的第一个元素，如果数组长度为 0，则抛出异常。
+     */
+    first(): T;
+    /**
+     * 选择数组中的第一个元素并应用转换函数，如果数组为空，则抛出异常。
+     * @param selector 应用于首元素的转换函数。
+     * @returns 返回数组中的第一个元素应用转换函数后的结果，如果数组长度为 0，则抛出异常。
+     */
+    first<U>(selector: (value: T, index: number, array: T[]) => U): U;
+    /**
+     * 选择数组中的第一个元素，如果数组为空，则返回 undefined。
+     * @returns 返回数组中的第一个元素，如果数组长度为 0，则返回 undefined。
+     */
+    firstOrDefault(): T;
+    /**
+     * 选择数组中的第一个元素并应用转换函数，如果数组为空，则返回 undefined。
+     * @param selector 应用于首元素的转换函数。
+     * @returns 返回数组中的第一个元素应用转换函数后的结果，如果数组长度为 0，则返回 undefined。
+     */
+    firstOrDefault<U>(selector: (value: T, index: number, array: T[]) => U): U;
+
+    /**
+     * 选择数组中的最后一个元素，如果数组为空，则抛出异常。
+     * @returns 返回数组中的最后一个元素，如果数组长度为 0，则抛出异常。
+     */
+    last(): T;
+    /**
+     * 选择数组中的最后一个元素并应用转换函数，如果数组为空，则抛出异常。
+     * @param selector 应用于最后一个元素的转换函数。
+     * @returns 返回数组中的最后一个元素应用转换函数后的结果，如果数组长度为 0，则抛出异常。
+     */
+    last<U>(selector: (value: T, index: number, array: T[]) => U): U;
+    /**
+     * 选择数组中的第一个元素，如果数组为空，则返回 undefined。
+     * @returns 返回数组中的第一个元素，如果数组长度为 0，则返回 undefined。
+     */
+    lastOrDefault(): T;
+    /**
+     * 选择数组中的最后一个元素并应用转换函数，如果数组为空，则返回 undefined。
+     * @param selector 应用于最后一个元素的转换函数。
+     * @returns 返回数组中的最后一个元素应用转换函数后的结果，如果数组长度为 0，则返回 undefined。
+     */
+    lastOrDefault<U>(selector: (value: T, index: number, array: T[]) => U): U;
+
+    /**
+     * 选择数组中的唯一元素，如果数组为空或者数量大于 1，则抛出异常。
+     * @returns 返回数组中的最后一个元素，如果数组长度为 0 或者数量大于 1，则抛出异常。
+     */
+    single(): T;
+
+    /**
+     * 选择数组中的唯一元素并应用转换函数，如果数组为空或者数量大于 1，则抛出异常。
+     * @param selector 应用于唯一元素的转换函数。
+     * @returns 返回数组中的唯一元素应用转换函数后的结果，如果数组长度为 0 或者数量大于 1，则抛出异常。
+     */
+    single<U>(selector: (value: T, index: number, array: T[]) => U): U;
+    /**
+     * 选择数组中的唯一元素，如果数组为空，则返回 undefined，如果数量大于1，则抛出异常。
+     * @returns 返回数组中的唯一元素，如果数组长度为 0，则返回 undefined，如果数量大于1，则抛出异常。
+     */
+    singleOrDefault(): T;
+    /**
+     * 选择数组中的唯一元素并应用转换函数，如果数组为空，则返回 undefined，如果数量大于1，则抛出异常。。
+     * @param selector 应用于唯一元素的转换函数。
+     * @returns 返回数组中的唯一元素应用转换函数后的结果，如果数组长度为 0，则返回 undefined，如果数量大于1，则抛出异常。。
+     */
+    singleOrDefault<U>(selector: (value: T, index: number, array: T[]) => U): U;
+    /**
+     * 基于过滤函数统计符合条件的元素，如果过滤函数为空，则返回本数组的长度。
+     * @param predicate 用于测试每个源元素是否满足条件的函数。
+     * @returns 返回符合条件的个数，如果过滤函数为空，则返回数组的原始长度。
+     */
+    count(predicate?: (value: T, index: number, array: T[]) => any): number;
+
+    /**
+    * 将序列的每个元素投影到新的数组，并将结果数组合并为一个数组。
+    * @param selector 应用于每个元素的转换函数。 
+    * @returns 一个 新数组，其元素为对 数组 的每个元素调用转换函数的结果。
+    */
+    selectMany<U>(selector: (value: T, index: number, array: T[]) => U[]): U[];
+
+    min(selector?: (value: T, index: number, array: T[]) => number): number;
+    max(selector?: (value: T, index: number, array: T[]) => number): number;
+    sum(selector?: (value: T, index: number, array: T[]) => number): number;
+    average(selector?: (value: T, index: number, array: T[]) => number): number;
+
+    replaceNullOrUndefined(item: T): T[];
+    replaceNullOrUndefined(factory: (index: number, array: T[]) => T): T[];
+    ignoreNullOrUndefined(): T[];
+
+    distinct(comparer?: (a: T, b: T) => boolean): T[];
+    except(other: T[], comparer?: (a: T, b: T) => boolean): T[];
+    intersect(other: T[], comparer?: (a: T, b: T) => boolean): T[];
+    union(other: T[], comparer?: (a: T, b: T) => boolean): T[];
+    skip(count: number): T[];
+    skipWhere(predicate: (value: T, index: number, array: T[]) => boolean): T[];
+
+    take(count: number): T[];
+    takeWhere(predicate: (value: T, index: number, array: T[]) => boolean): T[];
+
+    orderBy(...keySelectors: (((value: T) => any) | [(value: T) => any, boolean])[]): T[];
+
+    clone(): T[];
+
+    equals(other: T[]): boolean;
+
+    toDictionary(keySelector: (value: T, index: number, array: T[]) => string): { [key: string]: T }
+    toDictionary<U>(keySelector: (value: T, index: number, array: T[]) => string, elementSelector: (value: T, index: number, array: T[]) => U): { [key: string]: U }
+    toDictionary(keySelector: (value: T, index: number, array: T[]) => number): { [key: number]: T }
+    toDictionary<U>(keySelector: (value: T, index: number, array: T[]) => number, elementSelector: (value: T, index: number, array: T[]) => U): { [key: number]: U }
+
+    toLookup(keySelector: (value: T, index: number, array: T[]) => string): { [key: string]: T[] }
+    toLookup<U>(keySelector: (value: T, index: number, array: T[]) => string, elementSelector: (value: T, index: number, array: T[]) => U): { [key: string]: U[] }
+    toLookup(keySelector: (value: T, index: number, array: T[]) => number): { [key: number]: T[] }
+    toLookup<U>(keySelector: (value: T, index: number, array: T[]) => number, elementSelector: (value: T, index: number, array: T[]) => U): { [key: number]: U[] }
+
+    innerJoin<U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[];
+    outerJoin<U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[];
+    leftJoin<U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[];
+    rightJoin<U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[];
+
+    zip<U1, R>(other1: U1[], resultSelector: (item: T, otherItem1: U1) => R): R[];
+    zip<U1, U2, R>(other1: U1[], other2: U2[], resultSelector: (item: T, otherItem1: U1, otherItem2: U2) => R): R[];
+    zip<U1, U2, U3, R>(other1: U1[], other2: U2[], other3: U3[], resultSelector: (item: T, otherItem1: U1, otherItem2: U2, otherItem3: U3) => R): R[];
+    zip<U1, U2, U3, U4, R>(other1: U1[], other2: U2[], other3: U3[], other4: U4, resultSelector: (item: T, otherItem1: U1, otherItem2: U2, otherItem3: U3, otherItem4: U4) => R): R[];
+
+
+
+
+}
+interface ArrayConstructor {
+    range(stop: number): number[];
+    range(start: number, stop: number, step?: number): number[];
+    repeat<T>(item: T, count: number): T[]
+}
+
+
 if (!Array.prototype.where) {
     Array.prototype.where = Array.prototype.filter;
 }
@@ -84,7 +256,7 @@ if (!Array.prototype.count) {
     }
 }
 if (!Array.prototype.min) {
-    Array.prototype.min = function (selector) {
+    Array.prototype.min = function <T>(selector: (value: T, index: number, array: T[]) => number): number {
         if (selector) {
             let newArray = this.map(selector);
             return Math.min.apply(null, newArray);
@@ -94,7 +266,7 @@ if (!Array.prototype.min) {
     }
 }
 if (!Array.prototype.max) {
-    Array.prototype.max = function (selector) {
+    Array.prototype.max = function <T>(selector: (value: T, index: number, array: T[]) => number): number {
         if (selector) {
             let newArray = this.map(selector);
             return Math.max.apply(null, newArray);
@@ -209,7 +381,7 @@ if (!Array.prototype.union) {
 }
 
 if (!Array.prototype.skip) {
-    Array.prototype.skip = function (count) {
+    Array.prototype.skip = function (count: number) {
         return this.slice(count);
     }
 }
@@ -225,7 +397,7 @@ if (!Array.prototype.skipWhere) {
 }
 
 if (!Array.prototype.take) {
-    Array.prototype.take = function (count) {
+    Array.prototype.take = function (count: number) {
         return this.slice(0, count);
     }
 }
@@ -276,84 +448,65 @@ if (!Array.prototype.clone) {
     }
 }
 if (!Array.prototype.equals) {
-    Array.prototype.equals = function <T>(other: T[], deep: boolean = true, ignoreNaN: boolean = true): boolean {
+    Array.prototype.equals = function <T>(other: T[]): boolean {
+        const isArrayEquals = (a: T, b: T): boolean => (a instanceof Array) && (b instanceof Array) && (a.equals(b));
+        const isObjectEquals = (a: any, b: any): boolean => (a instanceof Object) && (b instanceof Object) && (a.equals(b));
+        const isNaNEquals = (a: any, b: any): boolean =>  isNaN(a) && isNaN(b);
+
+        if (this === other) return true;
         if (!other || other.length != this.length) return false;
-        return deep ? deepEquals(other) : simpleEquals(other);
-        function deepEquals(second: T[]): boolean {
-            for (let i = 0; i < this.length; i++) {
-                let thisItem = this[i];
-                let otherItem = second[i];
-                if (thisItem !== otherItem &&
-                    !isObjectEquals(thisItem, otherItem) &&
-                    !isArrayEquals(thisItem, otherItem) &&
-                    !isNaNEquals(thisItem, otherItem)) {
-                    return false
-                }
+        
+        for (let i = 0; i < this.length; i++) {
+            let thisItem = this[i];
+            let otherItem = other[i];
+            if (thisItem !== otherItem &&
+                !isObjectEquals(thisItem, otherItem) &&
+                !isArrayEquals(thisItem, otherItem) &&
+                !isNaNEquals(thisItem, otherItem)) {
+                return false
             }
-            return true;
         }
-        function isArrayEquals(a: T, b: T): boolean {
-            if (a instanceof Array && b instanceof Array) {
-                return a.equals(b, deep, ignoreNaN);
-            }
-            return false;
-        }
-        function isObjectEquals(a: T, b: T): boolean {
-            //TODO ...
-            return a === b;
-        }
-        function isNaNEquals(a: any, b: any): boolean {
-            return ignoreNaN && isNaN(a) && isNaN(b);
-        }
-        function simpleEquals(second: any[], ): boolean {
-            for (let i = 0; i < this.length; i++) {
-                if (this[i] !== second[i] &&
-                    !isNaNEquals(this[i], second[i])) {
-                    return false;
-                }
-            }
-            return true;
-        }
+        return true;
+
+
+
+
     }
 
 }
 if (!Array.prototype.toDictionary) {
     Array.prototype.toDictionary = function <T, U>(keySelector: (value: T, index: number, array: T[]) => string | number, elementSelector?: (value: T, index: number, array: T[]) => U): { [key: string]: U | T } | { [key: number]: U | T } {
-        return toDictionaryInternal(this, keySelector, elementSelector);
+        let res: any = {};
+        this.forEach((current: T, index: number) => {
+            let key = keySelector(current, index, this);
+            let value = elementSelector ? elementSelector(current, index, this) : current;
+            res[key] = value;
+        }, {});
+        return res;
     }
 
 }
-function toDictionaryInternal<T>(array: T[], keySelector: (value: T, index: number, array: T[]) => any, elementSelector?: (value: T, index: number, array: T[]) => any): any {
-    let res: any = {};
-    array.forEach((current: T, index: number) => {
-        let key = keySelector(current, index, this);
-        let value = elementSelector ? elementSelector(current, index, this) : current;
-        res[key] = value;
-    }, {});
-    return res;
-}
+
 if (!Array.prototype.toLookup) {
-    Array.prototype.toLookup = function <T, U>(keySelector: (value: T, index: number, array: T[]) => string | number, elementSelector?: (value: T, index: number, array: T[]) => U): { [key: string]: U[] | T[] } | { [key: number]: U[] | T[] } {
-        return toLookUpInternal(this, keySelector, elementSelector);
+    Array.prototype.toLookup = function <T>(keySelector: (value: T, index: number, array: T[]) => string | number, elementSelector?: (value: T, index: number, array: T[]) => any): any {
+        let res: any = {};
+        this.forEach((current: T, index: number) => {
+            let key = keySelector(current, index, this);
+            let value = elementSelector ? elementSelector(current, index, this) : current;
+            if (key in res) {
+                res[key].push(value);
+            } else {
+                res[key] = [value];
+            }
+        }, {});
+        return res;
     }
 }
-function toLookUpInternal<T>(array: T[], keySelector: (value: T, index: number, array: T[]) => any, elementSelector?: (value: T, index: number, array: T[]) => any): any {
-    let res: any = {};
-    array.forEach((current: T, index: number) => {
-        let key = keySelector(current, index, this);
-        let value = elementSelector ? elementSelector(current, index, this) : current;
-        if (key in res) {
-            res[key].push(value);
-        } else {
-            res[key] = [value];
-        }
-    }, {});
-    return res;
-}
+
 if (!Array.prototype.innerJoin) {
     Array.prototype.innerJoin = function <T, U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[] {
-        let lookup_a = toLookUpInternal(this, leftKeySelector);
-        let lookup_b = toLookUpInternal(right || new Array<U>(), rightKeySelector);
+        let lookup_a = this.toLookup(leftKeySelector);
+        let lookup_b = (right || new Array<U>()).toLookup(rightKeySelector);
         let all_keys = Object.keys(lookup_a).intersect(Object.keys(lookup_b));
         let res: R[] = [];
         all_keys.forEach((key) => {
@@ -371,8 +524,8 @@ if (!Array.prototype.innerJoin) {
 }
 if (!Array.prototype.outerJoin) {
     Array.prototype.outerJoin = function <T, U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[] {
-        let lookup_a = toLookUpInternal(this, leftKeySelector);
-        let lookup_b = toLookUpInternal(right || new Array<U>(), rightKeySelector);
+        let lookup_a = this.toLookup(leftKeySelector);
+        let lookup_b = (right || new Array<U>()).toLookup(rightKeySelector);
         let all_keys = Object.keys(lookup_a).union(Object.keys(lookup_b));
         let res: R[] = [];
         all_keys.forEach((key) => {
@@ -390,8 +543,8 @@ if (!Array.prototype.outerJoin) {
 }
 if (!Array.prototype.leftJoin) {
     Array.prototype.leftJoin = function <T, U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[] {
-        let lookup_a = toLookUpInternal(this, leftKeySelector);
-        let lookup_b = toLookUpInternal(right || new Array<U>(), rightKeySelector);
+        let lookup_a = this.toLookup(leftKeySelector);
+        let lookup_b = (right || new Array<U>()).toLookup(rightKeySelector);
         let all_keys = Object.keys(lookup_a);
         let res: R[] = [];
         all_keys.forEach((key) => {
@@ -409,8 +562,8 @@ if (!Array.prototype.leftJoin) {
 }
 if (!Array.prototype.rightJoin) {
     Array.prototype.rightJoin = function <T, U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[] {
-        let lookup_a = toLookUpInternal(this, leftKeySelector);
-        let lookup_b = toLookUpInternal(right || new Array<U>(), rightKeySelector);
+        let lookup_a = this.toLookup(leftKeySelector);
+        let lookup_b = (right || new Array<U>()).toLookup(rightKeySelector);
         let all_keys = Object.keys(lookup_b);
         let res: R[] = [];
         all_keys.forEach((key) => {
@@ -444,29 +597,7 @@ if (!Array.prototype.zip) {
         return res;
     }
 }
-if (!Array.prototype.toTree) {
-    Array.prototype.toTree = function <T, K>(keySelector: (item: T) => K, parentKeySelector: (item: T) => K): TreeNode<T>[] {
 
-        let entries = (this as T[]).select(p => {
-            let node: TreeNode<T> = { value: p, childrens: [] }
-            return {
-                key: keySelector(p),
-                parentKey: parentKeySelector(p),
-                node: node,
-                flag: false
-            }
-        });
-        let entry = toDictionaryInternal(entries, p => p.key);
-        for (let key in entry) {
-            let value = entry[key];
-            if (value.parentKey in entry) {
-                entry[value.parentKey].node.childrens.push(value.node);
-                value.flag=true;
-            }
-        }
-        return entries.where(p=>p.flag===false).select(p=>p.node);
-    }
-}
 if (!Array.range) {
     Array.range = function () {
         let start: number, stop: number, step: number;

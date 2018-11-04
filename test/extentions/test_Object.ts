@@ -159,6 +159,18 @@ describe("Object", () => {
                     y: ["1",2,3]
                 }
             }), false)
-        })
+        });
+
+        it('对象中包含日期',()=>{
+            let obj1={
+                name:"abc",
+                birthday:new Date('2017-10-1')
+            };
+            let obj2={
+                name:"abc",
+                birthday:new Date('2017-10-1')
+            };
+            assert.equal(Object.compare(obj1,obj2),true);
+        });
     })
 });

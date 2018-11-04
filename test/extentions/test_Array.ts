@@ -1,4 +1,4 @@
-import "../../src/index"
+import "../../src/extentions/Array"
 import "mocha"
 import * as assert from "assert";
 import { Student, People } from "./models"
@@ -489,22 +489,15 @@ describe("Array", () => {
             assert.deepEqual(res, ["16aa6", "25bb5", "34cc4"]);
         });
     });
-    describe("toTree", () => {
-        const datas = [
-            { name: "node1", id: "X001", parent: "" },
-            { name: "node2", id: "X002", parent: "" },
-            { name: "node3", id: "X003", parent: "" },
-            { name: "node4", id: "X004", parent: "X002" },
-            { name: "node5", id: "X005", parent: "X001" },
-            { name: "node6", id: "X006", parent: "X004" },
-            { name: "node7", id: "X007", parent: "X004" },
-            { name: "node8", id: "X008", parent: "X004" },
-            { name: "node9", id: "X009", parent: "X007" },
-        ]
-        it("to tree", () => {
-            let res = datas.toTree(p => p.id, p => p.parent);
-            assert.equal(res.length, 3);
 
+    describe("equals", () => {
+        let data1 = [{ name: 'abc', age: 13 }, { name: 'bcd', age: 14 }];
+        let data2 = [{ name: 'abc', age: 13 }, { name: 'bcd', age: 14 }]
+        it("equals self", () => {
+            assert.equal(data1.equals(data1), true);
+        });
+        it("equals the same data", () => {
+            assert.equal(data1.equals(data2), true);
         });
     });
 });

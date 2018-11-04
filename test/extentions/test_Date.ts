@@ -26,5 +26,17 @@ describe('Date',()=>{
         it("YYYY-MM-DDTHH:mm:ss",()=>{
             assert.equal(new Date("2014-04-02T07:32:56").format("YYYY-MM-DDTHH:mm:ss"),"2014-04-02T07:32:56")
         })
-    })
+    });
+    describe("equals",()=>{
+        it("equals works ok",()=>{
+            let date1=new Date("2018-11-4");
+            let date2=new Date("2018-11-4");
+            assert.equal(date1===date2,false);
+            assert.equal(date1==date2,false);
+            assert.equal(date1.equals(date2),true);
+            assert.equal(date1.equals(new Date()),false);
+
+        })
+
+    });
 })
