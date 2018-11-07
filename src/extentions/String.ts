@@ -18,6 +18,13 @@ interface StringConstructor {
      * @returns format 的副本，其中格式项已替换为 args 中相应对象的字符串表示形式。
      */
     format(format: string, ...args: any[]): string;
+    /**
+     * 由指定的字符串和重复次数构成新字符串。
+     * @param value 指定的字符串。
+     * @param repeatCount 重复次数。
+     * @returns 指定的字符串按照指定次数重复后生成的新字符串。
+     */
+    from(value: string, repeatCount: number): string;
 }
 interface String {
     /**
@@ -71,8 +78,8 @@ interface String {
     isBoolean(): boolean;
     isNumber(): boolean;
     isInteger(): boolean;
-    isEmail():boolean;
-    
+    isEmail(): boolean;
+
 }
 
 
@@ -103,6 +110,15 @@ if (!String.format) {
         }
 
         return result;
+    }
+}
+if (!String.from) {
+    String.from = (value, count) => {
+        let res = ""
+        for (let i = 0; i < count; i++) {
+            res += (value || '');
+        }
+        return res;
     }
 }
 
@@ -138,21 +154,21 @@ if (!String.prototype.replaceAll) {
 if (!String.prototype.equals) {
     String.prototype.equals = function (other, ignoreCase = false) {
         if (ignoreCase && other) {
-            return String(this).toLowerCase() === other.toLowerCase();
+            return this.toLowerCase() === other.toLowerCase();
         } else {
-            return String(this) === other;
+            return this.valueOf() === other;
         }
     }
 }
 if (!String.prototype.contains) {
     String.prototype.contains = function (substr, ignoreCase = false) {
         if (!ignoreCase) {
-            return String(this).indexOf(substr) >= 0;
+            return this.indexOf(substr) >= 0;
         } else {
             if (substr === null || substr === undefined) {
                 return false;
             }
-            return String(this).toLowerCase().indexOf(substr.toLowerCase()) >= 0;
+            return this.toLowerCase().indexOf(substr.toLowerCase()) >= 0;
         }
     }
 }

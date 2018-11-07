@@ -490,14 +490,4 @@ describe("Array", () => {
         });
     });
 
-    describe("equals", () => {
-        let data1 = [{ name: 'abc', age: 13 }, { name: 'bcd', age: 14 }];
-        let data2 = [{ name: 'abc', age: 13 }, { name: 'bcd', age: 14 }]
-        it("equals self", () => {
-            assert.equal(data1.equals(data1), true);
-        });
-        it("equals the same data", () => {
-            assert.equal(data1.equals(data2), true);
-        });
-    });
 });

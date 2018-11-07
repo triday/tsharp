@@ -1,3 +1,5 @@
+/// <reference path="./Object.ts" />
+
 interface Array<T> {
 
     /**
@@ -136,9 +138,9 @@ interface Array<T> {
 
     orderBy(...keySelectors: (((value: T) => any) | [(value: T) => any, boolean])[]): T[];
 
-    clone(): T[];
+    copy(): T[];
 
-    equals(other: T[]): boolean;
+  
 
     toDictionary(keySelector: (value: T, index: number, array: T[]) => string): { [key: string]: T }
     toDictionary<U>(keySelector: (value: T, index: number, array: T[]) => string, elementSelector: (value: T, index: number, array: T[]) => U): { [key: string]: U }
@@ -161,13 +163,12 @@ interface Array<T> {
     zip<U1, U2, U3, U4, R>(other1: U1[], other2: U2[], other3: U3[], other4: U4, resultSelector: (item: T, otherItem1: U1, otherItem2: U2, otherItem3: U3, otherItem4: U4) => R): R[];
 
 
-
+    repeat(count: number): T[];
 
 }
 interface ArrayConstructor {
     range(stop: number): number[];
     range(start: number, stop: number, step?: number): number[];
-    repeat<T>(item: T, count: number): T[]
 }
 
 
@@ -417,9 +418,9 @@ if (!Array.prototype.takeWhere) {
 if (!Array.prototype.orderBy) {
     Array.prototype.orderBy = function <T>(...keySelectors: (((value: T) => any) | [(value: T) => any, boolean])[]): T[] {
         if (keySelectors.length == 0) {
-            return this.clone().sort();
+            return this.slice(0).sort();
         } else {
-            return this.clone().sort((a: T, b: T) => {
+            return this.slice(0).sort((a: T, b: T) => {
                 for (let i = 0; i < keySelectors.length; i++) {
                     let item = keySelectors[i];
                     let keySelector: (value: T) => any;
@@ -442,38 +443,12 @@ if (!Array.prototype.orderBy) {
 
     }
 }
-if (!Array.prototype.clone) {
-    Array.prototype.clone = function () {
+if (!Array.prototype.copy) {
+    Array.prototype.copy = function () {
         return this.slice(0);
     }
 }
-if (!Array.prototype.equals) {
-    Array.prototype.equals = function <T>(other: T[]): boolean {
-        const isArrayEquals = (a: T, b: T): boolean => (a instanceof Array) && (b instanceof Array) && (a.equals(b));
-        const isObjectEquals = (a: any, b: any): boolean => (a instanceof Object) && (b instanceof Object) && (a.equals(b));
-        const isNaNEquals = (a: any, b: any): boolean =>  isNaN(a) && isNaN(b);
 
-        if (this === other) return true;
-        if (!other || other.length != this.length) return false;
-        
-        for (let i = 0; i < this.length; i++) {
-            let thisItem = this[i];
-            let otherItem = other[i];
-            if (thisItem !== otherItem &&
-                !isObjectEquals(thisItem, otherItem) &&
-                !isArrayEquals(thisItem, otherItem) &&
-                !isNaNEquals(thisItem, otherItem)) {
-                return false
-            }
-        }
-        return true;
-
-
-
-
-    }
-
-}
 if (!Array.prototype.toDictionary) {
     Array.prototype.toDictionary = function <T, U>(keySelector: (value: T, index: number, array: T[]) => string | number, elementSelector?: (value: T, index: number, array: T[]) => U): { [key: string]: U | T } | { [key: number]: U | T } {
         let res: any = {};
@@ -597,6 +572,16 @@ if (!Array.prototype.zip) {
         return res;
     }
 }
+if (!Array.prototype.repeat) {
+    Array.prototype.repeat = function <T>(count: number): T[] {
+        let res: T[] = [];
+        for (let i = 0; i < count; i++) {
+            res.concat(this);
+        }
+        return res;
+    }
+}
+
 
 if (!Array.range) {
     Array.range = function () {
@@ -614,15 +599,6 @@ if (!Array.range) {
             for (let i = start; i > stop; i += step) {
                 res.push(i);
             }
-        }
-        return res;
-    }
-}
-if (!Array.repeat) {
-    Array.repeat = function <T>(item: T, count: number): T[] {
-        let res = new Array<T>();
-        for (let i = 0; i < count; i++) {
-            res.push(item);
         }
         return res;
     }

@@ -7,6 +7,8 @@ interface Date {
     format(fmt?: string): string;
 
     equals(other: Date): boolean;
+
+    clone():Date;
 }
 
 if (!Date.prototype.format) {
@@ -52,6 +54,11 @@ if (!Date.prototype.format) {
 }
 if (!Date.prototype.equals) {
     Date.prototype.equals = function (other: any): boolean {
-        return (this - other) === 0
+        return this.valueOf() === other.valueOf();
+    }
+}
+if(!Date.prototype.clone){
+    Date.prototype.clone=function(){
+        return new Date(this.valueOf());
     }
 }

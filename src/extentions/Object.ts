@@ -1,14 +1,10 @@
-interface Object {
-    merge(...items: object[]): object;
-    clone(obj: object, deep?: boolean): object;
-    compare(obj1: object, obj2: object): boolean;
-    equals(other: object): boolean;
+
+interface ObjectConstructor {
+    clone<T>(obj: T): T;
+    merge(target: object, ...sources: object[]): object;
+    equals<T>(obj1: T, obj2: T): boolean;
+    isNullOrUndefined<T>(obj: T): boolean;
 }
-// interface ObjectConstructor {
-//     clone(obj: object, deep?: boolean): object;
-//     merge(target:object,...items:object[]):object;
-//     equals(deep?: boolean, ignoreNaN?: boolean): boolean;
-// }
 
 
 function isPlainObject(obj: object): boolean {
@@ -17,91 +13,119 @@ function isPlainObject(obj: object): boolean {
 function isArray(array: any[]): boolean {
     return array instanceof Array
 }
-
-Object.clone = function (obj: { [key: string]: any }, deep?: boolean): object {
-    var result: { [key: string]: any } = {}
-    Object.keys(obj).forEach(name => {
-        if (deep && (isPlainObject(obj[name])) || isArray(obj[name])) {
-            result[name] = Object.clone(obj[name], deep)
+if (!Object.clone) {
+    Object.clone = function (obj: any) {
+        const isPlainObject: (obj: any) => boolean = (obj) => {
+            return obj && obj instanceof Object && obj.toString() === '[object Object]';
         }
-        else {
-            result[name] = obj[name]
+        const isArray: (obj: any) => boolean = (obj) => {
+            return obj && obj instanceof Array
         }
-    })
-    return result
+        const hasCustomClone: (obj: any) => boolean = (obj) => {
+            return typeof obj['clone'] === "function";
+        }
+        const cloneArray: (obj: []) => any = (obj) => {
+            let res = new Array(obj.length);
+            obj.forEach((value, index, arr) => {
+                res[index] = Object.clone(value);
+            });
+            return res;
+        }
+        const clonePlainObject: (obj: any) => any = (obj) => {
+            return Object.keys(obj).reduce((prev: any, current) => {
+                prev[current] = Object.clone(obj[current]);
+                return prev;
+            }, {})
+        }
+        if (!obj) return obj;
+        if (typeof obj === "object") {
+            if (isArray(obj)) return cloneArray(obj);
+            if (hasCustomClone(obj)) return obj.clone();
+            if (isPlainObject(obj)) return clonePlainObject(obj)
+        }
+        return obj;
+    }
 }
-
-Object.merge = function (...items: any[]): object {
-    let array: any[] = [...items],
-        target: any = Object.clone(array[0], true),
-        clone: any[] | object = null
-    for (let i = 1; i < array.length; i++) {
-        let item = array[i]
-        Object.keys(item).forEach(name => {
-            let src = target[name],
-                copy = item[name]
-            if ((isPlainObject(copy) || isArray(copy))) {
-                if (isPlainObject(copy)) {
-                    clone = src && isPlainObject(src) ? src : {}
+if (!Object.merge) {
+    Object.merge = function (target: any, ...sources: object[]): object {
+        const isPlainObject: (obj: any) => boolean = (obj) => {
+            return obj && obj instanceof Object && obj.toString() === '[object Object]';
+        }
+        const isArray: (obj: any) => boolean = (obj) => {
+            return obj && obj instanceof Array
+        }
+        const isPlainObjectOrArray: (obj: any) => boolean = (obj) => isPlainObject(obj) || isArray(obj);
+        target = target || {};
+        sources.forEach((item: any) => {
+            Object.keys(item || {}).forEach((key) => {
+                let target_prop = target[key];
+                let item_prop = item[key];
+                if (isPlainObjectOrArray(target_prop) && isPlainObjectOrArray(item_prop)) {
+                    Object.merge(target_prop, item_prop);
+                } else {
+                    target[key] = Object.clone(item[key]);
                 }
-                if (isArray(copy)) {
-                    clone = src && isArray(src) ? src : []
-                }
-                target[name] = Object.merge(clone, copy)
-            }
-            else {
-                target[name] = copy
-            }
-        })
+            })
+        });
+        return target;
     }
-    return target
 }
 
-Object.compare = function (obj1: { [key: string]: any }, obj2: { [key: string]: any }): boolean {
-    var status = true,
-        keys = Object.keys(obj2)
-    for (var i = 0; i < keys.length; i++) {
-        var name = keys[i],
-            src = obj1[name],
-            copy = obj2[name]
-        if ((isPlainObject(copy) && isPlainObject(src)) || (isArray(copy) && isArray(src))) {
-            status = Object.compare(src, copy)
-            if (!status) break
+
+
+
+if (!Object.equals) {
+    Object.equals = function (obj1, obj2): boolean {
+        const isPlainObject: (obj: any) => boolean = (obj) => {
+            return obj && obj instanceof Object && obj.toString() === '[object Object]';
         }
-        else {
-            if (isNaN(copy) && isNaN(src)) status = true
-            else status = copy === src
+        const cmpPlainObject: (obj: any, obj2: any) => boolean = (obj1, obj2) => {
+            const [keys1, keys2] = [Object.keys(obj1), Object.keys(obj2)];
+            if (keys1.length !== keys2.length) return false;
+            for (let i = 0; i < keys1.length; i++) {
+                const key = keys1[i];
+                if (keys2.indexOf(key) < 0) return false;
+                if (!Object.equals(obj1[key], obj2[key])) return false;
+            }
+            return true;
         }
-        if (!status) break
-    }
-
-    return status
-}
-
-if (!Object.prototype.equals) {
-    Object.prototype.equals = function (other): boolean {
-
-        const isObjectEquals = (a: any, b: any): boolean => (a instanceof Object) && (b instanceof Object) && (a.equals(b));
-        const isNaNEquals = (a: any, b: any): boolean => isNaN(a) && isNaN(b);
-
-        if (this === other) return true;
-        if (other === null || other === undefined) return false;
-        if (Object.getPrototypeOf(this) !== Object.getPrototypeOf(other)) return false;
-        const [keys1, keys2] = [Object.keys(this), Object.keys(other)];
-        if (keys1.length !== keys2.length) return false;
-
-        for (let i = 0; i < keys1.length; i++) {
-            const key = keys1[i];
-            if (!(key in keys2)) return false;
-            const [val1, val2] = [this[key], (<any>other)[key]];
-            if (val1 !== val2 &&
-                !isNaNEquals(val1, val2) &&
-                !isObjectEquals(val1, val2)) {
-                return false;
+        const cmpArray: (obj1: any[], obj2: any[]) => boolean = (obj1, obj2) => {
+            if (obj1.length != obj2.length) return false;
+            for (let i = 0; i < obj1.length; i++) {
+                if (!Object.equals(obj1[i], obj2[i])) return false;
+            }
+            return true;
+        }
+        const isAllNaN: (obj: any, obj2: any) => boolean = (obj1, obj2) => {
+            return typeof obj1 === "number" && typeof obj2 === "number" && isNaN(obj1) && isNaN(obj2);
+        }
+        const isSameObjectType: (obj1: any, obj2: any) => boolean = (obj1, obj2) => {
+            return obj1 instanceof Object && obj2 instanceof Object &&
+                Object.getPrototypeOf(obj1) === Object.getPrototypeOf(obj2);
+        }
+        const hasCustomEquals: (obj: any) => boolean = (obj) => {
+            return typeof obj['equals'] === "function";
+        }
+        const hasOverwriteValueOf: (obj: any) => boolean = (obj) => {
+            return "valueOf" in obj && typeof obj.valueOf() !== obj;
+        }
+        const isArray: (obj: any) => boolean = (obj) => {
+            return obj && obj instanceof Array
+        }
+        if (obj1 === obj2) return true;
+        if (obj1 === null || obj1 === undefined || obj2 == null || obj2 == undefined) return false;
+        if (isAllNaN(obj1, obj2)) return true;
+        if (isSameObjectType(obj1, obj2)) {
+            if (isArray(obj1)) return cmpArray(<any>obj1, <any>obj2);
+            if (hasCustomEquals(obj1)) return (<any>obj1).equals(obj2);
+            if (isPlainObject(obj1)) return cmpPlainObject(obj1, obj2);
+            if (hasOverwriteValueOf(obj1) && hasOverwriteValueOf(obj2)) {
+                return Object.equals(obj1.valueOf(), obj2.valueOf());
             }
         }
-        return true;
-
-
+        return false;
     }
+}
+if (!Object.isNullOrUndefined) {
+    Object.isNullOrUndefined = (val) => val === null || val === undefined;
 }

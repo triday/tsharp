@@ -16,7 +16,7 @@ interface Number {
     limitRange(val1: number, val2: number): number;
     /**
      * 格式化数字。
-     * @param fmt 数字格式。 支持的字母格式如下（d,e,f,g,n,p,r,x)\
+     * @param fmt 数字格式，由字母和数字组成，数字最大支持两位，支持的字母格式如下（d,e,f,g,n,p,r,x)\
      * d 表示格式化为正数；\
      * e 表示格式化为科学计数法（支持大写E,表示结果中的字符转为大写字符）；\
      * f 表示格式化为小数 ；\

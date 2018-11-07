@@ -80,6 +80,9 @@ namespace tsharp {
         public toString(): string {
             return this.format(null);
         }
+        public valueOf():number{
+            return this._value;
+        }
         public equals(other: TimeSpan): boolean {
             return other && this._value === other._value;
         }
