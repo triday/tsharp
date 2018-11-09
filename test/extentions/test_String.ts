@@ -1,4 +1,7 @@
 import "../../src/extentions/String"
+import "../../src/extentions/Number"
+import "../../src/extentions/Date"
+
 import "mocha"
 import * as assert from "assert";
 describe("String", () => {
@@ -75,6 +78,13 @@ describe("String", () => {
         });
         it("'{0}+{1}={2}' with args [2,3,5] format result is '2+3=5'", () => {
             assert.equal(String.format('{0}+{1}={2}', 2, 3, 5), '2+3=5');
+        });
+        it("'{0,-2}*{1,2} = {2:f2}' with args [8,9,72] format result is '8 * 9= 72.00'", () => {
+            assert.equal(String.format('{0,-2}*{1,2} = {2:f2}', 8, 9, 72), '8 * 9 = 72.00');
+        });
+        
+        it("format datetime is ok.", () => {
+            assert.equal(String.format('北京时间:{time:YYYY年MM月DD日 HH:mm:ss}',{time:new Date('2018-11-10 23:58:40')}), '北京时间:2018年11月10日 23:58:40');
         });
         it("'[{name},{age}]' with args {name:'zhangsan',age:17} format result is '[zhangsan,17]'", () => {
             assert.equal(String.format('[{name},{age}]', { name: 'zhangsan', age: 17 }), '[zhangsan,17]');

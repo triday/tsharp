@@ -80,6 +80,15 @@ interface String {
     isInteger(): boolean;
     isEmail(): boolean;
 
+    hashCode(): number;
+
+    /**
+     * 将字符串按指定长度进行截断，如果超过最大长度，则末尾添加指定的后缀。
+     * @param maxLength 字符串的最大长度。
+     * @param endsText 超过最大长度后要添加的后缀。
+     */
+    truncat(maxLength: number, endsText?: string): string;
+
 }
 
 
@@ -92,24 +101,33 @@ if (!String.isNullOrWhiteSpace) {
 if (!String.format) {
     String.format = (fmt, ...args) => {
         if (String.isNullOrEmpty(fmt)) return fmt;
-        let result = fmt;
-        if (args.length === 1 && typeof args[0] === "object") {
-            for (let key in args[0]) {
-                if (args[0][key] != undefined) {
-                    var reg = new RegExp("({" + key + "})", "g");
-                    result = result.replace(reg, args[0][key]);
-                }
-            }
-        } else {
-            for (var i = 0; i < args.length; i++) {
-                if (args[i] != undefined) {
-                    var reg = new RegExp("({)" + i + "(})", "g");
-                    result = result.replace(reg, args[i]);
-                }
+        let regex = /{([_a-zA-Z0-9]+)\s*(?:,\s*([\+-]?\d+)\s*)?(?::((?:(?:\\})|[^}])*))?}/g
+        return fmt.replace(regex, (substring: string, ...items: any[]) => {
+            let [index, width, format] = items;
+            let value = /\d+/.test(index) ? args[index] : args[0][index]
+            return widthString(formatValue(value, format), Number(width));
+        });
+        function formatValue(value: any, format: string): string {
+            if (value === null || value === undefined) return '';
+            if (!format) return value.toString();
+            let value_proto = Object.getPrototypeOf(value);
+            let format_fun = value_proto['format'];
+            if (typeof format_fun === "function") {
+                return format_fun.call(value, format);
+            } else {
+                console.warn(`can not find format method in ${value_proto.constructor.name}'s prototype.`)
+                return value.toString();
             }
         }
-
-        return result;
+        function widthString(text: string, width: number): string {
+            if (width && !isNaN(width)) {
+                let absWidth = Math.abs(width);
+                if (text.length >= absWidth) return text;
+                let padSpace = String.from(' ', absWidth - text.length);
+                return width > 0 ? padSpace + text : text + padSpace;
+            }
+            return text;
+        }
     }
 }
 if (!String.from) {
@@ -182,3 +200,27 @@ if (!String.prototype.toChars) {
         return this.split('');
     }
 }
+if (!String.prototype.hashCode) {
+    String.prototype.hashCode = function () {
+        let hash = 1315423911;
+        for (let i = this.length - 1; i >= 0; i--) {
+            const char_code = this.charCodeAt(i);
+            hash ^= ((hash << 5) + char_code + (hash >> 2));
+        }
+        return (hash & 0x7FFFFFFF);
+    }
+}
+
+if (!String.prototype.truncat) {
+    String.prototype.truncat = function (maxLength: number, endsText: string = "..."): string {
+        if (maxLength < endsText.length)
+            throw new Error("the max length must great then the lenth of the ends text.");
+        //判断原字符串是否大于最大长度
+        if (this.length > maxLength) {
+            return this.slice(0, maxLength - endsText.length) + endsText;
+        }
+        return this.valueOf();
+
+    }
+}
+

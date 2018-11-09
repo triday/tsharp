@@ -40,12 +40,12 @@ if (!Number.prototype.inRange) {
 }
 if (!Number.prototype.limitRange) {
     Number.prototype.limitRange = function (val1: number, val2: number) {
-        if (isNaN(this) || isNaN(val1) || isNaN(val2)) return this;
+        if (isNaN(this) || isNaN(val1) || isNaN(val2)) return this.valueOf();
         if (val1 === val2) return val1;
         let [min, max] = (val1 < val2) ? [val1, val2] : [val2, val1];
         if (this < min) return min;
         if (this > max) return max;
-        return this;
+        return this.valueOf();
     }
 }
 if (!Number.prototype.format) {

@@ -93,10 +93,12 @@ describe("Number", () => {
         it("5 limit range [3,8] equals 5", () => {
             let num = 5;
             assert.equal(num.limitRange(3, 8), 5);
+            assert.equal(typeof num.limitRange(3, 8), "number");
         });
         it("5 limit range [8,3] equals 5", () => {
             let num = 5;
             assert.equal(num.limitRange(8, 3), 5);
+            assert.equal(typeof num.limitRange(8, 3), "number");
         });
         it("2 limit range [3,8] equals 3", () => {
             let num = 2;
