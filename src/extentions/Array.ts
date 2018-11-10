@@ -1,4 +1,4 @@
-/// <reference path="./Object.ts" />
+
 
 interface Array<T> {
 
@@ -140,7 +140,7 @@ interface Array<T> {
 
     copy(): T[];
 
-  
+
 
     toDictionary(keySelector: (value: T, index: number, array: T[]) => string): { [key: string]: T }
     toDictionary<U>(keySelector: (value: T, index: number, array: T[]) => string, elementSelector: (value: T, index: number, array: T[]) => U): { [key: string]: U }

@@ -1,4 +1,5 @@
 /// <reference path="../extentions/Number.ts" />
+
 namespace tsharp {
     export class TimeSpan {
 

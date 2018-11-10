@@ -6,13 +6,6 @@ interface ObjectConstructor {
     isNullOrUndefined<T>(obj: T): boolean;
 }
 
-
-function isPlainObject(obj: object): boolean {
-    return obj !== null && obj.toString() === '[object Object]'
-}
-function isArray(array: any[]): boolean {
-    return array instanceof Array
-}
 if (!Object.clone) {
     Object.clone = function (obj: any) {
         const isPlainObject: (obj: any) => boolean = (obj) => {

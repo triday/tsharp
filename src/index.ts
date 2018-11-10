@@ -1,10 +1,10 @@
-/// <reference path="./extentions/Array.ts" />
-/// <reference path="./extentions/Date.ts" />
-/// <reference path="./extentions/Number.ts" />
-/// <reference path="./extentions/Object.ts" />
-/// <reference path="./extentions/String.ts" />
+import "./extentions/Array";
+import "./extentions/Date";
+import "./extentions/Number";
+import "./extentions/Object";
+import "./extentions/String";
 
-/// <reference path="./tsharp/TimeSpan.ts" />
-/// <reference path="./tsharp/TreeNode.ts" />
+import "./tsharp/TimeSpan";
+import "./tsharp/TreeNode";
 
 

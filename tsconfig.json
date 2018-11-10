@@ -3,7 +3,7 @@
     "outDir": "./dist/",
     "sourceMap": true,
     "noImplicitAny": true,
-    "module":"umd",
+    "module": "umd",
     "target": "es5",
     "jsx": "react",
     "allowJs": false,
@@ -11,7 +11,7 @@
     "declarationDir": "./dist/dts"
   },
   "exclude": [
-    "test"
+    "test",
+    "dist"
   ]
-
 }
