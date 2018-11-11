@@ -61,7 +61,7 @@ namespace tsharp {
         }
 
         public format(fmt: string = TimeSpan.DEFAULT_FORMAT) {
-            return fmt.replace(/d{1,6}|h{1,2}|m{1,2}|s{1,2}|f{1,3}/ig, (match) => {
+            return fmt.replace(/d{1,8}|h{1,2}|m{1,2}|s{1,2}|f{1,3}/ig, (match) => {
                 let len = match.length;
                 switch (match[0].toLowerCase()) {
                     case 'd':

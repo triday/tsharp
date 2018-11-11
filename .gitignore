@@ -8,3 +8,5 @@ deploy
 *.css.d.ts
 *.sass.d.ts
 *.scss.d.ts
+/coverage
+/.nyc_output

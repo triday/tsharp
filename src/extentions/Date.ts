@@ -6,15 +6,23 @@ interface Date {
      */
     format(fmt?: string): string;
 
+    /**
+     * 将该时间日期和特定的时间日期对象做比较，如果所表示的时间日期相同则返回true，否则返回false。
+     * @param other 要进行比较的日期。
+     * @returns 如果两个时间日期的所表示的值相同则返回true，否则返回false。 
+     */
     equals(other: Date): boolean;
-
-    clone():Date;
+    /**
+     * 克隆当前日期。
+     * @returns 返回当前日期的副本。
+     */
+    clone(): Date;
 }
 
 if (!Date.prototype.format) {
     Date.prototype.format = function (mask: string): string {
         function padStart(str: string, length: number, pad: string): string {
-            if (!str || str.length >= length) return str
+            if (!str || str.length >= length) return str;
             return `${Array((length + 1) - str.length).join(pad)}${str}`
         }
         const weeks: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
@@ -27,7 +35,7 @@ if (!Date.prototype.format) {
             mHour: number = this.getHours(),
             mMinute: number = this.getMinutes(),
             mSecond: number = this.getSeconds()
-        return mask.replace(/Y{4}|M{2}|D{2}|T|H{2}|m{2}|s{2}|Z{1}/g, (match) => {
+        return mask.replace(/Y{2,4}|M{1,2}|D{1,2}|H{1,2}|m{1,2}|s{1,2}|Z{1}/ig, (match) => {
             switch (match) {
                 case 'YYYY':
                 case 'yyyy':
@@ -35,8 +43,10 @@ if (!Date.prototype.format) {
                 case 'MM':
                     return padStart(String(mMonth + 1), 2, '0')
                 case 'DD':
+                case 'dd':
                     return padStart(String(mDay), 2, '0')
                 case 'HH':
+                case 'hh':
                     return padStart(String(mHour), 2, '0')
                 case 'mm':
                     return padStart(String(mMinute), 2, '0')
@@ -54,11 +64,11 @@ if (!Date.prototype.format) {
 }
 if (!Date.prototype.equals) {
     Date.prototype.equals = function (other: any): boolean {
-        return this.valueOf() === other.valueOf();
+        return other && this.valueOf() === other.valueOf();
     }
 }
-if(!Date.prototype.clone){
-    Date.prototype.clone=function(){
+if (!Date.prototype.clone) {
+    Date.prototype.clone = function () {
         return new Date(this.valueOf());
     }
 }

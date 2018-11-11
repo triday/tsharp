@@ -6,6 +6,9 @@ namespace tsharp {
         Before,
         After
     }
+    /**
+     * 表示树状数据结构的节点。
+     */
     export class TreeNode<T>
     {
         constructor(public value: T, public childrens: TreeNode<T>[] = []) {

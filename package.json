@@ -11,7 +11,9 @@
     "server": "webpack-dev-server --open --config webpack/dev.js",
     "config-user": "gulp config-user-init",
     "clean": "gulp clean-all && npx rimraf node_modules",
-    "reinstall": "npm run clean && npm i"
+    "reinstall": "npm run clean && npm i",
+    "coverage": "nyc npm test",
+    "check": "nyc --check-coverage --lines 65 --functions 65 --branches 90 npm test"
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,27 @@
     "url": "https://github.com/triday/tsharp/issues"
   },
   "homepage": "https://github.com/triday/tsharp#readme",
+  "nyc": {
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "test/**/*.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text",
+      "text-summary",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
   "devDependencies": {
     "@types/assert": "^1.4.0",
     "@types/mocha": "^5.2.5",
@@ -45,6 +68,7 @@
     "html-webpack-plugin": "^3.2.0",
     "mocha": "^5.2.0",
     "mochawesome": "^3.1.1",
+    "nyc": "^13.1.0",
     "path": "^0.12.7",
     "plugin-error": "^1.0.1",
     "requiredir": "^1.0.7",
