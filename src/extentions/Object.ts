@@ -1,8 +1,30 @@
 
 interface ObjectConstructor {
+    /**
+     * 深度克隆指定的对象，如果对象原型上拓展了自定义的clone方法，则优先使用自定义的clone方法。
+     * @param obj 要克隆的对象。
+     * @returns 返回克隆对象的副本。
+     */
     clone<T>(obj: T): T;
+    /**
+     * 将指定的系列对象合并到目标对象上。
+     * @param target 目标对象，合并后目标对象受影响。
+     * @param sources 指定的系列对象，合并操作不影响对象的值。
+     * @returns 返回合并后的目标对象。
+     */
     merge(target: object, ...sources: object[]): object;
+    /**
+     * 深度比较两个对象是否相等，如果对象原型上拓展了自定义的equals方法，则优先使用自定义的equals方法。
+     * @param obj1 要比较的第1个对象。
+     * @param obj2 要比较的第2个对象。
+     * 如果判断的两个对象相等，则返回true，否则返回false。
+     */
     equals<T>(obj1: T, obj2: T): boolean;
+    /**
+     * 判断指定类型的对象是否为null或者undefined。
+     * @param obj 要判定的对象。
+     * @returns 如果指定的对象为null或者undefined，则返回true，否则返回false。
+     */
     isNullOrUndefined<T>(obj: T): boolean;
 }
 
@@ -63,9 +85,6 @@ if (!Object.merge) {
         return target;
     }
 }
-
-
-
 
 if (!Object.equals) {
     Object.equals = function (obj1, obj2): boolean {

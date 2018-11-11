@@ -1,4 +1,5 @@
 import "../../src/extentions/Object"
+import "../../src/extentions/Number"
 import "mocha"
 import * as assert from "assert"
 
@@ -25,7 +26,7 @@ describe("Object", () => {
                 }
             }, 'deep not equal')
         })
- 
+
         it('deep clone data_a array', () => {
             let o: Data = [{ m: 10, n: 20 }]
             let data_c = Object.clone({
@@ -47,132 +48,77 @@ describe("Object", () => {
             }, 'deep not equal')
         })
         it('deep clone  array', () => {
-            let arraya=[1,2,3];
-            let arrayb=[1,2,3];
-            assert.deepEqual(Object.clone(arraya),arrayb);
+            let arraya = [1, 2, 3];
+            let arrayb = [1, 2, 3];
+            assert.deepEqual(Object.clone(arraya), arrayb);
         })
     })
 
     describe("merge", () => {
-        it('deep merge data_a data_b', () => {
-            
-            let data_c = Object.merge({
-                a: 1,
-                b: 2,
-                c: {
-                    m: 10,
-                    n: 20
-                }
-            }, {
-                    a: 1,
-                    b: 500,
-                    c: {
-                        m: 7
-                    }
-                })
-            assert.deepEqual(data_c, {
-                a: 1,
-                b: 500,
-                c: {
-                    m: 7,
-                    n: 20
-                }
-            }, 'deep not equal')
-        })
+        const datas: [string, any, any[], any][] = [
+            ['merge array', [2, 3, 4], [[4], [5, 6]], [5, 6, 4]],
+            ['deep merge objects', { a: 1, b: 2, c: { m: 10, n: 20 } }, [{ a: 1, b: 500, c: { m: 7 } }], { a: 1, b: 500, c: { m: 7, n: 20 } }]
+        ];
+        datas.forEach((item, index) => {
+            it(`case ${index.format('d2')} : ${item[0]}`, () => {
+                assert.deepEqual(Object.merge(item[1], ...item[2]), item[3]);
+            });
+        });
     })
 
-    
+
     describe("equals", () => {
-        let data1 = [{ name: 'abc', age: 13 }, { name: 'bcd', age: 14 }];
-        let data2 = [{ name: 'abc', age: 13 }, { name: 'bcd', age: 14 }]
-        it("equals self", () => {
-            assert.equal(Object.equals(data1,data1), true);
+
+        const datas: [boolean, string, any, any][] = [
+            [true, 'null equals null', null, null],
+            [true, 'undefined equals undefined', undefined, undefined],
+            [true, 'NaN equals NaN', NaN, NaN],
+            [false, 'null not equals undefined', null, undefined],
+            [true, '{name:"abc"} equals {name:"abc"}', { name: 'abc' }, { name: 'abc' }],
+            [false, '{name:123} not equals {name:"123"}', { name: 123 }, { name: '123' }],
+            [true, 'Date equals be Date.prototype has custom equals method', new Date('2018-11-11'), new Date('2018-11-11')],
+            [true, '[1,2,3] equals [1,2,3]', [1, 2, 3], [1, 2, 3]],
+            [false, "[1,2,'3'] not equals [1,2,3]", [1, 2, '3'], [1, 2, 3]],
+            [true, "复杂对象相等", { a: 1, b: '2', c: { x: 1, y: 2, z: [{ t: 12 }] } },
+                { a: 1, b: '2', c: { x: 1, y: 2, z: [{ t: 12 }] } }],
+            [false, "复杂对象不等", { a: 0, b: '2', c: { x: 1, y: 2 } },
+                { a: '0', b: '2', c: { x: 1, y: 2 } }],
+            [true, "复杂对象包含NaN", { a: 1, b: '2', c: { x: NaN, y: 2 } },
+                { a: 1, b: '2', c: { x: NaN, y: 2 } }],
+            [false, "对象中含有两个不相同的数组", { a: 1, b: '2', c: { x: NaN, y: [1, 2, 3] } },
+                { a: 1, b: '2', c: { x: NaN, y: ['1', 2, 3] } }],
+            [true, "对象中包含时间", { a: 1, b: '2', c: { x: NaN, y: [1, 2, new Date('2018-11-11')] } },
+                { a: 1, b: '2', c: { x: NaN, y: [1, 2, new Date('2018-11-11')] } }],
+
+        ]
+        datas.forEach((item, index) => {
+            it(`case ${index.format('d2')} : ${item[1]}`, () => {
+                assert.equal(Object.equals(item[2], item[3]), item[0]);
+
+                assert.equal(Object.equals(item[3], item[2]), item[0]);
+            });
         });
-        it("equals the same data", () => {
-            assert.equal(Object.equals(data1,data2), true);
+
+    });
+
+    describe("isNullOrUndefined", () => {
+        it('Object.isNullOrUndefined(null) returns true', () => {
+            assert.equal(Object.isNullOrUndefined(null), true);
+        });
+        it('Object.isNullOrUndefined(undefined) returns true', () => {
+            assert.equal(Object.isNullOrUndefined(undefined), true);
+        });
+        it('Object.isNullOrUndefined("null") returns true', () => {
+            assert.equal(Object.isNullOrUndefined('null'), false);
+        });
+        it('Object.isNullOrUndefined("") returns true', () => {
+            assert.equal(Object.isNullOrUndefined(''), false);
+        });
+        it('Object.isNullOrUndefined("0") returns true', () => {
+            assert.equal(Object.isNullOrUndefined('0'), false);
+        });
+        it('Object.isNullOrUndefined({}) returns true', () => {
+            assert.equal(Object.isNullOrUndefined({}), false);
         });
     });
-    // describe('compare', () => {
-    //     it('常规比较两个对象是否相等', () => {
-    //         assert.deepEqual(Object.compare({
-    //             a: 1,
-    //             b: '2',
-    //             c: {
-    //                 x: 1,
-    //                 y: 2
-    //             }
-    //         }, {
-    //                 a: 1,
-    //                 b: '2',
-    //                 c: {
-    //                     x: 1,
-    //                     y: 2
-    //                 }
-    //             }), true, 'obj1 is not equal obj2')
-    //     })
-    //     it('对象中含有数字0与字符串0', () => {
-    //         assert.deepEqual(Object.compare({
-    //             a: 0,
-    //             b: '2',
-    //             c: {
-    //                 x: 1,
-    //                 y: 2
-    //             }
-    //         }, {
-    //             a: '0',
-    //             b: '2',
-    //             c: {
-    //                 x: 1,
-    //                 y: 2
-    //             }
-    //         }), false)
-    //     })
-    //     it('对象中含有NaN', () => {
-    //         assert.deepEqual(Object.compare({
-    //             a: 0,
-    //             b: '2',
-    //             c: {
-    //                 x: NaN,
-    //                 y: 2
-    //             }
-    //         }, {
-    //             a: 0,
-    //             b: '2',
-    //             c: {
-    //                 x: NaN,
-    //                 y: 2
-    //             }
-    //         }), true)
-    //     })
-    //     it('对象中含有两个不相同的数组', () => {
-    //         assert.deepEqual(Object.compare({
-    //             a: 0,
-    //             b: '2',
-    //             c: {
-    //                 x: NaN,
-    //                 y: [1,2,3]
-    //             }
-    //         }, {
-    //             a: 0,
-    //             b: '2',
-    //             c: {
-    //                 x: NaN,
-    //                 y: ["1",2,3]
-    //             }
-    //         }), false)
-    //     });
-
-    //     it('对象中包含日期',()=>{
-    //         let obj1={
-    //             name:"abc",
-    //             birthday:new Date('2017-10-1')
-    //         };
-    //         let obj2={
-    //             name:"Abc",
-    //             birthday:new Date('2017-10-1')
-    //         };
-    //         assert.equal(Object.equals(obj1,obj2),true);
-    //         assert.equal(Object.compare(obj1,obj2),true);
-    //     });
-    // })
 });
