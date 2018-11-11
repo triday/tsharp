@@ -1,7 +1,8 @@
-import "../../src/extentions/Object"
-import "../../src/extentions/Number"
-import "mocha"
-import * as assert from "assert"
+import "../../src/extentions/Object";
+import "../../src/extentions/Date";
+import "../../src/extentions/Number";
+import "mocha";
+import * as assert from "assert";
 
 describe("Object", () => {
     interface Data {
@@ -25,7 +26,7 @@ describe("Object", () => {
                     n: 20
                 }
             }, 'deep not equal')
-        })
+        });
 
         it('deep clone data_a array', () => {
             let o: Data = [{ m: 10, n: 20 }]
@@ -51,11 +52,27 @@ describe("Object", () => {
             let arraya = [1, 2, 3];
             let arrayb = [1, 2, 3];
             assert.deepEqual(Object.clone(arraya), arrayb);
-        })
+        });
+        it('clone null return null', () => {
+            assert.equal(Object.clone(null), null);
+        });
+        it('clone custom clone', () => {
+            let date = new Date('2018-11-11');
+            let cloneDate = Object.clone(date);
+            assert.notEqual(date, cloneDate);
+            assert.equal(date.valueOf(), cloneDate.valueOf());
+        });
+        it('clone no plain obj', () => {
+            let reg = /\d+/;
+            let cloneReg = Object.clone(reg);
+            assert.equal(reg, cloneReg);
+        });
     })
 
     describe("merge", () => {
         const datas: [string, any, any[], any][] = [
+            ['merge to null', null, [{ a: 1 }, { b: 2 }], { a: 1, b: 2 }],
+            ['merge from null', {}, [null, { b: 2 }], { b: 2 }],
             ['merge array', [2, 3, 4], [[4], [5, 6]], [5, 6, 4]],
             ['deep merge objects', { a: 1, b: 2, c: { m: 10, n: 20 } }, [{ a: 1, b: 500, c: { m: 7 } }], { a: 1, b: 500, c: { m: 7, n: 20 } }]
         ];
@@ -68,7 +85,23 @@ describe("Object", () => {
 
 
     describe("equals", () => {
+        class People {
+            constructor(public name: string) {
 
+            }
+            public toString(): string {
+                return this.name;
+            }
+        }
+        class Student extends People {
+            constructor(public id: string, name: string = '') {
+                super(name);
+            }
+            public valueOf(): any {
+                return this.id;
+            }
+
+        }
         const datas: [boolean, string, any, any][] = [
             [true, 'null equals null', null, null],
             [true, 'undefined equals undefined', undefined, undefined],
@@ -89,7 +122,11 @@ describe("Object", () => {
                 { a: 1, b: '2', c: { x: NaN, y: ['1', 2, 3] } }],
             [true, "对象中包含时间", { a: 1, b: '2', c: { x: NaN, y: [1, 2, new Date('2018-11-11')] } },
                 { a: 1, b: '2', c: { x: NaN, y: [1, 2, new Date('2018-11-11')] } }],
-
+            [false, "对象的属性个数不相等", { a: 1, b: 2 }, { a: 1 }],
+            [false, "对象的属性名称不相等", { a: 1, b: 2 }, { a: 1, c: 2 }],
+            [false, "数组的元素个数不相等", [1, 2], [1]],
+            [false, "自定义的对象", new People('abc'), new People('abc')],
+            [false, "包含特定的valueOf", new Student('y001'), new Student('y002')]
         ]
         datas.forEach((item, index) => {
             it(`case ${index.format('d2')} : ${item[1]}`, () => {

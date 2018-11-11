@@ -251,12 +251,10 @@ if (!String.prototype.equals) {
 }
 if (!String.prototype.contains) {
     String.prototype.contains = function (substr, ignoreCase = false) {
+        if (substr === null || substr === undefined) return false;
         if (!ignoreCase) {
             return this.indexOf(substr) >= 0;
         } else {
-            if (substr === null || substr === undefined) {
-                return false;
-            }
             return this.toLowerCase().indexOf(substr.toLowerCase()) >= 0;
         }
     }

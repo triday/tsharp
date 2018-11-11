@@ -119,7 +119,7 @@ if (!Object.equals) {
             return typeof obj['equals'] === "function";
         }
         const hasOverwriteValueOf: (obj: any) => boolean = (obj) => {
-            return "valueOf" in obj && typeof obj.valueOf() !== obj;
+            return "valueOf" in obj && obj.valueOf() !== obj;
         }
         const isArray: (obj: any) => boolean = (obj) => {
             return obj && obj instanceof Array

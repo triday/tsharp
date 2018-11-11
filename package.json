@@ -12,8 +12,8 @@
     "config-user": "gulp config-user-init",
     "clean": "gulp clean-all && npx rimraf node_modules",
     "reinstall": "npm run clean && npm i",
-    "coverage": "nyc npm test",
-    "check": "nyc --check-coverage --lines 65 --functions 65 --branches 90 npm test"
+    "cover": "nyc npm test",
+    "check": "nyc --check-coverage --lines 90 --functions 95 --branches 90 npm test"
   },
   "repository": {
     "type": "git",

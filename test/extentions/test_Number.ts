@@ -108,6 +108,14 @@ describe("Number", () => {
             let num = 12;
             assert.equal(num.limitRange(3, 8), 8);
         });
+        it("12 limit range [8,8] equals 8", () => {
+            let num = 12;
+            assert.equal(num.limitRange(8, 8), 8);
+        });
+        it("12 limit range [8,NaN] equals 8", () => {
+            let num = 12;
+            assert.equal(num.limitRange(8, NaN), num);
+        });
         it("12 limit range [3,Infinity] equals 12", () => {
             let num = 12;
             assert.equal(num.limitRange(3, Infinity), 12);
@@ -118,6 +126,15 @@ describe("Number", () => {
         });
     });
     describe("format", () => {
+        it("format with null or undefined", () => {
+            let num = 123;
+            assert.equal(num.format(null), "123");
+            assert.equal(num.format(undefined), "123");
+        });
+        it("invalid format", () => {
+            let num = 123;
+            assert.throws(() => { num.format('ff') });
+        });
         describe("format with 'f'", () => {
             it("123 format f equals 123.00", () => {
                 let num = 123;
@@ -143,6 +160,12 @@ describe("Number", () => {
                 let num = 123.456;
                 assert.equal(num.format('f1'), "123.5");
                 assert.equal(num.format('F1'), "123.5");
+            });
+            it("NaN or Infinity format f", () => {
+                let num = NaN;
+                let num2 = Infinity;
+                assert.equal(num.format('f'), "NaN");
+                assert.equal(num2.format('f'), "Infinity");
             });
         });
         describe("format with 'd'", () => {

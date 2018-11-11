@@ -1,6 +1,8 @@
-import "../../src/extentions/String"
-import "../../src/extentions/Number"
-import "../../src/extentions/Date"
+/// <reference path="./init_String.ts" />
+
+import "../../src/extentions/String";
+import "../../src/extentions/Number";
+import "../../src/extentions/Date";
 
 import "mocha"
 import * as assert from "assert";
@@ -76,6 +78,21 @@ describe("String", () => {
         it("'' format result is ''", () => {
             assert.equal(String.format(''), '');
         });
+        it("format null or undefined value", () => {
+            assert.equal(String.format('ab{0}c', null), "abc");
+            assert.equal(String.format('ab{0}c', undefined), "abc");
+        });
+        it('no custom format',()=>{
+            assert.equal(String.format('{0:f2}',{}),'[object Object]');
+        });
+        it("format width is ok", () => {
+            assert.equal(String.format("a{0,3}b", 12), "a 12b");
+            assert.equal(String.format("a{0,-3}b", 12), "a12 b");
+            assert.equal(String.format("a{0,3}b", 123), "a123b");
+            assert.equal(String.format("a{0,-3}b", 123), "a123b");
+            assert.equal(String.format("a{0,3}b", 1234), "a1234b");
+            assert.equal(String.format("a{0,-3}b", 1234), "a1234b");
+        });
         it("'{0}+{1}={2}' with args [2,3,5] format result is '2+3=5'", () => {
             assert.equal(String.format('{0}+{1}={2}', 2, 3, 5), '2+3=5');
         });
@@ -116,6 +133,9 @@ describe("String", () => {
         it("abc start with pattern a", () => {
             assert.equal('abc'.startsWithPattern(/a/), true);
         });
+        it("123abc start with pattern ^\\d", () => {
+            assert.equal('123abc'.startsWithPattern(/^\d/), true);
+        });
         it("abc not start with pattern b", () => {
             assert.equal('abc'.startsWithPattern(/b/), false);
         });
@@ -137,6 +157,9 @@ describe("String", () => {
         it("'' start with pattern \\d*", () => {
             assert.equal(''.startsWithPattern(/\d*/), true);
         });
+        it(' start with null pattern throws error', () => {
+            assert.throws(() => { ''.startsWithPattern(null) });
+        });
     });
     describe("endsWithPattern", () => {
         it("abc end with pattern abc", () => {
@@ -144,6 +167,9 @@ describe("String", () => {
         });
         it("abc end with pattern c", () => {
             assert.equal('abc'.endsWithPattern(/c/), true);
+        });
+        it("abc123 end with pattern \\d+$", () => {
+            assert.equal('abc123'.endsWithPattern(/\d+$/), true);
         });
         it("abc end end with pattern b", () => {
             assert.equal('abc'.endsWithPattern(/b/), false);
@@ -165,6 +191,9 @@ describe("String", () => {
         });
         it("'' end with pattern \\d*", () => {
             assert.equal(''.endsWithPattern(/\d*/), true);
+        });
+        it(' end with null pattern throws error', () => {
+            assert.throws(() => { ''.endsWithPattern(null) });
         });
     });
     describe("trimStart", () => {
@@ -494,11 +523,14 @@ describe("String", () => {
         it("'abc' is not '\\d+' pattern ", () => {
             assert.equal('abc'.isPattern(/\d+/), false);
         });
+        it("throw error if pattern is null ", () => {
+            assert.throws(() => { 'abc'.isPattern(null) });
+        });
     });
     describe("isEmail", () => {
         const validEmails = [
             "ma@hostname.com",
-            "ma@hostname.comcom",            
+            "ma@hostname.comcom",
             "m.a@hostname.co",
             "m_a1a@hostname.com",
             "ma-a@hostname.com",
@@ -520,19 +552,19 @@ describe("String", () => {
             "ma_@jjf.",            // nothing after `_` and .
             "ma@jjf.",             // nothing after `.`
         ];
-        
-        
+
+
         describe('valid email address', () => {
             validEmails.forEach(text => {
-                it(`'${text} is valid email'`,()=>{
+                it(`'${text} is valid email'`, () => {
                     assert.equal(text.isEmail(), true);
                 });
-                
+
             });
         });
         describe('invalid eamil address', () => {
             invalidEmails.forEach(text => {
-                it(`'${text} is invalid email'`,()=>{
+                it(`'${text} is invalid email'`, () => {
                     assert.equal(text.isEmail(), false);
                 });
             });
@@ -551,18 +583,21 @@ describe("String", () => {
             }
         })
     });
-    describe("truncat",()=>{
-        it("'abcde' truncat 10 is 'abcde'",()=>{
-            assert.equal('abcde'.truncat(10),'abcde');
+    describe("truncat", () => {
+        it("'abcde' truncat 10 is 'abcde'", () => {
+            assert.equal('abcde'.truncat(10), 'abcde');
         });
-        it("'abcde' truncat 5 is 'abcde'",()=>{
-            assert.equal('abcde'.truncat(5),'abcde');
+        it("'abcde' truncat 5 is 'abcde'", () => {
+            assert.equal('abcde'.truncat(5), 'abcde');
         });
-        it("'abcdef' truncat 5 is 'abcde'",()=>{
-            assert.equal('abcdef'.truncat(5),'ab...');
+        it("'abcdef' truncat 5 is 'abcde'", () => {
+            assert.equal('abcdef'.truncat(5), 'ab...');
         });
-        it("'abcdef' truncat(5,'##') is 'abcde'",()=>{
-            assert.equal('abcdef'.truncat(5,'##'),'abc##');
+        it("'abcdef' truncat(5,'##') is 'abcde'", () => {
+            assert.equal('abcdef'.truncat(5, '##'), 'abc##');
+        });
+        it('throws error if the ends text too long', () => {
+            assert.throws(() => { 'abc'.truncat(2) });
         });
     });
 });

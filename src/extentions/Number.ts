@@ -53,7 +53,7 @@ if (!Number.prototype.format) {
     Number.prototype.format = function (fmt?) {
         if (!fmt) return this.toString();
         let match = fmt.match(/^([DdEeFfGgNnPpRrXx])(\d{0,2})$/);
-        if (!match) throw new Error('Invalid format text');
+        if (!match) throw new Error(`Invalid format text "${fmt}"`);
         if (isNaN(this) || !isFinite(this)) return this.toString()
         let kind = match[1];
         let len = (match[2]) ? Number(match[2]) : NaN;
