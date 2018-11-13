@@ -1,6 +1,7 @@
 /// <reference path="../extentions/Array.ts" />
 
 
+
 namespace tsharp {
     export enum Traversal {
         Before,

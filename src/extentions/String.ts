@@ -157,13 +157,13 @@ interface String {
 
 
 if (!String.isNullOrEmpty) {
-    String.isNullOrEmpty = (val) => !val;
+    String.isNullOrEmpty = (val:string) => !val;
 }
 if (!String.isNullOrWhiteSpace) {
-    String.isNullOrWhiteSpace = (val) => !val || !(val.trim())
+    String.isNullOrWhiteSpace = (val:string) => !val || !(val.trim())
 }
 if (!String.format) {
-    String.format = (fmt, ...args) => {
+    String.format = (fmt:string, ...args:any[]) => {
         if (String.isNullOrEmpty(fmt)) return fmt;
         let regex = /{([_a-zA-Z0-9]+)\s*(?:,\s*([\+-]?\d+)\s*)?(?::((?:(?:\\})|[^}])*))?}/g
         return fmt.replace(regex, (substring: string, ...items: any[]) => {
@@ -195,7 +195,7 @@ if (!String.format) {
     }
 }
 if (!String.from) {
-    String.from = (value, count) => {
+    String.from = (value:string, count:number) => {
         let res = ""
         for (let i = 0; i < count; i++) {
             res += (value || '');
@@ -204,7 +204,7 @@ if (!String.from) {
     }
 }
 if (!String.prototype.startsWithPattern) {
-    String.prototype.startsWithPattern = function (pattern) {
+    String.prototype.startsWithPattern = function (pattern:RegExp) {
         if (!pattern) throw new Error('pattern can not be null.')
         if (pattern.source[0] === '^') {
             return pattern.test(this);
@@ -214,7 +214,7 @@ if (!String.prototype.startsWithPattern) {
     }
 }
 if (!String.prototype.endsWithPattern) {
-    String.prototype.endsWithPattern = function (pattern) {
+    String.prototype.endsWithPattern = function (pattern:RegExp) {
         if (!pattern) throw new Error('pattern can not be null.')
         if (pattern.source[pattern.source.length - 1] === '$') {
             return pattern.test(this);
@@ -235,13 +235,13 @@ if (!String.prototype.trimEnd) {
 }
 
 if (!String.prototype.replaceAll) {
-    String.prototype.replaceAll = function (substr, newSubStr) {
+    String.prototype.replaceAll = function (substr:string, newSubStr:string) {
         return String.isNullOrEmpty(substr) ? this : this.replace(new RegExp(substr, "gm"), newSubStr);
     }
 }
 
 if (!String.prototype.equals) {
-    String.prototype.equals = function (other, ignoreCase = false) {
+    String.prototype.equals = function (other:string, ignoreCase = false) {
         if (ignoreCase && other) {
             return this.toLowerCase() === other.toLowerCase();
         } else {
@@ -250,7 +250,7 @@ if (!String.prototype.equals) {
     }
 }
 if (!String.prototype.contains) {
-    String.prototype.contains = function (substr, ignoreCase = false) {
+    String.prototype.contains = function (substr:string, ignoreCase = false) {
         if (substr === null || substr === undefined) return false;
         if (!ignoreCase) {
             return this.indexOf(substr) >= 0;
@@ -322,7 +322,7 @@ if (!String.prototype.isNumber) {
     }
 }
 if (!String.prototype.isPattern) {
-    String.prototype.isPattern = function (pattern) {
+    String.prototype.isPattern = function (pattern:RegExp):boolean {
         if (!pattern) throw new Error('pattern can not be null')
         return pattern.test(this);
     }

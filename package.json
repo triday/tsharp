@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
-  "types": "dist/dts/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "mocha --reporter mochawesome",
     "dev": "webpack --config webpack/dev.js",
@@ -19,7 +19,7 @@
     "type": "git",
     "url": "git+https://github.com/triday/tsharp.git"
   },
-  "author": "",
+  "author": "obpt123",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/triday/tsharp/issues"

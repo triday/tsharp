@@ -117,15 +117,47 @@ interface Array<T> {
     */
     selectMany<U>(selector: (value: T, index: number, array: T[]) => U[]): U[];
 
+    /**
+     * 返回数组中的最小值。
+     * @param selector 应用于每个元素的选择函数。
+     * @returns 返回数组中的最小值。
+     */
     min(selector?: (value: T, index: number, array: T[]) => number): number;
+    /**
+     * 返回数组中的最大值。
+     * @param selector 应用于每个元素的选择函数。
+     * @returns 返回数组中的最大值。
+     */
     max(selector?: (value: T, index: number, array: T[]) => number): number;
+    /**
+     * 返回数组中的累加值。
+     * @param selector 应用于每个元素的选择函数。
+     * @returns 返回数组中的累加值。
+     */
     sum(selector?: (value: T, index: number, array: T[]) => number): number;
+    /**
+     * 返回数组中的平均值。
+     * @param selector 应用于每个元素的选择函数。
+     * @returns 返回数组中的平均值。
+     */
     average(selector?: (value: T, index: number, array: T[]) => number): number;
 
-    replaceNullOrUndefined(item: T): T[];
-    replaceNullOrUndefined(factory: (index: number, array: T[]) => T): T[];
+    /**
+     * 替换数组中值为null或者为undefined的元素，替换操作对源数组不产生影响。
+     * @param itemOrFactory 指定的元素或者生产元素的工厂方法。
+     * @returns 返回替换完成后的新数组。
+     */
+    replaceNullOrUndefined(itemOrFactory: T | ((index: number, array: T[]) => T)): T[];
+    /**
+     * 忽略数组中的null或者undefiend元素，由剩余的元素组成新的数组。
+     * @returns 返回由数组中的非空元素组成的新数组，并保持原来的顺序。
+     */
     ignoreNullOrUndefined(): T[];
-
+    /**
+     * 将数组中相同的元素做去重处理。
+     * @param comparer 用于比较两个元素是否相等的比较函数。
+     * @returns 返回去重后的新数组。
+     */
     distinct(comparer?: (a: T, b: T) => boolean): T[];
     except(other: T[], comparer?: (a: T, b: T) => boolean): T[];
     intersect(other: T[], comparer?: (a: T, b: T) => boolean): T[];
@@ -291,10 +323,8 @@ if (!Array.prototype.average) {
 if (!Array.prototype.selectMany) {
     Array.prototype.selectMany = function <T, U>(selector: (value: T, index: number, array: T[]) => U[]): U[] {
         return this.reduce((prev: U[], current: T, index: number) => {
-            if (current && selector) {
-                let itemRes = selector(current, index, this);
-                return itemRes ? prev.concat(itemRes) : prev;
-            }
+            let itemRes = (current !== null && current !== undefined) ? selector(current, index, this) : undefined;
+            return itemRes ? prev.concat(itemRes) : prev;
         }, new Array<U>())
     }
 }
@@ -312,7 +342,7 @@ if (!Array.prototype.ignoreNullOrUndefined) {
 if (!Array.prototype.replaceNullOrUndefined) {
     Array.prototype.replaceNullOrUndefined = function <T>(itemOrFactory: T | ((index: number, array: T[]) => T)): T[] {
         let res: T[] = [];
-        this.array.forEach((element: T, index: number) => {
+        this.forEach((element: T, index: number) => {
             if (element === null || element === undefined) {
                 if (typeof itemOrFactory == "function") {
                     res.push((itemOrFactory as (index: number, array: T[]) => T)(index, this));

@@ -50,7 +50,7 @@ if (!Number.prototype.limitRange) {
 }
 if (!Number.prototype.format) {
     /*参考 https://docs.microsoft.com/zh-cn/dotnet/standard/base-types/standard-numeric-format-strings*/
-    Number.prototype.format = function (fmt?) {
+    Number.prototype.format = function (fmt:string="") {
         if (!fmt) return this.toString();
         let match = fmt.match(/^([DdEeFfGgNnPpRrXx])(\d{0,2})$/);
         if (!match) throw new Error(`Invalid format text "${fmt}"`);

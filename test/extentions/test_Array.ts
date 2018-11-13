@@ -25,10 +25,10 @@ describe("Array", () => {
             assert.equal(empty_array.contains(null), false);
         });
         it(`[${hex_array}] not contains 'FF'`, () => {
-            assert.equal(empty_array.contains('FF'), false);
+            assert.equal(hex_array.contains('FF'), false);
         });
         it(`[${hex_array}] contains 'FF' with ignorecase comparer`, () => {
-            assert.equal(empty_array.contains('FF', (a, b) => a.toLowerCase() === b.toLowerCase()), false);
+            assert.equal(hex_array.contains('FF', (a, b) => a.toLowerCase() === b.toLowerCase()), true);
         });
     });
 
@@ -76,6 +76,44 @@ describe("Array", () => {
         it(`[${emptyArray}] map length get []`, () => {
             assert.deepEqual(emptyArray.select(p => p.length), []);
         });
+    });
+    describe("selectMany", () => {
+        const datas = [
+            { a: [1, 2, 3] },
+            null,
+            { a: null },
+            { a: [4, 5, 6] }
+        ]
+        it(`select many works ok`, () => {
+            assert.deepEqual(datas.selectMany(p => p.a), [1, 2, 3, 4, 5, 6]);
+            assert.deepEqual(datas.selectMany(p => p.a), [1, 2, 3, 4, 5, 6]);
+        })
+    });
+    describe("ignoreNullOrUndefined", () => {
+        const datas = [1, null, 2, undefined];
+        it(`ignoreNullOrUndefined  works ok`, () => {
+            assert.deepEqual(datas.ignoreNullOrUndefined(), [1, 2]);
+            assert.equal(datas.length, 4);
+        })
+    });
+    describe("replaceNullOrUndefined", () => {
+        const datas = [1, null, 2, undefined];
+        it(`replaceNullOrUndefined to fixed value  works ok`, () => {
+            assert.deepEqual(datas.replaceNullOrUndefined(3), [1, 3, 2, 3]);
+            assert.equal(datas[1], null);
+        });
+        it(`replaceNullOrUndefined to factory value  works ok`, () => {
+            assert.deepEqual(datas.replaceNullOrUndefined((index, arr) => { return index * index + 2; }), [1, 3, 2, 11]);
+            assert.equal(datas[1], null);
+        })
+    });
+    describe("distinct",()=>{
+        const datas=[1,3,5,1,'3',5,6];
+        it('distinct works ok',()=>{
+            assert.deepEqual(datas.distinct(),[1,3,5,'3',6]);
+            assert.deepEqual(datas.distinct((a,b)=>a.toString()==b.toString()),[1,3,5,6]);
+        });
+
     });
     describe("where", () => {
         let strArray = ['ab', 'bcd', 'cdef'];
@@ -229,8 +267,12 @@ describe("Array", () => {
     });
     describe("max", () => {
         let objArray = [{ a: 100 }, { a: 200 }, { a: 300 }];
+        let numArray = [1, 3, 5, 7, 9];
         it("[{a:100},{a:200},{a:300}] max is 300", () => {
             assert.equal(objArray.max(p => p.a), 300);
+        });
+        it(`[${numArray}] max is 9`, () => {
+            assert.equal(numArray.max(), 9);
         });
     });
     describe("sum", () => {

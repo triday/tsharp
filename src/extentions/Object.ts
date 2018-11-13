@@ -39,7 +39,7 @@ if (!Object.clone) {
         const hasCustomClone: (obj: any) => boolean = (obj) => {
             return typeof obj['clone'] === "function";
         }
-        const cloneArray: (obj: []) => any = (obj) => {
+        const cloneArray: (obj: any[]) => any = (obj) => {
             let res = new Array(obj.length);
             obj.forEach((value, index, arr) => {
                 res[index] = Object.clone(value);
@@ -87,7 +87,7 @@ if (!Object.merge) {
 }
 
 if (!Object.equals) {
-    Object.equals = function (obj1, obj2): boolean {
+    Object.equals = function<T> (obj1:T, obj2:T): boolean {
         const isPlainObject: (obj: any) => boolean = (obj) => {
             return obj && obj instanceof Object && obj.toString() === '[object Object]';
         }
@@ -139,5 +139,5 @@ if (!Object.equals) {
     }
 }
 if (!Object.isNullOrUndefined) {
-    Object.isNullOrUndefined = (val) => val === null || val === undefined;
+    Object.isNullOrUndefined = (val:any) => val === null || val === undefined;
 }

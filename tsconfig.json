@@ -7,8 +7,7 @@
     "target": "es5",
     "jsx": "react",
     "allowJs": false,
-    "declaration": true,
-    "declarationDir": "./dist/dts"
+    "declaration": true
   },
   "exclude": [
     "test",
