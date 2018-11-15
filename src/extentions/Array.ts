@@ -159,47 +159,206 @@ interface Array<T> {
      * @returns 返回去重后的新数组。
      */
     distinct(comparer?: (a: T, b: T) => boolean): T[];
+    /**
+     * 计算该数组与指定数组的差集。
+     * @param other 与之计算差集的数组。
+     * @param comparer 用于比较两个元素是否相等的比较函数。
+     * @returns 返回结果差集组成的新数组。
+     */
     except(other: T[], comparer?: (a: T, b: T) => boolean): T[];
+    /**
+     * 计算该数组与指定数组的交集。
+     * @param other 与之计算交集的数组。
+     * @param comparer 用于比较两个元素是否相等的比较函数。
+     * @returns 返回结果交集组成的新数组。
+     */
     intersect(other: T[], comparer?: (a: T, b: T) => boolean): T[];
+    /**
+     * 计算该数组与指定数组的并集。
+     * @param other 与之计算并集的数组。
+     * @param comparer 用于比较两个元素是否相等的比较函数。
+     * @returns 返回结果并集组成的新数组。
+     */
     union(other: T[], comparer?: (a: T, b: T) => boolean): T[];
+    /**
+     * 跳过指定数量的元素，然后返回由剩余的元素组成的数组。
+     * @param count 要跳过的元素数量。
+     * @returns 返回由剩余元素组成的新数组。
+     */
     skip(count: number): T[];
+    /**
+     * 只要满足指定的条件，就跳过序列中的元素，然后返回剩余元素。
+     * @param predicate 用于测试每个元素是否满足条件的函数。
+     * @returns 返回由剩余元素组成的新数组。
+     */
     skipWhere(predicate: (value: T, index: number, array: T[]) => boolean): T[];
-
+    /**
+     * 从序列的开头返回指定数量的连续元素。
+     * @param count 要返回的元素数量。
+     * @returns 返回从序列开头到指定数量的连续元素组成的新数组。
+     */
     take(count: number): T[];
+    /**
+     * 只要满足指定的条件，就会返回序列的元素。
+     * @param predicate 用于测试每个元素是否满足条件的函数。
+     * @returns 包含输入序列中出现在测试不再能够通过的元素之前的元素。
+     */
     takeWhere(predicate: (value: T, index: number, array: T[]) => boolean): T[];
-
+    /**
+     * 将当前的数组按照指定的规则排序，排序不影响源数组的顺序。
+     * @param keySelectors 排序规则，可以是要排序的字段的表达式，或者是排序字段表达式和boolean值组成的元组。\
+     * 当为元组时，元组的最后一项表示是否是倒序排序。当为字段的表达式时，默认为正序排列。
+     * @returns 返回排序后的新数组。
+     */
     orderBy(...keySelectors: (((value: T) => any) | [(value: T) => any, boolean])[]): T[];
-
+    /**
+     * 返回该数组的浅副本。
+     * @returns 返回新数组，新数组为源数组的浅副本。
+     */
     copy(): T[];
-
-
-
+    /**
+     * 将数组转换为字典对象。
+     * @param keySelector 用于从每个元素中提取键的函数。
+     * @readonly 返回转换后的字典对象。
+     */
     toDictionary(keySelector: (value: T, index: number, array: T[]) => string): { [key: string]: T }
+    /**
+     * 将数组转换为字典对象。
+     * @param keySelector 用于从每个元素中提取键的函数。
+     * @param elementSelector 用于从每个元素产生结果元素值的转换函数。
+     * @returns 返回转换后的字典对象。
+     */
     toDictionary<U>(keySelector: (value: T, index: number, array: T[]) => string, elementSelector: (value: T, index: number, array: T[]) => U): { [key: string]: U }
+    /**
+     * 将数组转换为字典对象。
+     * @param keySelector 用于从每个元素中提取键的函数。
+     * @returns 返回转换后的字典对象。
+     */
     toDictionary(keySelector: (value: T, index: number, array: T[]) => number): { [key: number]: T }
+    /**
+     * 将数组转换为字典对象。
+     * @param keySelector 用于从每个元素中提取键的函数。
+     * @param elementSelector 用于从每个元素产生结果元素值的转换函数。
+     * @returns 返回转换后的字典对象。
+     */
     toDictionary<U>(keySelector: (value: T, index: number, array: T[]) => number, elementSelector: (value: T, index: number, array: T[]) => U): { [key: number]: U }
-
+    /**
+     * 将数组转换为键-列表对对象。
+     * @param keySelector 用于从每个元素中提取键的函数。
+     * @returns 返回转换后的键-列表对对象。
+     */
     toLookup(keySelector: (value: T, index: number, array: T[]) => string): { [key: string]: T[] }
+     /**
+     * 将数组转换为键-列表对对象。
+     * @param keySelector 用于从每个元素中提取键的函数。
+     * @param elementSelector 用于从每个元素产生结果元素值的转换函数。
+     * @returns 返回转换后的键-列表对对象。
+     */
     toLookup<U>(keySelector: (value: T, index: number, array: T[]) => string, elementSelector: (value: T, index: number, array: T[]) => U): { [key: string]: U[] }
+    /**
+     * 将数组转换为键-列表对对象。
+     * @param keySelector 用于从每个元素中提取键的函数。
+     * @returns 返回转换后的键-列表对对象。
+     */
     toLookup(keySelector: (value: T, index: number, array: T[]) => number): { [key: number]: T[] }
+    /**
+     * 将数组转换为键-列表对对象。
+     * @param keySelector 用于从每个元素中提取键的函数。
+     * @param elementSelector 用于从每个元素产生结果元素值的转换函数。
+     * @returns 返回转换后的键-列表对对象。
+     */
     toLookup<U>(keySelector: (value: T, index: number, array: T[]) => number, elementSelector: (value: T, index: number, array: T[]) => U): { [key: number]: U[] }
-
+    /**
+     * 将数组与另外的数组进行内联接。
+     * @param right 另外操作的数组。
+     * @param leftKeySelector 用于从左侧（本）序列的每个元素提取联接键的函数。
+     * @param rightKeySelector 用于从右侧序列的每个元素提取联接键的函数。
+     * @param resultSelector  用于从两个匹配元素创建结果元素的函数。
+     * @returns 返回通过对两个序列执行内部联接得来的数组。
+     */
     innerJoin<U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[];
+    /**
+     * 将数组与另外的数组进行外联接。
+     * @param right 另外操作的数组。
+     * @param leftKeySelector 用于从左侧（本）序列的每个元素提取联接键的函数。
+     * @param rightKeySelector 用于从右侧序列的每个元素提取联接键的函数。
+     * @param resultSelector  用于从两个匹配元素创建结果元素的函数。
+     * @returns 返回通过对两个序列执行外部联接得来的数组。
+     */
     outerJoin<U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[];
+    /**
+     * 将数组与另外的数组进行左联接。
+     * @param right 另外操作的数组。
+     * @param leftKeySelector 用于从左侧（本）序列的每个元素提取联接键的函数。
+     * @param rightKeySelector 用于从右侧序列的每个元素提取联接键的函数。
+     * @param resultSelector  用于从两个匹配元素创建结果元素的函数。
+     * @returns 返回通过对两个序列执行左联接得来的数组。
+     */
     leftJoin<U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[];
+    /**
+     * 将数组与另外的数组进行右联接。
+     * @param right 另外操作的数组。
+     * @param leftKeySelector 用于从左侧（本）序列的每个元素提取联接键的函数。
+     * @param rightKeySelector 用于从右侧序列的每个元素提取联接键的函数。
+     * @param resultSelector  用于从两个匹配元素创建结果元素的函数。
+     * @returns 返回通过对两个序列执行右联接得来的数组。
+     */
     rightJoin<U, R>(right: U[], leftKeySelector: (left: T) => any, rightKeySelector: (right: U) => any, resultSelector: (left: T, right: U) => R): R[];
-
+    /**
+     * 将指定函数应用于两个序列的对应元素，以生成结果序列。
+     * @param other1 另外一个数组序列。
+     * @param resultSelector 用于指定如何合并这两个序列的子元素的函数。
+     * @returns 返回合并两个数组子元素后组成的新数组。
+     */
     zip<U1, R>(other1: U1[], resultSelector: (item: T, otherItem1: U1) => R): R[];
+     /**
+     * 将指定函数应用于三个序列的对应元素，以生成结果序列。
+     * @param other1 另外一个数组序列。
+     * @param other2 另外第二个数组序列。
+     * @param resultSelector 用于指定如何合并这三个序列的子元素的函数。
+     * @returns 返回合并三个数组子元素后组成的新数组。
+     */
     zip<U1, U2, R>(other1: U1[], other2: U2[], resultSelector: (item: T, otherItem1: U1, otherItem2: U2) => R): R[];
+     /**
+     * 将指定函数应用于四个序列的对应元素，以生成结果序列。
+     * @param other1 另外一个数组序列。
+     * @param other2 另外第二个数组序列。
+     * @param other3 另外第三个数组序列。
+     * @param resultSelector 用于指定如何合并这四个序列的子元素的函数。
+     * @returns 返回合并四个数组子元素后组成的新数组。
+     */
     zip<U1, U2, U3, R>(other1: U1[], other2: U2[], other3: U3[], resultSelector: (item: T, otherItem1: U1, otherItem2: U2, otherItem3: U3) => R): R[];
+     /**
+     * 将指定函数应用于五个序列的对应元素，以生成结果序列。
+     * @param other1 另外一个数组序列。
+     * @param other2 另外第二个数组序列。
+     * @param other3 另外第三个数组序列。
+     * @param other4 另外第四个数组序列。
+     * @param resultSelector 用于指定如何合并这五个序列的子元素的函数。
+     * @returns 返回合并五个数组子元素后组成的新数组。
+     */
     zip<U1, U2, U3, U4, R>(other1: U1[], other2: U2[], other3: U3[], other4: U4, resultSelector: (item: T, otherItem1: U1, otherItem2: U2, otherItem3: U3, otherItem4: U4) => R): R[];
-
-
+    /**
+     * 返回由该数组重复指定的次数组成的新数组。
+     * @param count 重复的次数。
+     * @returns 返回重复制定次数后的新数组。
+     */
     repeat(count: number): T[];
-
 }
 interface ArrayConstructor {
+    /**
+     * 返回从0开始到指定数字的整数序列。
+     * @param stop 指定的数字（不包含）。
+     * @returns 返回整数序列组成的数组。
+     */
     range(stop: number): number[];
+    /**
+     * 返回从起始值开始，按照指定的不长进行到停止值的数字序列。
+     * @param start 起始值（包含）。
+     * @param stop 结束值（不包含）。
+     * @param step 步长值，默认为1。
+     * @returns 返回数字序列组成的数组。
+     */
     range(start: number, stop: number, step?: number): number[];
 }
 
@@ -413,6 +572,7 @@ if (!Array.prototype.union) {
 
 if (!Array.prototype.skip) {
     Array.prototype.skip = function (count: number) {
+        count = count < 0 ? 0 : count;
         return this.slice(count);
     }
 }
@@ -429,6 +589,7 @@ if (!Array.prototype.skipWhere) {
 
 if (!Array.prototype.take) {
     Array.prototype.take = function (count: number) {
+        count = count < 0 ? 0 : count;
         return this.slice(0, count);
     }
 }
@@ -606,7 +767,7 @@ if (!Array.prototype.repeat) {
     Array.prototype.repeat = function <T>(count: number): T[] {
         let res: T[] = [];
         for (let i = 0; i < count; i++) {
-            res.concat(this);
+            res = res.concat(this);
         }
         return res;
     }

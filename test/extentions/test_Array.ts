@@ -107,11 +107,11 @@ describe("Array", () => {
             assert.equal(datas[1], null);
         })
     });
-    describe("distinct",()=>{
-        const datas=[1,3,5,1,'3',5,6];
-        it('distinct works ok',()=>{
-            assert.deepEqual(datas.distinct(),[1,3,5,'3',6]);
-            assert.deepEqual(datas.distinct((a,b)=>a.toString()==b.toString()),[1,3,5,6]);
+    describe("distinct", () => {
+        const datas = [1, 3, 5, 1, '3', 5, 6];
+        it('distinct works ok', () => {
+            assert.deepEqual(datas.distinct(), [1, 3, 5, '3', 6]);
+            assert.deepEqual(datas.distinct((a, b) => a.toString() == b.toString()), [1, 3, 5, 6]);
         });
 
     });
@@ -280,6 +280,9 @@ describe("Array", () => {
         it("[{a:100},{a:200},{a:300}] sum is 600", () => {
             assert.equal(objArray.sum(p => p.a), 600);
         });
+        it("sum range(1,100) get 4950", () => {
+            assert.equal(Array.range(1, 100).sum(), 4950);
+        });
     });
     describe("average", () => {
         let objArray = [{ a: 100 }, { a: 200 }, { a: 300 }];
@@ -287,8 +290,94 @@ describe("Array", () => {
         it("[{a:100},{a:200},{a:300}] sum is 600", () => {
             assert.equal(objArray.average(p => p.a), 200);
         });
+    });
+    describe("except", () => {
+        const from = [1, 3, 5, 7, 9];
+        it('[1,3,5,7,9] except [1,2,3,7] is [5,9]', () => {
+            assert.deepEqual(from.except([1, 2, 3, 7]), [5, 9]);
+        });
+        it('[1,3,5,7,9] except null is [1,3,5,7,9]', () => {
+            assert.deepEqual(from.except(null), from);
+        });
+    });
+    describe("intersect ", () => {
+        const from = [1, 3, 5, 7, 9];
+        it('[1,3,5,7,9] intersect  [1,2,3,7] is [5,9]', () => {
+            assert.deepEqual(from.intersect([1, 2, 3, 7]), [1, 3, 7]);
+        });
+        it('[1,3,5,7,9] intersect null is [1,3,5,7,9]', () => {
+            assert.deepEqual(from.intersect(null), []);
+        });
+    });
+    describe("union ", () => {
+        const from = [1, 3, 5, 7, 9, 5];
+        it('[1,3,5,7,9,5] union  [1,2,3,7] is [1,3,5,7,9,2]', () => {
+            assert.deepEqual(from.union([1, 2, 3, 7]), [1, 3, 5, 7, 9, 2]);
+        });
+        it('[1,3,5,7,9,5] union null is [1,3,5,7,9]', () => {
+            assert.deepEqual(from.union(null), [1, 3, 5, 7, 9]);
+        });
+    });
+    describe("skip", () => {
 
+        it('[1,3,5,7,9] skip(2) is [5,7,9]', () => {
+            let data = [1, 3, 5, 7, 9];
+            assert.deepEqual(data.skip(2), [5, 7, 9]);
+        });
+        it('[1,3,5,7,9] skip(10) is []', () => {
+            let data = [1, 3, 5, 7, 9];
+            assert.deepEqual(data.skip(10), []);
+        });
+        it('[1,3,5,7,9] skip(-2) is [1,3,5,7,9]', () => {
+            let data = [1, 3, 5, 7, 9];
+            assert.deepEqual(data.skip(-2), data);
+        });
+    });
 
+    describe("skipWhere", () => {
+
+        it('[1,3,5,7,9] skipWhere(p=>p<5) is [5,7,9]', () => {
+            let data = [1, 3, 5, 7, 9];
+            assert.deepEqual(data.skipWhere(p => p < 5), [5, 7, 9]);
+        });
+        it('[1,3,5,7,9]  skipWhere(p=>p<0) is [1,3,5,7,9]', () => {
+            let data = [1, 3, 5, 7, 9];
+            assert.deepEqual(data.skipWhere(p => p < 0), [1, 3, 5, 7, 9]);
+        });
+        it('[1,3,5,7,9]  skipWhere(p=>p<10) is []', () => {
+            let data = [1, 3, 5, 7, 9];
+            assert.deepEqual(data.skipWhere(p => p < 10), []);
+        });
+    });
+    describe("take", () => {
+
+        it('[1,3,5,7,9] take(2) is [1,3]', () => {
+            let data = [1, 3, 5, 7, 9];
+            assert.deepEqual(data.take(2), [1, 3]);
+        });
+        it('[1,3,5,7,9] take(10) is []', () => {
+            let data = [1, 3, 5, 7, 9];
+            assert.deepEqual(data.take(10), data);
+        });
+        it('[1,3,5,7,9] take(-2) is []', () => {
+            let data = [1, 3, 5, 7, 9];
+            assert.deepEqual(data.take(-2), []);
+        });
+    });
+    describe("takeWhere", () => {
+
+        it('[1,3,5,7,9] takeWhere(p=>p<5) is [1,3]', () => {
+            let data = [1, 3, 5, 7, 9];
+            assert.deepEqual(data.takeWhere(p => p < 5), [1, 3]);
+        });
+        it('[1,3,5,7,9]  takeWhere(p=>p<0) is []', () => {
+            let data = [1, 3, 5, 7, 9];
+            assert.deepEqual(data.takeWhere(p => p < 0), []);
+        });
+        it('[1,3,5,7,9]  takeWhere(p=>p<10) is [1,3,5,7,9]', () => {
+            let data = [1, 3, 5, 7, 9];
+            assert.deepEqual(data.takeWhere(p => p < 10), [1, 3, 5, 7, 9]);
+        });
     });
     describe("range", () => {
         it("range(5).toString() equals '0,1,2,3,4'", () => {
@@ -306,6 +395,9 @@ describe("Array", () => {
         it("range(7,2,-2).toString() equals '7,5,3'", () => {
             assert.equal(Array.range(7, 2, -2).toString(), '7,5,3');
         });
+        it("step 0 throws error", () => {
+            assert.throws(() => { Array.range(0, 100, 0) });
+        })
     });
 
     describe("orderby", () => {
@@ -318,6 +410,11 @@ describe("Array", () => {
             { id: "x005", name: '郑八', age: 15 },
             { id: "x006", name: '赵七', age: 13 },
         ]
+        it("order by null", () => {
+            let res = allStudents.orderBy();
+            assert.equal(res === allStudents, false);
+            assert.deepEqual(allStudents.orderBy(), allStudents);
+        });
         it("order by id", () => {
             let res = allStudents.orderBy(p => p.id);
             assert.equal(res[0].id, 'x001');
@@ -350,6 +447,11 @@ describe("Array", () => {
             assert.deepEqual(res[5], { id: "x001", name: '张三', age: 13 });
             assert.deepEqual(res[6], { id: "x004", name: '吴六', age: 11 });
         });
+        it("order by object", () => {
+            let res = allStudents.orderBy(p => p)
+            assert.equal(res === allStudents, false);
+            assert.deepEqual(res, allStudents);
+        })
     });
 
     describe("toDictionary", () => {
@@ -384,8 +486,56 @@ describe("Array", () => {
             };
             assert.deepEqual(allStudents.toDictionary(p => p.age), expected);
         });
+        it("elementSelector works ok", () => {
+            let expected = {
+                x001: '张三',
+                x002: '李四',
+                x003: '王五',
+                x004: '吴六',
+                x007: '李七',
+                x005: '郑八',
+                x006: '赵七'
+            };
+            assert.deepEqual(allStudents.toDictionary(p => p.id, p => p.name), expected);
+        });
     });
 
+    describe("toLookup", () => {
+        let allStudents = [
+            { id: "x001", name: '张三', age: 13, state: true },
+            { id: "x002", name: '李四', age: 17, state: true },
+            { id: "x003", name: '王五', age: 14, state: true },
+            { id: "x004", name: '吴六', age: 11, state: true },
+            { id: "x007", name: '李七', age: 13, state: true },
+            { id: "x005", name: '郑八', age: 15, state: true },
+            { id: "x006", name: '赵七', age: 13, state: true },
+        ];
+        it("to lookup by age", () => {
+            let expected = {
+                13: [{ id: "x001", name: '张三', age: 13, state: true },
+                { id: "x007", name: '李七', age: 13, state: true },
+                { id: "x006", name: '赵七', age: 13, state: true }
+                ],
+                17: [{ id: "x002", name: '李四', age: 17, state: true }],
+                14: [{ id: "x003", name: '王五', age: 14, state: true }],
+                11: [{ id: "x004", name: '吴六', age: 11, state: true }],
+                15: [{ id: "x005", name: '郑八', age: 15, state: true }],
+            };
+            let result=allStudents.toLookup(p => p.age);
+            console.log(result);
+            assert.deepEqual(result, expected);
+        });
+        it("elementSelector works ok", () => {
+            let expected = {
+                13: ['张三', '李七', '赵七'],
+                17: ['李四'],
+                14: ['王五'],
+                11: ['吴六'],
+                15: ['郑八'],
+            };
+            assert.deepEqual(allStudents.toLookup(p => p.age, p => p.name), expected);
+        });
+    });
     describe("innerJoin", () => {
         let allStudents = [
             { id: "x001", name: "张三", class: "c001" },
@@ -401,6 +551,8 @@ describe("Array", () => {
             { id: "c002", name: '二班' },
             { id: "c003", name: '三班' },
         ]
+        let nullDatas = allClasses;
+        nullDatas = null;
         it("inner join will ignore 'c004' and 'c003' ", () => {
             let res = allStudents.innerJoin(allClasses, p => p.class, p => p.id, (l, r) => {
                 return {
@@ -413,6 +565,31 @@ describe("Array", () => {
             // res.forEach(p=>console.log(JSON.stringify(p,null,0)));
             assert.equal(res.count(), 6);
             assert.equal(res.count(p => p.classId == 'c003' || p.classId == 'c004'), 0);
+        });
+        it("inner join null", () => {
+
+            let res = allStudents.innerJoin(nullDatas, p => p.class, p => p.id, (l, r) => {
+                return {
+                    studentId: l.id,
+                    studentName: l.name,
+                    classId: r.id,
+                    className: r.name
+                }
+            });
+            assert.equal(res.length, 0);
+        });
+        it("ignore x003 because resultSelector returns null.", () => {
+            let res = allStudents.innerJoin(allClasses, p => p.class, p => p.id, (l, r) => {
+                if (l.id === 'x003') return null;
+                return {
+                    studentId: l.id,
+                    studentName: l.name,
+                    classId: r.id,
+                    className: r.name
+                }
+            });
+            // res.forEach(p=>console.log(JSON.stringify(p,null,0)));
+            assert.equal(res.count(), 6 - 1);
         });
     });
     describe("outerJoin", () => {
@@ -430,6 +607,8 @@ describe("Array", () => {
             { id: "c002", name: '二班' },
             { id: "c003", name: '三班' },
         ]
+        let nullDatas = allClasses;
+        nullDatas = null;
         it("outer join will select all class", () => {
             let res = allStudents.outerJoin(allClasses, p => p.class, p => p.id, (l, r) => {
                 return {
@@ -446,8 +625,34 @@ describe("Array", () => {
             assert.equal(res.count(p => p.studentId == 'x006'), 1);
             assert.equal(res.where(p => p.studentId === 'x006').first().classId, undefined);
         });
+        it("outer join null", () => {
+
+            let res = allStudents.outerJoin(nullDatas, p => p.class, p => p.id, (l, r) => {
+                return {
+                    studentId: l && l.id,
+                    studentName: l && l.name,
+                    classId: r && r.id,
+                    className: r && r.name
+                }
+            });
+            assert.equal(res.length, allStudents.length);
+        });
+        it("ignore x003 because resultSelector returns null.", () => {
+            let res = allStudents.outerJoin(allClasses, p => p.class, p => p.id, (l, r) => {
+                if (l && l.id === 'x003') return null;
+                return {
+                    studentId: l && l.id,
+                    studentName: l && l.name,
+                    classId: r && r.id,
+                    className: r && r.name
+                }
+            });
+            res.forEach(p => console.log(JSON.stringify(p, null, 0)));
+            assert.equal(res.count(), 8 - 1);
+        });
     });
     describe("leftJoin", () => {
+
         let allStudents = [
             { id: "x001", name: "张三", class: "c001" },
             { id: "x002", name: "李四", class: "c001" },
@@ -462,6 +667,8 @@ describe("Array", () => {
             { id: "c002", name: '二班' },
             { id: "c003", name: '三班' },
         ]
+        let nullDatas = allClasses;
+        nullDatas = null;
         it("left join will ignore 'c003'", () => {
             let res = allStudents.leftJoin(allClasses, p => p.class, p => p.id, (l, r) => {
                 return {
@@ -476,6 +683,29 @@ describe("Array", () => {
             assert.equal(res.count(p => p.classId == 'c003'), 0);
             assert.equal(res.count(p => p.studentId == 'x006'), 1);
             assert.equal(res.where(p => p.studentId === 'x006').first().classId, undefined);
+        });
+        it("left join null", () => {
+            let res = allStudents.leftJoin(nullDatas, p => p.class, p => p.id, (l, r) => {
+                return {
+                    studentId: l.id,
+                    studentName: l.name,
+                    classId: r && r.id,
+                    className: r && r.name
+                }
+            });
+            assert.equal(res.length, allStudents.length);
+        });
+        it("ignore x003 because resultSelector returns null.", () => {
+            let res = allStudents.leftJoin(allClasses, p => p.class, p => p.id, (l, r) => {
+                if (l.id === 'x003') return null;
+                return {
+                    studentId: l.id,
+                    studentName: l.name,
+                    classId: r && r.id,
+                    className: r && r.name
+                }
+            });
+            assert.equal(res.count(), 7 - 1);
         });
     });
     describe("rightJoin", () => {
@@ -493,6 +723,8 @@ describe("Array", () => {
             { id: "c002", name: '二班' },
             { id: "c003", name: '三班' },
         ]
+        let nullDatas = allClasses;
+        nullDatas = null;
         it("right join will ignore 'c004'", () => {
             let res = allStudents.rightJoin(allClasses, p => p.class, p => p.id, (l, r) => {
                 return {
@@ -507,6 +739,31 @@ describe("Array", () => {
             assert.equal(res.count(p => p.classId == 'c003'), 1);
             assert.equal(res.where(p => p.classId === 'c003').first().studentId, undefined);
             assert.equal(res.count(p => p.studentId == 'x006'), 0);
+        });
+        it("right join null", () => {
+
+            let res = allStudents.rightJoin(nullDatas, p => p.class, p => p.id, (l, r) => {
+                return {
+                    studentId: l && l.id,
+                    studentName: l && l.name,
+                    classId: r.id,
+                    className: r.name
+                }
+            });
+            assert.equal(res.length, 0);
+        });
+        it("ignore x003 because resultSelector returns null.", () => {
+            let res = allStudents.rightJoin(allClasses, p => p.class, p => p.id, (l, r) => {
+                if (l && l.id === 'x003') return null;
+                return {
+                    studentId: l && l.id,
+                    studentName: l && l.name,
+                    classId: r.id,
+                    className: r.name
+                }
+            });
+            assert.equal(res.count(), 7 - 1);
+
         });
     });
 
@@ -531,5 +788,26 @@ describe("Array", () => {
             assert.deepEqual(res, ["16aa6", "25bb5", "34cc4"]);
         });
     });
-
+    describe("repeat", () => {
+        it('[] repeat 10 is []', () => {
+            assert.deepEqual([].repeat(10), []);
+        });
+        it('[2,3] repeat 3 is [2,3,2,3,2,3]', () => {
+            assert.deepEqual([2, 3].repeat(3), [2, 3, 2, 3, 2, 3]);
+        });
+        it('[2,3] repeat 0 is []', () => {
+            assert.deepEqual([2, 3].repeat(0), []);
+        });
+        it('[2,3] repeat 1 is [2,3]', () => {
+            assert.deepEqual([2, 3].repeat(1), [2, 3]);
+        });
+    });
+    describe("copy", () => {
+        it('[1,2,3] copy returns [1,2,3]', () => {
+            const data = [1, 2, 3];
+            const result = data.copy();
+            assert.notEqual(data, result);
+            assert.deepEqual(data, result);
+        });
+    });
 });
