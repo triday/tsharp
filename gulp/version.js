@@ -22,13 +22,14 @@ function inc(importance) {
 }
 function incVersion(importance) {
     return getCurrentBranch().then((branch) => {
-        if (branch === 'dev') {
-            inc(importance)
-        } else {
-            log.error('=============================================');
-            log.error('Increase version only support in dev branch.');
-            log.error('=============================================');
-        }
+        inc(importance)
+        // if (branch === 'dev') {
+        //     inc(importance)
+        // } else {
+        //     log.error('=============================================');
+        //     log.error('Increase version only support in dev branch.');
+        //     log.error('=============================================');
+        // }
     });
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "tsharp",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,7 +13,7 @@
     "clean": "gulp clean-all && npx rimraf node_modules",
     "reinstall": "npm run clean && npm i",
     "cover": "nyc npm test",
-    "check": "nyc --check-coverage --lines 90 --functions 95 --branches 90 npm test"
+    "check": "nyc --check-coverage --lines 80 --functions 80 --branches 80 npm test"
   },
   "repository": {
     "type": "git",
