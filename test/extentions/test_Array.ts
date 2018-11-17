@@ -425,6 +425,11 @@ describe("Array", () => {
             assert.equal(res[0].id, 'x007');
             assert.equal(res[6].id, 'x001');
         });
+        it("order by age", () => {
+            let res = allStudents.orderBy(p => p.age);
+            assert.equal(res[0].id, 'x004');
+            assert.equal(res[6].id, 'x002');
+        });
         it("order by age desc,id", () => {
             let res = allStudents.orderBy([p => p.age, true], p => p.id);
 
@@ -451,7 +456,7 @@ describe("Array", () => {
             let res = allStudents.orderBy(p => p)
             assert.equal(res === allStudents, false);
             assert.deepEqual(res, allStudents);
-        })
+        });
     });
 
     describe("toDictionary", () => {
@@ -521,7 +526,7 @@ describe("Array", () => {
                 11: [{ id: "x004", name: '吴六', age: 11, state: true }],
                 15: [{ id: "x005", name: '郑八', age: 15, state: true }],
             };
-            let result=allStudents.toLookup(p => p.age);
+            let result = allStudents.toLookup(p => p.age);
             console.log(result);
             assert.deepEqual(result, expected);
         });
@@ -810,4 +815,28 @@ describe("Array", () => {
             assert.deepEqual(data, result);
         });
     });
+    describe("fromObject", () => {
+        const data = {
+            's001': { 'c1': 90, 'c2': 85 },
+            's002': { 'c1': 99, 'c2': 100 },
+            's003': { 'c1': 75, 'c2': 60 }
+        }
+        it("return tuple array", () => {
+            const expected = [['s001', { 'c1': 90, 'c2': 85 }], ['s002', { 'c1': 99, 'c2': 100 }], ['s003', { 'c1': 75, 'c2': 60 }]];
+            assert.deepEqual(Array.fromObject(data), expected);
+        });
+        it("return [] if from null", () => {
+            assert.deepEqual(Array.fromObject(null), []);
+        });
+        it("return custom object array", () => {
+            const expected = [{ id: 's001', total: 175 }, { id: 's002', total: 199 }, { id: 's003', total: 135 }];
+            assert.deepEqual(Array.fromObject(data, (v, k) => {
+                return {
+                    id: v,
+                    total: k.c1 + k.c2
+                }
+            }), expected);
+        });
+    });
+
 });

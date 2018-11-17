@@ -1,12 +1,6 @@
 /// <reference path="../extentions/Array.ts" />
 
-
-
 namespace tsharp {
-    export enum Traversal {
-        Before,
-        After
-    }
     /**
      * 表示树状数据结构的节点。
      */
@@ -14,31 +8,54 @@ namespace tsharp {
     {
         constructor(public value: T, public childrens: TreeNode<T>[] = []) {
         }
-        public forEachNode(callback: (value: T, node: TreeNode<T>, depth: number) => void, traversal: Traversal = Traversal.Before, depth: number = 0): void {
-            if (!callback) return;
-            if (traversal == Traversal.Before) {
-                callback(this.value, this, depth);
-                (this.childrens || []).forEach(p => { p.forEachNode(callback, traversal, depth + 1); })
-            } else {
-                callback(this.value, this, depth);
-                (this.childrens || []).forEach(p => { p.forEachNode(callback, traversal, depth + 1); })
-            }
+        /**
+         * 前序遍历树状结构的节点以及子节点。
+         * @param callback 遍历元素的回调函数。
+         * @param depth 起始深度值。
+         */
+        public forEachBefore(callback: (value: T, node: TreeNode<T>, depth: number) => void, depth: number = 0): void {
+            if(!callback) return;
+            callback(this.value, this, depth);
+            (this.childrens||[]).forEach(p => { p.forEachBefore(callback, depth + 1); })
+        }
+        /**
+         * 后序遍历树状结构的节点以及子节点。
+         * @param callback 遍历元素的回调函数。
+         * @param depth 起始深度值。
+         */
+        public forEachAfter(callback: (value: T, node: TreeNode<T>, depth: number) => void, depth: number = 0): void {
+            if(!callback) return;
+            (this.childrens||[]).forEach(p => { p.forEachAfter(callback, depth + 1); })
+            callback(this.value, this, depth);
+        }
+        /**
+         * 将节点根据比较函数进行递归排序。
+         * @param compareFn 比较当前Node值的函数。
+         */
+        public sort(compareFn: (a: T, b: T) => number): void {
+            this.childrens.sort((a, b) => compareFn(a.value, b.value));
+            this.childrens.forEach(p => p.sort(compareFn));
         }
     }
-}
 
-interface Array<T>
-{
-    toTree<K>(keySelector: (item: T) => K, parentKeySelector: (item: T) => K): tsharp.TreeNode<T>[];
+}
+interface Array<T> {
+    /**
+     * 将数组转换为树状结构的节点集。
+     * @param keySelector 选择当前元素的key的函数。
+     * @param parentKeySelector 选择当前元素的父元素key的函数。
+     * @param sortfn 排序数组结构的函数。
+     * @returns 返回树状结构的节点集。
+     */
+    toTree<K>(keySelector: (item: T) => K, parentKeySelector: (item: T) => K, sortfn?: (a: T, b: T) => number): tsharp.TreeNode<T>[];
 }
 if (!Array.prototype.toTree) {
-    Array.prototype.toTree = function <T, K>(keySelector: (item: T) => K, parentKeySelector: (item: T) => K): tsharp.TreeNode<T>[] {
-        function toDictionaryInternal<T>(array: T[], keySelector: (value: T, index: number, array: T[]) => any, elementSelector?: (value: T, index: number, array: T[]) => any): any {
+    Array.prototype.toTree = function <T, K>(keySelector: (item: T) => K, parentKeySelector: (item: T) => K, sortfn?: (a: T, b: T) => number): tsharp.TreeNode<T>[] {
+        function toDictionaryInternal<T>(array: T[], keySelector: (value: T, index: number, array: T[]) => any): any {
             let res: any = {};
             array.forEach((current: T, index: number) => {
                 let key = keySelector(current, index, this);
-                let value = elementSelector ? elementSelector(current, index, this) : current;
-                res[key] = value;
+                res[key] = current;
             }, {});
             return res;
         }
@@ -59,6 +76,11 @@ if (!Array.prototype.toTree) {
                 value.flag = true;
             }
         }
-        return entries.where(p => p.flag === false).select(p => p.node);
+        let res = entries.where(p => p.flag === false).select(p => p.node);
+        if (sortfn) {
+            res.sort((a, b) => sortfn(a.value, b.value));
+            res.forEach(p => p.sort(sortfn));
+        }
+        return res;
     }
 }

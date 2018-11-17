@@ -1,5 +1,3 @@
-/// <reference path="./init_String.ts" />
-
 import "../../src/extentions/String";
 import "../../src/extentions/Number";
 import "../../src/extentions/Date";

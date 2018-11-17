@@ -1,5 +1,6 @@
 
 
+
 interface Array<T> {
 
     /**
@@ -248,12 +249,12 @@ interface Array<T> {
      * @returns 返回转换后的键-列表对对象。
      */
     toLookup(keySelector: (value: T, index: number, array: T[]) => string): { [key: string]: T[] }
-     /**
-     * 将数组转换为键-列表对对象。
-     * @param keySelector 用于从每个元素中提取键的函数。
-     * @param elementSelector 用于从每个元素产生结果元素值的转换函数。
-     * @returns 返回转换后的键-列表对对象。
-     */
+    /**
+    * 将数组转换为键-列表对对象。
+    * @param keySelector 用于从每个元素中提取键的函数。
+    * @param elementSelector 用于从每个元素产生结果元素值的转换函数。
+    * @returns 返回转换后的键-列表对对象。
+    */
     toLookup<U>(keySelector: (value: T, index: number, array: T[]) => string, elementSelector: (value: T, index: number, array: T[]) => U): { [key: string]: U[] }
     /**
      * 将数组转换为键-列表对对象。
@@ -311,32 +312,32 @@ interface Array<T> {
      * @returns 返回合并两个数组子元素后组成的新数组。
      */
     zip<U1, R>(other1: U1[], resultSelector: (item: T, otherItem1: U1) => R): R[];
-     /**
-     * 将指定函数应用于三个序列的对应元素，以生成结果序列。
-     * @param other1 另外一个数组序列。
-     * @param other2 另外第二个数组序列。
-     * @param resultSelector 用于指定如何合并这三个序列的子元素的函数。
-     * @returns 返回合并三个数组子元素后组成的新数组。
-     */
+    /**
+    * 将指定函数应用于三个序列的对应元素，以生成结果序列。
+    * @param other1 另外一个数组序列。
+    * @param other2 另外第二个数组序列。
+    * @param resultSelector 用于指定如何合并这三个序列的子元素的函数。
+    * @returns 返回合并三个数组子元素后组成的新数组。
+    */
     zip<U1, U2, R>(other1: U1[], other2: U2[], resultSelector: (item: T, otherItem1: U1, otherItem2: U2) => R): R[];
-     /**
-     * 将指定函数应用于四个序列的对应元素，以生成结果序列。
-     * @param other1 另外一个数组序列。
-     * @param other2 另外第二个数组序列。
-     * @param other3 另外第三个数组序列。
-     * @param resultSelector 用于指定如何合并这四个序列的子元素的函数。
-     * @returns 返回合并四个数组子元素后组成的新数组。
-     */
+    /**
+    * 将指定函数应用于四个序列的对应元素，以生成结果序列。
+    * @param other1 另外一个数组序列。
+    * @param other2 另外第二个数组序列。
+    * @param other3 另外第三个数组序列。
+    * @param resultSelector 用于指定如何合并这四个序列的子元素的函数。
+    * @returns 返回合并四个数组子元素后组成的新数组。
+    */
     zip<U1, U2, U3, R>(other1: U1[], other2: U2[], other3: U3[], resultSelector: (item: T, otherItem1: U1, otherItem2: U2, otherItem3: U3) => R): R[];
-     /**
-     * 将指定函数应用于五个序列的对应元素，以生成结果序列。
-     * @param other1 另外一个数组序列。
-     * @param other2 另外第二个数组序列。
-     * @param other3 另外第三个数组序列。
-     * @param other4 另外第四个数组序列。
-     * @param resultSelector 用于指定如何合并这五个序列的子元素的函数。
-     * @returns 返回合并五个数组子元素后组成的新数组。
-     */
+    /**
+    * 将指定函数应用于五个序列的对应元素，以生成结果序列。
+    * @param other1 另外一个数组序列。
+    * @param other2 另外第二个数组序列。
+    * @param other3 另外第三个数组序列。
+    * @param other4 另外第四个数组序列。
+    * @param resultSelector 用于指定如何合并这五个序列的子元素的函数。
+    * @returns 返回合并五个数组子元素后组成的新数组。
+    */
     zip<U1, U2, U3, U4, R>(other1: U1[], other2: U2[], other3: U3[], other4: U4, resultSelector: (item: T, otherItem1: U1, otherItem2: U2, otherItem3: U3, otherItem4: U4) => R): R[];
     /**
      * 返回由该数组重复指定的次数组成的新数组。
@@ -344,6 +345,7 @@ interface Array<T> {
      * @returns 返回重复制定次数后的新数组。
      */
     repeat(count: number): T[];
+  
 }
 interface ArrayConstructor {
     /**
@@ -360,6 +362,20 @@ interface ArrayConstructor {
      * @returns 返回数字序列组成的数组。
      */
     range(start: number, stop: number, step?: number): number[];
+
+    /**
+     * 从字典对象转换为键值对元组的数组。
+     * @param obj 要转换的对象。
+     * @returns 返回键值对元组的数组。
+     */
+    fromObject<T>(obj: { [key: string]: T }): [string, T][];
+    /**
+     * 根据转换函数从字典对象转换为数组。
+     * @param obj 要转换的对象。
+     * @param selector 数组元素的转换函数。
+     * @returns 返回转换后的对象数组。
+     */
+    fromObject<T, U>(obj: { [key: string]: T }, selector: (key: string, value: T) => U): U[];
 }
 
 
@@ -789,6 +805,17 @@ if (!Array.range) {
         } else {
             for (let i = start; i > stop; i += step) {
                 res.push(i);
+            }
+        }
+        return res;
+    }
+}
+if (!Array.fromObject) {
+    Array.fromObject = function <T, U>(obj: { [key: string]: T }, selector?: (key: string, value: T) => U): any[] {
+        let res: any[] = [];
+        if (obj) {
+            for (let key in obj) {
+                res.push(selector ? selector(key, obj[key]) : [key, obj[key]]);
             }
         }
         return res;

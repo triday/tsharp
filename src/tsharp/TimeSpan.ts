@@ -1,6 +1,4 @@
 /// <reference path="../extentions/Number.ts" />
-
-
 namespace tsharp {
     export class TimeSpan {
 
@@ -80,7 +78,7 @@ namespace tsharp {
             });
         }
         public toString(): string {
-            return this.format(null);
+            return this.format(TimeSpan.DEFAULT_FORMAT);
         }
         public valueOf():number{
             return this._value;
