@@ -14,7 +14,7 @@ function inc(importance) {
         .pipe(gulp.dest('./'))
         // commit the changed version number
         .pipe(git.commit('bumps package version'))
-
+        .pipe(git.push('git push origin --tags'))
         // read only one file to get the version number
         .pipe(filter('package.json'))
         // **tag it in the repository**
