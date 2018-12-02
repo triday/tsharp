@@ -568,6 +568,42 @@ describe("String", () => {
             });
         });
     });
+    describe("isVarName",()=>{
+        const validNames = [
+            '_',
+            '$',
+            '__',
+            '$$',
+            '$a$',
+            '_a_',
+            'name',
+            'name100',
+            'name_100'
+        ];
+        const invalidNames = [
+            '123',
+            'abc.efg',
+            'abc\nefg',
+            ''
+        ]
+        describe('valid var name', () => {
+            validNames.forEach(text => {
+                it(`'${text} is valid var name'`, () => {
+                    assert.equal(text.isVarName(), true);
+                });
+
+            });
+        });
+        describe('invalid var name', () => {
+            invalidNames.forEach(text => {
+                it(`'${text} is invalid var name'`, () => {
+                    assert.equal(text.isVarName(), false);
+                });
+            });
+        });
+    
+    });
+
     describe("hashCode", () => {
         it("the hash code is unique and fixed", () => {
             let text1 = Math.round((Math.random() * 1000)).toString();
