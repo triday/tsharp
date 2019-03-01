@@ -80,8 +80,8 @@ describe("String", () => {
             assert.equal(String.format('ab{0}c', null), "abc");
             assert.equal(String.format('ab{0}c', undefined), "abc");
         });
-        it('no custom format',()=>{
-            assert.equal(String.format('{0:f2}',{}),'[object Object]');
+        it('no custom format', () => {
+            assert.equal(String.format('{0:f2}', {}), '[object Object]');
         });
         it("format width is ok", () => {
             assert.equal(String.format("a{0,3}b", 12), "a 12b");
@@ -568,7 +568,7 @@ describe("String", () => {
             });
         });
     });
-    describe("isVarName",()=>{
+    describe("isVarName", () => {
         const validNames = [
             '_',
             '$',
@@ -601,7 +601,7 @@ describe("String", () => {
                 });
             });
         });
-    
+
     });
 
     describe("hashCode", () => {
@@ -633,5 +633,40 @@ describe("String", () => {
         it('throws error if the ends text too long', () => {
             assert.throws(() => { 'abc'.truncat(2) });
         });
+    });
+
+    describe("htmlEncode", () => {
+        const datas = [
+            ["", ""],
+            ["\n", "<br>"],
+            ["<", "&lt;"],
+            [">","&gt;"],
+            ["&","&amp;"],
+            ["<>","&lt;&gt;"],
+            ["<>\"abc&","&lt;&gt;\"abc&amp;"],
+            ["<p>test！</p>","&lt;p&gt;test！&lt;/p&gt;"]
+        ]
+        datas.forEach(([text, encode]) => {
+            it(`htmlencode "${text}" get "${encode}"`, () => {
+                assert.equal(encode, text.htmlEncode());
+            })
+        })
+    });
+    describe("htmlDecode", () => {
+        const datas = [
+            ["", ""],
+            ["\n", "<br>"],
+            ["<", "&lt;"],
+            [">","&gt;"],
+            ["&","&amp;"],
+            ["<>","&lt;&gt;"],
+            ["<>\"abc&","&lt;&gt;\"abc&amp;"],
+            ["<p>test！</p>","&lt;p&gt;test！&lt;/p&gt;"]
+        ]
+        datas.forEach(([text, encode]) => {
+            it(`htmldecode "${encode}" get "${text}"`, () => {
+                assert.equal(text, encode.htmlDocode());
+            })
+        })
     });
 });

@@ -145,7 +145,7 @@ interface String {
      * 判断字符串是否是合法的变量名。
      * @returns 返回一个值，该值表示该字符串是否是合法的变量名。
      */
-    isVarName():boolean;
+    isVarName(): boolean;
     /**
      * 计算字符串的哈希值。
      * @returns 返回该字符串的哈希值。
@@ -158,17 +158,25 @@ interface String {
      * @returns 返回截断后的字符串。
      */
     truncat(maxLength: number, endsText?: string): string;
+    /**
+     * 将字符串进行html编码
+     */
+    htmlEncode(): string;
+    /**
+     * 将字符串进行html解码
+     */
+    htmlDocode(): string;
 }
 
 
 if (!String.isNullOrEmpty) {
-    String.isNullOrEmpty = (val:string) => !val;
+    String.isNullOrEmpty = (val: string) => !val;
 }
 if (!String.isNullOrWhiteSpace) {
-    String.isNullOrWhiteSpace = (val:string) => !val || !(val.trim())
+    String.isNullOrWhiteSpace = (val: string) => !val || !(val.trim())
 }
 if (!String.format) {
-    String.format = (fmt:string, ...args:any[]) => {
+    String.format = (fmt: string, ...args: any[]) => {
         if (String.isNullOrEmpty(fmt)) return fmt;
         let regex = /{([_a-zA-Z0-9]+)\s*(?:,\s*([\+-]?\d+)\s*)?(?::((?:(?:\\})|[^}])*))?}/g
         return fmt.replace(regex, (substring: string, ...items: any[]) => {
@@ -200,7 +208,7 @@ if (!String.format) {
     }
 }
 if (!String.from) {
-    String.from = (value:string, count:number) => {
+    String.from = (value: string, count: number) => {
         let res = ""
         for (let i = 0; i < count; i++) {
             res += (value || '');
@@ -209,7 +217,7 @@ if (!String.from) {
     }
 }
 if (!String.prototype.startsWithPattern) {
-    String.prototype.startsWithPattern = function (pattern:RegExp) {
+    String.prototype.startsWithPattern = function (pattern: RegExp) {
         if (!pattern) throw new Error('pattern can not be null.')
         if (pattern.source[0] === '^') {
             return pattern.test(this);
@@ -219,7 +227,7 @@ if (!String.prototype.startsWithPattern) {
     }
 }
 if (!String.prototype.endsWithPattern) {
-    String.prototype.endsWithPattern = function (pattern:RegExp) {
+    String.prototype.endsWithPattern = function (pattern: RegExp) {
         if (!pattern) throw new Error('pattern can not be null.')
         if (pattern.source[pattern.source.length - 1] === '$') {
             return pattern.test(this);
@@ -240,13 +248,13 @@ if (!String.prototype.trimEnd) {
 }
 
 if (!String.prototype.replaceAll) {
-    String.prototype.replaceAll = function (substr:string, newSubStr:string) {
+    String.prototype.replaceAll = function (substr: string, newSubStr: string) {
         return String.isNullOrEmpty(substr) ? this : this.replace(new RegExp(substr, "gm"), newSubStr);
     }
 }
 
 if (!String.prototype.equals) {
-    String.prototype.equals = function (other:string, ignoreCase = false) {
+    String.prototype.equals = function (other: string, ignoreCase = false) {
         if (ignoreCase && other) {
             return this.toLowerCase() === other.toLowerCase();
         } else {
@@ -255,7 +263,7 @@ if (!String.prototype.equals) {
     }
 }
 if (!String.prototype.contains) {
-    String.prototype.contains = function (substr:string, ignoreCase = false) {
+    String.prototype.contains = function (substr: string, ignoreCase = false) {
         if (substr === null || substr === undefined) return false;
         if (!ignoreCase) {
             return this.indexOf(substr) >= 0;
@@ -327,7 +335,7 @@ if (!String.prototype.isNumber) {
     }
 }
 if (!String.prototype.isPattern) {
-    String.prototype.isPattern = function (pattern:RegExp):boolean {
+    String.prototype.isPattern = function (pattern: RegExp): boolean {
         if (!pattern) throw new Error('pattern can not be null')
         return pattern.test(this);
     }
@@ -339,7 +347,7 @@ if (!String.prototype.isEmail) {
         return this.isPattern(new RegExp(regTxt));
     }
 }
-if(!String.prototype.isVarName){
+if (!String.prototype.isVarName) {
     String.prototype.isVarName = function () {
         const regTxt = "^[\$_a-zA-Z][\$_0-9a-zA-Z]*$"
         return this.isPattern(new RegExp(regTxt));
@@ -369,4 +377,37 @@ if (!String.prototype.truncat) {
 
     }
 }
+if (!String.prototype.htmlEncode) {
+    (function () {
+        const encode_map = {
+            '\n': '<br>',
+            '\r': '<br>',
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            [String.fromCharCode(160)]: '&nbsp;'
+        }
+        String.prototype.htmlEncode = function (): string {
+            return this.split('')
+                .reduce((prev: string, ch: string) => prev + ((ch in encode_map) ? encode_map[ch] : ch)
+                    , '');
+        }
+    })();
+}
+if (!String.prototype.htmlDocode) {
 
+    (function () {
+        const decode_map: { [key: string]: string } = {
+            '<br>': '\n',
+            '&amp;': '&',
+            '&lt;': '<',
+            '&gt;': '>',
+            '&nbsp;': String.fromCharCode(160)
+        }
+        String.prototype.htmlDocode = function (): string {
+            return Object.keys(decode_map).reduce((prev, key) => {
+                return prev.replaceAll(key, decode_map[key]);
+            }, this);
+        }
+    })()
+}
