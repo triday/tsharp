@@ -669,4 +669,74 @@ describe("String", () => {
             })
         })
     });
+    describe("toTitleCase",()=>{
+        const data=[
+            ["",""],
+            ["abc","Abc"],
+            ["Hello world","Hello World"],
+            ["wAr aNd pEaCe","War And Peace"],
+            ["ABC","Abc"],
+            ["Abc","Abc"],
+        ];
+        data.forEach(([from,to])=>{
+            it(`"${from}" toTileCase get "${to}"`,function(){
+                assert.equal(from.toTitleCase(),to);
+            });
+        });
+    });
+    describe("toCamelCase",()=>{
+        const data=[
+            ["",""],
+            ["abc","abc"],
+            ["Hello world","helloWorld"],
+            ["background-color","backgroundColor"],
+            ["background_color","backgroundColor"],
+            ["backgroundColor","backgroundColor"],
+            ["ab-cd-ef","abCdEf"],
+            ["ab-cd-ef-","abCdEf"],
+            ["ab-cd-ef--","abCdEf"],
+            ["ab-cd--ef--","abCdEf"],
+            ["--ab-cd--ef--","abCdEf"],
+            ["--ab-cd-__-ef--","abCdEf"]
+        ];
+        data.forEach(([from,to])=>{
+            it(`"${from}" toCamelCase get "${to}"`,function(){
+                assert.equal(from.toCamelCase(),to);
+            });
+        });
+        const data2=[
+            ["",""],
+            ["abc","Abc"],
+            ["Hello world","HelloWorld"],
+            ["background-color","BackgroundColor"],
+            ["background_color","BackgroundColor"],
+            ["backgroundColor","BackgroundColor"],
+            ["ab-cd-ef","AbCdEf"],
+            ["ab-cd-ef-","AbCdEf"],
+            ["ab-cd-ef--","AbCdEf"],
+            ["ab-cd--ef--","AbCdEf"],
+            ["--ab-cd--ef--","AbCdEf"],
+            ["--ab-cd-__-ef--","AbCdEf"]
+        ];
+        data2.forEach(([from,to])=>{
+            it(`"${from}" toCamelCase with firstWorldUpper get "${to}"`,function(){
+                assert.equal(from.toCamelCase(true),to);
+            });
+        });
+    });
+    describe("toCssName",()=>{
+        const data=[
+            ["",""],
+            ["border","border"],
+            ["borderBottom","border-bottom"],
+            ["borderBottomColor","border-bottom-color"],
+            ["border-bottom","border-bottom"],
+            ["border-bottom-color","border-bottom-color"],
+        ];
+        data.forEach(([from,to])=>{
+            it(`"${from}" toCssName  get "${to}"`,function(){
+                assert.equal(from.toCssName(),to);
+            });
+        })
+    });
 });

@@ -166,6 +166,21 @@ interface String {
      * 将字符串进行html解码
      */
     htmlDocode(): string;
+
+    /**
+     * 将字符串转换为驼峰命名字符串
+     * @param firstWordUpper 是否将第一个单词转为驼峰格式，默认为false。
+     */
+    toCamelCase(firstWordUpper?: boolean): string;
+    /**
+     * 将字符串转换为标题大写的字符串
+     */
+    toTitleCase(): string;
+    /**
+     * 将驼峰命名法的字符串转换为css属性格式的字符串。
+     * @example backgroundColor => background-color
+     */
+    toCssName(): string;
 }
 
 
@@ -410,4 +425,28 @@ if (!String.prototype.htmlDocode) {
             }, this);
         }
     })()
+}
+if (!String.prototype.toCamelCase) {
+    String.prototype.toCamelCase = function (firstWordUpper: boolean = false): string {
+        return (this.match(/[a-zA-Z0-9]+/g)||[]).map((value: string, index: number) => {
+            let firstLetter = (index > 0 || firstWordUpper) ? value[0].toUpperCase() : value[0].toLowerCase();
+            let leftLetters = value.slice(1);
+            return firstLetter + leftLetters;
+        }).join('');
+    }
+}
+if (!String.prototype.toTitleCase) {
+    String.prototype.toTitleCase = function (): string {
+        return this.replace(/\w+/g, (word: string) => {
+            return word[0].toUpperCase() + word.slice(1).toLowerCase();
+        });
+    }
+}
+if (!String.prototype.toCssName) {
+    String.prototype.toCssName = function (): string {
+        let result: string = this.replace(/[A-Z]/g, (word: string) => {
+            return '-' + word.toLowerCase();
+        });
+        return /^-/.test(result) ? result.slice(1) : result;
+    }
 }
