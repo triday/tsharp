@@ -15,14 +15,20 @@ module.exports = {
     },
     output: {
         filename: '[name].js',
-        path: output_path
+        path: output_path,
+        library: 'tsharp',
+        libraryTarget: 'umd',
+        globalObject: 'this',
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
     },
     module: {
-        rules: [
-            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+        rules: [{
+                enforce: "pre",
+                test: /\.js$/,
+                loader: "source-map-loader"
+            },
             {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
