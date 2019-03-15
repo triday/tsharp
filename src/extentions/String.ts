@@ -50,6 +50,11 @@ interface String {
      */
     trimEnd(): string;
     /**
+     * 从当前字符串中移除数组中指定的一组字符的所有前导匹配项和尾部匹配项。
+     * @returns 从当前字符串的开头移除所出现的所有 chars 参数中的字符后剩余的字符串。 如果 chars 为 null 或空字符串，则改为移除空白字符。 如果从当前实例无法删除字符，此方法返回未更改的当前实例。
+     */
+    trimChars(chars: string): string;
+    /**
      * 返回一个新字符串，其中当前实例中出现的所有指定字符串都替换为另一个指定的字符串。
      * @param substr 要替换的字符串。
      * @param newSubStr 要替换 substr 的所有匹配项的字符串。
@@ -261,6 +266,22 @@ if (!String.prototype.trimEnd) {
         return this.replace(/\s*$/, '');
     }
 }
+if (!String.prototype.trimChars) {
+    String.prototype.trimChars = function (chars: string): string {
+        if (chars && chars.length > 0) {
+            let charsSet = chars.split('').reduce((prev: { [key: string]: boolean }, curr) => {
+                prev[curr] = true
+                return prev;
+            }, {});
+            let [startIndex, endIndex] = [0, this.length - 1];
+            while (startIndex <= endIndex && this[startIndex] in charsSet) startIndex++;
+            while (endIndex >= startIndex && this[endIndex] in charsSet) endIndex--;
+            return this.slice(startIndex, endIndex + 1);
+        } else {
+            return this.trim();
+        }
+    }
+}
 
 if (!String.prototype.replaceAll) {
     String.prototype.replaceAll = function (substr: string, newSubStr: string) {
@@ -428,7 +449,7 @@ if (!String.prototype.htmlDocode) {
 }
 if (!String.prototype.toCamelCase) {
     String.prototype.toCamelCase = function (firstWordUpper: boolean = false): string {
-        return (this.match(/[a-zA-Z0-9]+/g)||[]).map((value: string, index: number) => {
+        return (this.match(/[a-zA-Z0-9]+/g) || []).map((value: string, index: number) => {
             let firstLetter = (index > 0 || firstWordUpper) ? value[0].toUpperCase() : value[0].toLowerCase();
             let leftLetters = value.slice(1);
             return firstLetter + leftLetters;

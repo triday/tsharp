@@ -242,6 +242,35 @@ describe("String", () => {
         });
 
     });
+    describe("trimChars", () => {
+        it(`" abc " trimChars(null) get "abc"`, function () {
+            assert.equal(" abc ".trimChars(null), "abc");
+        })
+        it(`" abc " trimChars() get "abc"`, function () {
+            assert.equal(" abc ".trimChars(""), "abc");
+        })
+        it(`" abc d" trimChars() get "abc d"`, function () {
+            assert.equal(" abc d".trimChars(""), "abc d");
+        })
+        it(`"      " trimChars() get ""`, function () {
+            assert.equal("      ".trimChars(""), "");
+        })
+        it(`"aaaa" trimChars(a) get ""`, function () {
+            assert.equal("aaaa".trimChars("a"), "");
+        })
+        it(`" aaaa" trimChars(a) get " "`, function () {
+            assert.equal(" aaaa".trimChars("a"), " ");
+        })
+        it(`" aaaa " trimChars(a) get " aaaa "`, function () {
+            assert.equal(" aaaa ".trimChars("a"), " aaaa ");
+        })
+        it(`"abaaab" trimChars(ab) get ""`, function () {
+            assert.equal("abaaab".trimChars("ab"), "");
+        })
+        it(`"abcabcabc" trimChars(ab) get "cabcabc"`, function () {
+            assert.equal("abcabcabc".trimChars("ab"), "cabcabc");
+        })
+    });
     describe("replaceAll", () => {
         it("'abc' replaceall 'b' to '#' get 'a#c'", () => {
             assert.equal("abc".replaceAll('b', '#'), "a#c");
@@ -640,11 +669,11 @@ describe("String", () => {
             ["", ""],
             ["\n", "<br>"],
             ["<", "&lt;"],
-            [">","&gt;"],
-            ["&","&amp;"],
-            ["<>","&lt;&gt;"],
-            ["<>\"abc&","&lt;&gt;\"abc&amp;"],
-            ["<p>test！</p>","&lt;p&gt;test！&lt;/p&gt;"]
+            [">", "&gt;"],
+            ["&", "&amp;"],
+            ["<>", "&lt;&gt;"],
+            ["<>\"abc&", "&lt;&gt;\"abc&amp;"],
+            ["<p>test！</p>", "&lt;p&gt;test！&lt;/p&gt;"]
         ]
         datas.forEach(([text, encode]) => {
             it(`htmlencode "${text}" get "${encode}"`, () => {
@@ -657,11 +686,11 @@ describe("String", () => {
             ["", ""],
             ["\n", "<br>"],
             ["<", "&lt;"],
-            [">","&gt;"],
-            ["&","&amp;"],
-            ["<>","&lt;&gt;"],
-            ["<>\"abc&","&lt;&gt;\"abc&amp;"],
-            ["<p>test！</p>","&lt;p&gt;test！&lt;/p&gt;"]
+            [">", "&gt;"],
+            ["&", "&amp;"],
+            ["<>", "&lt;&gt;"],
+            ["<>\"abc&", "&lt;&gt;\"abc&amp;"],
+            ["<p>test！</p>", "&lt;p&gt;test！&lt;/p&gt;"]
         ]
         datas.forEach(([text, encode]) => {
             it(`htmldecode "${encode}" get "${text}"`, () => {
@@ -669,73 +698,73 @@ describe("String", () => {
             })
         })
     });
-    describe("toTitleCase",()=>{
-        const data=[
-            ["",""],
-            ["abc","Abc"],
-            ["Hello world","Hello World"],
-            ["wAr aNd pEaCe","War And Peace"],
-            ["ABC","Abc"],
-            ["Abc","Abc"],
+    describe("toTitleCase", () => {
+        const data = [
+            ["", ""],
+            ["abc", "Abc"],
+            ["Hello world", "Hello World"],
+            ["wAr aNd pEaCe", "War And Peace"],
+            ["ABC", "Abc"],
+            ["Abc", "Abc"],
         ];
-        data.forEach(([from,to])=>{
-            it(`"${from}" toTileCase get "${to}"`,function(){
-                assert.equal(from.toTitleCase(),to);
+        data.forEach(([from, to]) => {
+            it(`"${from}" toTileCase get "${to}"`, function () {
+                assert.equal(from.toTitleCase(), to);
             });
         });
     });
-    describe("toCamelCase",()=>{
-        const data=[
-            ["",""],
-            ["abc","abc"],
-            ["Hello world","helloWorld"],
-            ["background-color","backgroundColor"],
-            ["background_color","backgroundColor"],
-            ["backgroundColor","backgroundColor"],
-            ["ab-cd-ef","abCdEf"],
-            ["ab-cd-ef-","abCdEf"],
-            ["ab-cd-ef--","abCdEf"],
-            ["ab-cd--ef--","abCdEf"],
-            ["--ab-cd--ef--","abCdEf"],
-            ["--ab-cd-__-ef--","abCdEf"]
+    describe("toCamelCase", () => {
+        const data = [
+            ["", ""],
+            ["abc", "abc"],
+            ["Hello world", "helloWorld"],
+            ["background-color", "backgroundColor"],
+            ["background_color", "backgroundColor"],
+            ["backgroundColor", "backgroundColor"],
+            ["ab-cd-ef", "abCdEf"],
+            ["ab-cd-ef-", "abCdEf"],
+            ["ab-cd-ef--", "abCdEf"],
+            ["ab-cd--ef--", "abCdEf"],
+            ["--ab-cd--ef--", "abCdEf"],
+            ["--ab-cd-__-ef--", "abCdEf"]
         ];
-        data.forEach(([from,to])=>{
-            it(`"${from}" toCamelCase get "${to}"`,function(){
-                assert.equal(from.toCamelCase(),to);
+        data.forEach(([from, to]) => {
+            it(`"${from}" toCamelCase get "${to}"`, function () {
+                assert.equal(from.toCamelCase(), to);
             });
         });
-        const data2=[
-            ["",""],
-            ["abc","Abc"],
-            ["Hello world","HelloWorld"],
-            ["background-color","BackgroundColor"],
-            ["background_color","BackgroundColor"],
-            ["backgroundColor","BackgroundColor"],
-            ["ab-cd-ef","AbCdEf"],
-            ["ab-cd-ef-","AbCdEf"],
-            ["ab-cd-ef--","AbCdEf"],
-            ["ab-cd--ef--","AbCdEf"],
-            ["--ab-cd--ef--","AbCdEf"],
-            ["--ab-cd-__-ef--","AbCdEf"]
+        const data2 = [
+            ["", ""],
+            ["abc", "Abc"],
+            ["Hello world", "HelloWorld"],
+            ["background-color", "BackgroundColor"],
+            ["background_color", "BackgroundColor"],
+            ["backgroundColor", "BackgroundColor"],
+            ["ab-cd-ef", "AbCdEf"],
+            ["ab-cd-ef-", "AbCdEf"],
+            ["ab-cd-ef--", "AbCdEf"],
+            ["ab-cd--ef--", "AbCdEf"],
+            ["--ab-cd--ef--", "AbCdEf"],
+            ["--ab-cd-__-ef--", "AbCdEf"]
         ];
-        data2.forEach(([from,to])=>{
-            it(`"${from}" toCamelCase with firstWorldUpper get "${to}"`,function(){
-                assert.equal(from.toCamelCase(true),to);
+        data2.forEach(([from, to]) => {
+            it(`"${from}" toCamelCase with firstWorldUpper get "${to}"`, function () {
+                assert.equal(from.toCamelCase(true), to);
             });
         });
     });
-    describe("toCssName",()=>{
-        const data=[
-            ["",""],
-            ["border","border"],
-            ["borderBottom","border-bottom"],
-            ["borderBottomColor","border-bottom-color"],
-            ["border-bottom","border-bottom"],
-            ["border-bottom-color","border-bottom-color"],
+    describe("toCssName", () => {
+        const data = [
+            ["", ""],
+            ["border", "border"],
+            ["borderBottom", "border-bottom"],
+            ["borderBottomColor", "border-bottom-color"],
+            ["border-bottom", "border-bottom"],
+            ["border-bottom-color", "border-bottom-color"],
         ];
-        data.forEach(([from,to])=>{
-            it(`"${from}" toCssName  get "${to}"`,function(){
-                assert.equal(from.toCssName(),to);
+        data.forEach(([from, to]) => {
+            it(`"${from}" toCssName  get "${to}"`, function () {
+                assert.equal(from.toCssName(), to);
             });
         })
     });

@@ -4,7 +4,7 @@ const common = require('./base.js');
 
 module.exports = merge(common, {
     mode: "development",
-    devtool: 'inline-source-map',
+    devtool: 'cheap-module-source-map',
     devServer: {
         contentBase: common.output.path,
         host: '127.0.0.1',
