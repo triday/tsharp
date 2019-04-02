@@ -768,4 +768,18 @@ describe("String", () => {
             });
         })
     });
+    describe("toColorful", () => {
+        it(`abc toColorful("blue") == "\x1B[34mabc\x1B[39m"`, function () {
+            let actual = "abc".toColorful("blue")
+            assert.equal(actual, "\x1B[34mabc\x1B[39m");
+        });
+        it(`abc toColorful("blue","cyanBG") == "\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m"`, function () {
+            let actual = "abc".toColorful("blue", "cyanBG")
+            assert.equal(actual, "\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m");
+        });
+        it(`abc toColorful("blue","cyanBG","bold","italic") == "\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m"`, function () {
+            let actual = "abc".toColorful("blue", "cyanBG", "bold", "italic")
+            assert.equal(actual, "\x1B[3m\x1B[1m\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m\x1B[22m\x1B[23m");
+        });
+    })
 });
