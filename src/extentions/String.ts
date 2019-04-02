@@ -12,6 +12,13 @@ interface StringConstructor {
      */
     isNullOrWhiteSpace(value: string): boolean;
     /**
+     * 将指定字符串中的格式项替换为指定对象中的属性值。
+     * @param format 复合格式字符串。
+     * @param argObj 一个对象，包含要替换的属性值。
+     * @returns format 的副本，其中格式项已替换为 argObj 中相应属性的字符串表示形式。
+     */
+    format(format: string, argObj: { [key: string]: any }): string;
+    /**
      * 将指定字符串中的格式项替换为指定数组中相应对象的字符串表示形式。
      * @param format 复合格式字符串。
      * @param args  一个对象数组，其中包含零个或多个要设置格式的对象。
@@ -211,7 +218,7 @@ if (!String.format) {
         let regex = /{([_a-zA-Z0-9]+)\s*(?:,\s*([\+-]?\d+)\s*)?(?::((?:(?:\\})|[^}])*))?}/g
         return fmt.replace(regex, (substring: string, ...items: any[]) => {
             let [index, width, format] = items;
-            let value = /\d+/.test(index) ? args[index] : args[0][index]
+            let value = /\d+/.test(index) ? args[index] : (args[0] ? args[0][index] : null);
             return widthString(formatValue(value, format), Number(width));
         });
         function formatValue(value: any, format: string): string {
