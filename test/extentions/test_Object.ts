@@ -69,16 +69,16 @@ describe("Object", () => {
         });
     })
 
-    describe("merge", () => {
+    describe("extend", () => {
         const datas: [string, any, any[], any][] = [
-            ['merge to null', null, [{ a: 1 }, { b: 2 }], { a: 1, b: 2 }],
-            ['merge from null', {}, [null, { b: 2 }], { b: 2 }],
-            ['merge array', [2, 3, 4], [[4], [5, 6]], [5, 6, 4]],
-            ['deep merge objects', { a: 1, b: 2, c: { m: 10, n: 20 } }, [{ a: 1, b: 500, c: { m: 7 } }], { a: 1, b: 500, c: { m: 7, n: 20 } }]
+            ['extend to null', null, [{ a: 1 }, { b: 2 }], { a: 1, b: 2 }],
+            ['extend from null', {}, [null, { b: 2 }], { b: 2 }],
+            ['extend array', [2, 3, 4], [[4], [5, 6]], [5, 6, 4]],
+            ['deep extend objects', { a: 1, b: 2, c: { m: 10, n: 20 } }, [{ a: 1, b: 500, c: { m: 7 } }], { a: 1, b: 500, c: { m: 7, n: 20 } }]
         ];
         datas.forEach((item, index) => {
             it(`case ${index.format('d2')} : ${item[0]}`, () => {
-                assert.deepEqual(Object.merge(item[1], ...item[2]), item[3]);
+                assert.deepEqual(Object.extend(item[1], ...item[2]), item[3]);
             });
         });
     })

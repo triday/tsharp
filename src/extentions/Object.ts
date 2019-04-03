@@ -12,7 +12,7 @@ interface ObjectConstructor {
      * @param sources 指定的系列对象，合并操作不影响对象的值。
      * @returns 返回合并后的目标对象。
      */
-    merge(target: object, ...sources: object[]): object;
+    extend(target: object, ...sources: object[]): object;
     /**
      * 深度比较两个对象是否相等，如果对象原型上拓展了自定义的equals方法，则优先使用自定义的equals方法。
      * @param obj1 要比较的第1个对象。
@@ -61,8 +61,8 @@ if (!Object.clone) {
         return obj;
     }
 }
-if (!Object.merge) {
-    Object.merge = function (target: any, ...sources: object[]): object {
+if (!Object.extend) {
+    Object.extend = function (target: any, ...sources: object[]): object {
         const isPlainObject: (obj: any) => boolean = (obj) => {
             return obj && obj instanceof Object && obj.toString() === '[object Object]';
         }
@@ -76,7 +76,7 @@ if (!Object.merge) {
                 let target_prop = target[key];
                 let item_prop = item[key];
                 if (isPlainObjectOrArray(target_prop) && isPlainObjectOrArray(item_prop)) {
-                    Object.merge(target_prop, item_prop);
+                    Object.extend(target_prop, item_prop);
                 } else {
                     target[key] = Object.clone(item[key]);
                 }
