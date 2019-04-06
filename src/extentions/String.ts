@@ -34,7 +34,7 @@ interface StringConstructor {
     from(value: string, repeatCount: number): string;
 }
 type ForeColor = 'white' | 'black' | 'red' | 'green' | 'blue' | 'yellow' | 'cyan' | 'magenta' | 'grey';
-type BackColor = 'whiteBG' | 'blackBG' | 'redBG' | 'greenBG' | 'blueBG' | 'yellowBG' | 'cyanBG' | 'magentaBG' | 'greyBG';
+type BackColor = 'whiteBG' | 'blackBG' | 'redBG' | 'greenBG' | 'blueBG' | 'yellowBG' | 'cyanBG' | 'magentaBG';
 type TextStyle = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'inverse';
 interface String {
     /**
@@ -203,6 +203,16 @@ interface String {
      * @param styles 字符串的样式
      */
     toColorful(foreColor: ForeColor, backColor?: BackColor, ...styles: TextStyle[]): string;
+    /**
+     * 将字符串转换为带样式的字符串，用于控制台输出。
+     * @param styles 要应用的前景色，背景色或样式集。
+     */
+    toColorful(...styles: (ForeColor | BackColor | TextStyle)[]): string
+    /**
+     * 将字符串格式化为指定的格式
+     * @param fmt 字符串的格式。
+     */
+    format(fmt?: "lower" | "upper" | "title" | "css" | "camel" ): string
 }
 
 
@@ -506,7 +516,7 @@ if (!String.prototype.toColorful) {
             'red': ['\x1B[31m', '\x1B[39m'],
             'yellow': ['\x1B[33m', '\x1B[39m'],
             'whiteBG': ['\x1B[47m', '\x1B[49m'],
-            'greyBG': ['\x1B[49;5;8m', '\x1B[49m'],
+            //'greyBG': ['\x1B[49;5;8m', '\x1B[49m'],
             'blackBG': ['\x1B[40m', '\x1B[49m'],
             'blueBG': ['\x1B[44m', '\x1B[49m'],
             'cyanBG': ['\x1B[46m', '\x1B[49m'],
@@ -524,6 +534,29 @@ if (!String.prototype.toColorful) {
                     return prev;
                 }
             }, this);
+        }
+    })();
+}
+if (!String.prototype.format) {
+    (function () {
+
+        const funMaps: { [key: string]: string } = {
+            lower: "toLowerCase",
+            upper: "toUpperCase",
+            title: "toTitleCase",
+            css: "toCssName",
+            camel: "toCamelCase",
+        }
+
+        String.prototype.format = function (fmt?: string): string {
+            if (!fmt) return this;
+            let funName = fmt in funMaps ? funMaps[fmt] : fmt;
+            let fun = this[funName];
+            if (typeof fun === "function") {
+               return fun.call(this);
+            } else {
+                throw new Error(`can not find function ${fmt} in String.prototype`);
+            }
         }
     })();
 }

@@ -781,5 +781,18 @@ describe("String", () => {
             let actual = "abc".toColorful("blue", "cyanBG", "bold", "italic")
             assert.equal(actual, "\x1B[3m\x1B[1m\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m\x1B[22m\x1B[23m");
         });
-    })
+    });
+    describe("format", () => {
+        const data = [["abc", "lower", "abc"],
+        ["abc", "upper", "ABC"],
+        ["abc", "title", "Abc"],
+        ["abcBcd", "css", "abc-bcd"],
+        ["abc-bcd", "camel", "abcBcd"]
+        ]
+        data.forEach(([text, fmt, res]) => {
+            it(`"${text}".format(${fmt})=="${res}"`, function () {
+                assert.equal(text.format(fmt as any), res);
+            })
+        });
+    });
 });
