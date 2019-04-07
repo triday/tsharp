@@ -28,7 +28,7 @@ interface Number {
      * 
      * @returns 返回格式化后的数字。
      */
-    format(fmt?: string): string;
+    toFormat(fmt: string): string;
 }
 
 if (!Number.prototype.inRange) {
@@ -48,9 +48,9 @@ if (!Number.prototype.limitRange) {
         return this.valueOf();
     }
 }
-if (!Number.prototype.format) {
+if (!Number.prototype.toFormat) {
     /*参考 https://docs.microsoft.com/zh-cn/dotnet/standard/base-types/standard-numeric-format-strings*/
-    Number.prototype.format = function (fmt:string="") {
+    Number.prototype.toFormat = function (fmt:string="") {
         if (!fmt) return this.toString();
         let match = fmt.match(/^([DdEeFfGgNnPpRrXx])(\d{0,2})$/);
         if (!match) throw new Error(`Invalid format text "${fmt}"`);

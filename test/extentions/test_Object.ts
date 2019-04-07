@@ -77,7 +77,7 @@ describe("Object", () => {
             ['deep extend objects', { a: 1, b: 2, c: { m: 10, n: 20 } }, [{ a: 1, b: 500, c: { m: 7 } }], { a: 1, b: 500, c: { m: 7, n: 20 } }]
         ];
         datas.forEach((item, index) => {
-            it(`case ${index.format('d2')} : ${item[0]}`, () => {
+            it(`case ${index.toFormat('d2')} : ${item[0]}`, () => {
                 assert.deepEqual(Object.extend(item[1], ...item[2]), item[3]);
             });
         });
@@ -129,7 +129,7 @@ describe("Object", () => {
             [false, "包含特定的valueOf", new Student('y001'), new Student('y002')]
         ]
         datas.forEach((item, index) => {
-            it(`case ${index.format('d2')} : ${item[1]}`, () => {
+            it(`case ${index.toFormat('d2')} : ${item[1]}`, () => {
                 assert.equal(Object.equals(item[2], item[3]), item[0]);
 
                 assert.equal(Object.equals(item[3], item[2]), item[0]);

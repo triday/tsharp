@@ -4,7 +4,7 @@ interface Date {
      * @param fmt 日期格式 。
      * @returns 返回格式化后的日期。
      */
-    format(fmt?: string): string;
+    toFormat(fmt: string): string;
 
     /**
      * 将该时间日期和特定的时间日期对象做比较，如果所表示的时间日期相同则返回true，否则返回false。
@@ -19,8 +19,8 @@ interface Date {
     clone(): Date;
 }
 
-if (!Date.prototype.format) {
-    Date.prototype.format = function (mask: string): string {
+if (!Date.prototype.toFormat) {
+    Date.prototype.toFormat = function (fmt: string=""): string {
         function padStart(str: string, length: number, pad: string): string {
             if (!str || str.length >= length) return str;
             return `${Array((length + 1) - str.length).join(pad)}${str}`
@@ -35,7 +35,7 @@ if (!Date.prototype.format) {
             mHour: number = this.getHours(),
             mMinute: number = this.getMinutes(),
             mSecond: number = this.getSeconds()
-        return mask.replace(/Y{2,4}|M{1,2}|D{1,2}|H{1,2}|m{1,2}|s{1,2}|Z{1}/ig, (match) => {
+        return fmt.replace(/Y{2,4}|M{1,2}|D{1,2}|H{1,2}|m{1,2}|s{1,2}|Z{1}/ig, (match) => {
             switch (match) {
                 case 'YYYY':
                 case 'yyyy':

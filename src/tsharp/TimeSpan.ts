@@ -64,15 +64,15 @@ namespace tsharp {
                 let len = match.length;
                 switch (match[0].toLowerCase()) {
                     case 'd':
-                        return this.Days.format(`d${len}`);
+                        return this.Days.toFormat(`d${len}`);
                     case 'h':
-                        return this.Hours.format(`d${len}`);
+                        return this.Hours.toFormat(`d${len}`);
                     case 'm':
-                        return this.Minutes.format(`d${len}`);
+                        return this.Minutes.toFormat(`d${len}`);
                     case 's':
-                        return this.Seconds.format(`d${len}`);
+                        return this.Seconds.toFormat(`d${len}`);
                     case 'f':
-                        return (this.Milliseconds / 1000).format(`f${len}`).slice(2, 2 + len);
+                        return (this.Milliseconds / 1000).toFormat(`f${len}`).slice(2, 2 + len);
 
                 }
             });

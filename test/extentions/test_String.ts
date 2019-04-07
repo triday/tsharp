@@ -94,6 +94,12 @@ describe("String", () => {
         it("'{0}+{1}={2}' with args [2,3,5] format result is '2+3=5'", () => {
             assert.equal(String.format('{0}+{1}={2}', 2, 3, 5), '2+3=5');
         });
+        it("'{0,-8#green:f2}+{1#red#bold}={2,10 # # blue #redBG ### :f3}' with args [2,3,5] format result is '...'", () => {
+            let expected="\x1B[32m2.00\x1B[39m    +\x1B[1m\x1B[31m3\x1B[39m\x1B[22m=     \x1B[41m\x1B[34m5.000\x1B[39m\x1B[49m";
+            let actual=String.format('{0,-8#green:f2}+{1#red#bold}={2,10 # # blue #redBG ### :f3}', 2, 3, 5);
+            assert.equal(actual,expected);
+        });
+
         it("'{0,-2}*{1,2} = {2:f2}' with args [8,9,72] format result is '8 * 9= 72.00'", () => {
             assert.equal(String.format('{0,-2}*{1,2} = {2:f2}', 8, 9, 72), '8 * 9 = 72.00');
         });
@@ -782,7 +788,22 @@ describe("String", () => {
             assert.equal(actual, "\x1B[3m\x1B[1m\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m\x1B[22m\x1B[23m");
         });
     });
-    describe("format", () => {
+    describe("clearColorful", () => {
+        it(`"abc" clearColorful() == "abc"`, function () {
+            let actual = "abc".clearColurful();
+            assert.equal(actual, "abc");
+        });
+        it(`"\x1B[34mabc\x1B[39m" clearColorful() == "abc"`, function () {
+            let actual = "\x1B[34mabc\x1B[39m".clearColurful();
+            assert.equal(actual, "abc");
+        });
+        it(`"\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m" clearColorful() == "abc"`, function () {
+            let actual = "\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m".clearColurful()
+            assert.equal(actual, "abc");
+        });
+
+    });
+    describe("toFormat", () => {
         const data = [["abc", "lower", "abc"],
         ["abc", "upper", "ABC"],
         ["abc", "title", "Abc"],
@@ -790,9 +811,10 @@ describe("String", () => {
         ["abc-bcd", "camel", "abcBcd"]
         ]
         data.forEach(([text, fmt, res]) => {
-            it(`"${text}".format(${fmt})=="${res}"`, function () {
-                assert.equal(text.format(fmt as any), res);
+            it(`"${text}".toFormat(${fmt})=="${res}"`, function () {
+                assert.equal(text.toFormat(fmt as any), res);
             })
         });
+        
     });
 });
