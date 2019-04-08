@@ -787,6 +787,13 @@ describe("String", () => {
             let actual = "abc".toColorful("blue", "cyanBG", "bold", "italic")
             assert.equal(actual, "\x1B[3m\x1B[1m\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m\x1B[22m\x1B[23m");
         });
+
+        it(`nested colorful works ok`,function(){
+            let actual=`a${'b'.toColorful('red')}c`.toColorful('blue');
+            let expected='\x1B[34ma\x1B[31mb\x1B[34mc\x1B[39m';
+            assert.equal(actual,expected);
+        })
+
     });
     describe("clearColorful", () => {
         it(`"abc" clearColorful() == "abc"`, function () {
@@ -801,6 +808,8 @@ describe("String", () => {
             let actual = "\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m".clearColurful()
             assert.equal(actual, "abc");
         });
+
+
 
     });
     describe("toFormat", () => {

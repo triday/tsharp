@@ -228,7 +228,7 @@ interface String {
      * 将字符串格式化为指定的格式
      * @param fmt 字符串原型上定义的转换函数名称。该函数格式为 (fmt)=>string。
      */
-    toFormat(fmt:string):string;
+    toFormat(fmt: string): string;
     /**
      * 获取字符串的显示宽度， 忽略字符串中应用的样式一个全角字符占2位，半角字符占1位。
      * @see {@link https://github.com/sindresorhus/string-width }
@@ -592,15 +592,83 @@ if (!String.prototype.toColorful) {
             'yellowBG': ['\x1B[43m', '\x1B[49m']
         }
         String.prototype.toColorful = function (...args: string[]) {
-            return args.filter(p => p).reduce((prev, current) => {
+            let colorfulText = args.filter(p => p).reduce((prev, current) => {
                 if (current in ALL_STYLES) {
                     let [before, after] = ALL_STYLES[current];
                     return `${before}${prev}${after}`;
                 } else {
                     throw new Error(`invalid style name ${current}`)
-                    return prev;
                 }
             }, this);
+            return handleNestedStyles(colorfulText);
+        }
+        function handleNestedStyles(text: string) {
+            let stackStyles: { [key: string]: string[] } = {
+            }
+            function push(key: TextStyle | 'foreColor' | 'backColor', value: string): void {
+                if (key in stackStyles) {
+                    stackStyles[key].push(value);
+                } else {
+                    stackStyles[key] = [value];
+                }
+            }
+            function pop(key: TextStyle | 'foreColor' | 'backColor') {
+                if (key in stackStyles) {
+                    stackStyles[key].pop();
+                }
+            }
+            function popThenLast(key: TextStyle | 'foreColor' | 'backColor'): string {
+                pop(key);
+                if (key in stackStyles && stackStyles[key].length > 0) {
+                    let len = stackStyles[key].length;
+                    return stackStyles[key][len - 1];
+                }
+            }
+            const beginHandlers: { [key: string]: () => void } = {
+                '\x1B[1m':()=>push("bold","\x1B[1m"),                
+                '\x1B[3m':()=>push("italic","\x1B[3m"),
+                '\x1B[4m':()=>push("underline","\x1B[4m"),
+                '\x1B[7m':()=>push("inverse","\x1B[7m"),
+                '\x1B[9m':()=>push("strikethrough","\x1B[9m"),
+
+                '\x1B[37m': () => push("foreColor", "\x1B[37m"),
+                '\x1B[90m': () => push("foreColor", "\x1B[90m"),
+                '\x1B[30m': () => push("foreColor", "\x1B[30m"),
+                '\x1B[34m': () => push("foreColor", "\x1B[34m"),
+                '\x1B[36m': () => push("foreColor", "\x1B[36m"),
+                '\x1B[32m': () => push("foreColor", "\x1B[32m"),
+                '\x1B[35m': () => push("foreColor", "\x1B[35m"),
+                '\x1B[31m': () => push("foreColor", "\x1B[31m"),
+                '\x1B[33m': () => push("foreColor", "\x1B[33m"),
+                '\x1B[47m': () => push("backColor", "\x1B[47m"),
+                '\x1B[49;5;8m': () => push("backColor", "\x1B[49;5;8m"),
+                '\x1B[40m': () => push("backColor", "\x1B[40m"),
+                '\x1B[44m': () => push("backColor", "\x1B[44m"),
+                '\x1B[46m': () => push("backColor", "\x1B[46m"),
+                '\x1B[42m': () => push("backColor", "\x1B[42m"),
+                '\x1B[45m': () => push("backColor", "\x1B[45m"),
+                '\x1B[41m': () => push("backColor", "\x1B[41m"),
+                '\x1B[43m': () => push("backColor", "\x1B[43m"),
+            }
+            const endHandlers: { [key: string]: () => string } = {
+                '\x1B[39m': () => popThenLast("foreColor"),
+                '\x1B[49m': () => popThenLast("backColor"),
+                '\x1B[22m': () => popThenLast("bold"),
+                '\x1B[23m': () => popThenLast("italic"),
+                '\x1B[24m': () => popThenLast("underline"),
+                '\x1B[7m': () => popThenLast("inverse"),
+                '\x1B[29m': () => popThenLast("strikethrough")
+            }
+            return text.replace(/\x1b\[\d+(;\d+)*m/g, (sub) => {
+                if (sub in endHandlers) {
+                    return endHandlers[sub]() || sub;
+                } else if (sub in beginHandlers) {
+                    beginHandlers[sub]();
+                    return sub;
+                } else {
+                    return sub;
+                }
+            });
         }
     })();
 }
