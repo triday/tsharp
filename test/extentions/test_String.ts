@@ -94,9 +94,9 @@ describe("String", () => {
         it("'{0}+{1}={2}' with args [2,3,5] format result is '2+3=5'", () => {
             assert.equal(String.format('{0}+{1}={2}', 2, 3, 5), '2+3=5');
         });
-        it("'{0,-8#green:f2}+{1#red#bold}={2,10 # # blue #redBG ### :f3}' with args [2,3,5] format result is '...'", () => {
+        it("'{0,-8#green:f2}+{1#red#bold}={2,10 # # blue #bgRed ### :f3}' with args [2,3,5] format result is '...'", () => {
             let expected="\x1B[32m2.00\x1B[39m    +\x1B[1m\x1B[31m3\x1B[39m\x1B[22m=     \x1B[41m\x1B[34m5.000\x1B[39m\x1B[49m";
-            let actual=String.format('{0,-8#green:f2}+{1#red#bold}={2,10 # # blue #redBG ### :f3}', 2, 3, 5);
+            let actual=String.format('{0,-8#green:f2}+{1#red#bold}={2,10 # # blue #bgRed ### :f3}', 2, 3, 5);
             assert.equal(actual,expected);
         });
 
@@ -780,11 +780,11 @@ describe("String", () => {
             assert.equal(actual, "\x1B[34mabc\x1B[39m");
         });
         it(`abc toColorful("blue","cyanBG") == "\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m"`, function () {
-            let actual = "abc".toColorful("blue", "cyanBG")
+            let actual = "abc".toColorful("blue", "bgCyan")
             assert.equal(actual, "\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m");
         });
         it(`abc toColorful("blue","cyanBG","bold","italic") == "\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m"`, function () {
-            let actual = "abc".toColorful("blue", "cyanBG", "bold", "italic")
+            let actual = "abc".toColorful("blue", "bgCyan", "bold", "italic")
             assert.equal(actual, "\x1B[3m\x1B[1m\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m\x1B[22m\x1B[23m");
         });
 

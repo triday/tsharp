@@ -40,9 +40,9 @@ interface StringConstructor {
      */
     isFullwidthCode(code: number): boolean;
 }
-type ForeColor = 'white' | 'black' | 'red' | 'green' | 'blue' | 'yellow' | 'cyan' | 'magenta' | 'grey';
-type BackColor = 'whiteBG' | 'blackBG' | 'redBG' | 'greenBG' | 'blueBG' | 'yellowBG' | 'cyanBG' | 'magentaBG';
-type TextStyle = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'inverse';
+type ForeColor = 'black' | 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'white' | 'blackBright' | 'redBright' | 'greenBright' | 'yellowBright' | 'blueBright' | 'magentaBright' | 'cyanBright' | 'whiteBright';
+type BackColor = 'bgBlack' | 'bgRed' | 'bgGreen' | 'bgYellow' | 'bgBlue' | 'bgMagenta' | 'bgCyan' | 'bgWhite' | 'bgBlackBright' | 'bgRedBright' | 'bgGreenBright' | 'bgYellowBright' | 'bgBlueBright' | 'bgMagentaBright' | 'bgCyanBright' | 'bgWhiteBright';
+type TextStyle = 'bold' | 'faint' | 'italic' | 'underline' | 'strikethrough' | 'inverse';
 interface String {
     /**
      * 判断字符串的开头是否以指定的正则表达式开始。
@@ -566,36 +566,57 @@ if (!String.prototype.toCssName) {
 }
 if (!String.prototype.toColorful) {
     (function () {
-        const ALL_STYLES: { [key: string]: string[] } = {
-            'bold': ['\x1B[1m', '\x1B[22m'],
-            'italic': ['\x1B[3m', '\x1B[23m'],
-            'underline': ['\x1B[4m', '\x1B[24m'],
-            'inverse': ['\x1B[7m', '\x1B[27m'],
-            'strikethrough': ['\x1B[9m', '\x1B[29m'],
-            'white': ['\x1B[37m', '\x1B[39m'],
-            'grey': ['\x1B[90m', '\x1B[39m'],
-            'black': ['\x1B[30m', '\x1B[39m'],
-            'blue': ['\x1B[34m', '\x1B[39m'],
-            'cyan': ['\x1B[36m', '\x1B[39m'],
-            'green': ['\x1B[32m', '\x1B[39m'],
-            'magenta': ['\x1B[35m', '\x1B[39m'],
-            'red': ['\x1B[31m', '\x1B[39m'],
-            'yellow': ['\x1B[33m', '\x1B[39m'],
-            'whiteBG': ['\x1B[47m', '\x1B[49m'],
-            //'greyBG': ['\x1B[49;5;8m', '\x1B[49m'],
-            'blackBG': ['\x1B[40m', '\x1B[49m'],
-            'blueBG': ['\x1B[44m', '\x1B[49m'],
-            'cyanBG': ['\x1B[46m', '\x1B[49m'],
-            'greenBG': ['\x1B[42m', '\x1B[49m'],
-            'magentaBG': ['\x1B[45m', '\x1B[49m'],
-            'redBG': ['\x1B[41m', '\x1B[49m'],
-            'yellowBG': ['\x1B[43m', '\x1B[49m']
+        //参考 https://en.wikipedia.org/wiki/ANSI_escape_code
+        const ALL_STYLES: { [key: string]: number[] } = {
+            'bold': [1, 22],
+            'faint': [2, 22],
+            'italic': [3, 23],
+            'underline': [4, 24],
+            'inverse': [7, 27],
+            'strikethrough': [9, 29],
+
+            'black': [30, 39],
+            'red': [31, 39],
+            'green': [32, 39],
+            'yellow': [33, 39],
+            'blue': [34, 39],
+            'magenta': [35, 39],
+            'cyan': [36, 39],
+            'white': [37, 39],
+
+            'blackBright ': [90, 39],
+            'redBright ': [91, 39],
+            'greenBright ': [92, 39],
+            'yellowBright ': [93, 39],
+            'blueBright ': [94, 39],
+            'magentaBright ': [95, 39],
+            'cyanBright ': [96, 39],
+            'whiteBright ': [97, 39],
+
+            'bgBlack': [40, 49],
+            'bgRed': [41, 49],
+            'bgGreen': [42, 49],
+            'bgYellow': [43, 49],
+            'bgBlue': [44, 49],
+            'bgMagenta': [45, 49],
+            'bgCyan': [46, 49],
+            'bgWhite': [47, 49],
+
+            'bgBlackBright': [100, 49],
+            'bgRedBright': [101, 49],
+            'bgGreenBright': [102, 49],
+            'bgYellowBright': [103, 49],
+            'bgBlueBright': [104, 49],
+            'bgMagentaBright': [105, 49],
+            'bgCyanBright': [106, 49],
+            'bgWhiteBright': [107, 49],
         }
+        const AnsiCode = (code: number) => `\x1b[${code}m`;
         String.prototype.toColorful = function (...args: string[]) {
             let colorfulText = args.filter(p => p).reduce((prev, current) => {
                 if (current in ALL_STYLES) {
                     let [before, after] = ALL_STYLES[current];
-                    return `${before}${prev}${after}`;
+                    return `${AnsiCode(before)}${prev}${AnsiCode(after)}`;
                 } else {
                     throw new Error(`invalid style name ${current}`)
                 }
@@ -605,65 +626,66 @@ if (!String.prototype.toColorful) {
         function handleNestedStyles(text: string) {
             let stackStyles: { [key: string]: string[] } = {
             }
-            function push(key: TextStyle | 'foreColor' | 'backColor', value: string): void {
+            function push(key: string, value: string): void {
                 if (key in stackStyles) {
                     stackStyles[key].push(value);
                 } else {
                     stackStyles[key] = [value];
                 }
             }
-            function pop(key: TextStyle | 'foreColor' | 'backColor') {
+            function pop(key: string) {
                 if (key in stackStyles) {
                     stackStyles[key].pop();
                 }
             }
-            function popThenLast(key: TextStyle | 'foreColor' | 'backColor'): string {
+            function popThenLast(key: string): string {
                 pop(key);
                 if (key in stackStyles && stackStyles[key].length > 0) {
                     let len = stackStyles[key].length;
                     return stackStyles[key][len - 1];
                 }
             }
-            const beginHandlers: { [key: string]: () => void } = {
-                '\x1B[1m':()=>push("bold","\x1B[1m"),                
-                '\x1B[3m':()=>push("italic","\x1B[3m"),
-                '\x1B[4m':()=>push("underline","\x1B[4m"),
-                '\x1B[7m':()=>push("inverse","\x1B[7m"),
-                '\x1B[9m':()=>push("strikethrough","\x1B[9m"),
+            const beginHandlers: { [key: number]: () => void } = {
+                1: () => push("weight", AnsiCode(1)),
+                2: () => push("weight", AnsiCode(2)),
+                3: () => push("italic", AnsiCode(3)),
+                4: () => push("underline", AnsiCode(4)),
+                7: () => push("inverse", AnsiCode(7)),
+                9: () => push("strikethrough", AnsiCode(9)),
 
-                '\x1B[37m': () => push("foreColor", "\x1B[37m"),
-                '\x1B[90m': () => push("foreColor", "\x1B[90m"),
-                '\x1B[30m': () => push("foreColor", "\x1B[30m"),
-                '\x1B[34m': () => push("foreColor", "\x1B[34m"),
-                '\x1B[36m': () => push("foreColor", "\x1B[36m"),
-                '\x1B[32m': () => push("foreColor", "\x1B[32m"),
-                '\x1B[35m': () => push("foreColor", "\x1B[35m"),
-                '\x1B[31m': () => push("foreColor", "\x1B[31m"),
-                '\x1B[33m': () => push("foreColor", "\x1B[33m"),
-                '\x1B[47m': () => push("backColor", "\x1B[47m"),
-                '\x1B[49;5;8m': () => push("backColor", "\x1B[49;5;8m"),
-                '\x1B[40m': () => push("backColor", "\x1B[40m"),
-                '\x1B[44m': () => push("backColor", "\x1B[44m"),
-                '\x1B[46m': () => push("backColor", "\x1B[46m"),
-                '\x1B[42m': () => push("backColor", "\x1B[42m"),
-                '\x1B[45m': () => push("backColor", "\x1B[45m"),
-                '\x1B[41m': () => push("backColor", "\x1B[41m"),
-                '\x1B[43m': () => push("backColor", "\x1B[43m"),
+                30: () => push("forecolor", AnsiCode(30)),
+                31: () => push("forecolor", AnsiCode(31)),
+                32: () => push("forecolor", AnsiCode(32)),
+                33: () => push("forecolor", AnsiCode(33)),
+                34: () => push("forecolor", AnsiCode(34)),
+                35: () => push("forecolor", AnsiCode(35)),
+                36: () => push("forecolor", AnsiCode(36)),
+                37: () => push("forecolor", AnsiCode(37)),
+
+                90: () => push("forecolor", AnsiCode(90)),
+                91: () => push("forecolor", AnsiCode(91)),
+                92: () => push("forecolor", AnsiCode(92)),
+                93: () => push("forecolor", AnsiCode(93)),
+                94: () => push("forecolor", AnsiCode(94)),
+                95: () => push("forecolor", AnsiCode(95)),
+                96: () => push("forecolor", AnsiCode(96)),
+                97: () => push("forecolor", AnsiCode(97)),
             }
-            const endHandlers: { [key: string]: () => string } = {
-                '\x1B[39m': () => popThenLast("foreColor"),
-                '\x1B[49m': () => popThenLast("backColor"),
-                '\x1B[22m': () => popThenLast("bold"),
-                '\x1B[23m': () => popThenLast("italic"),
-                '\x1B[24m': () => popThenLast("underline"),
-                '\x1B[7m': () => popThenLast("inverse"),
-                '\x1B[29m': () => popThenLast("strikethrough")
+            const endHandlers: { [key: number]: () => string } = {
+                39: () => popThenLast("forecolor"),
+                49: () => popThenLast("backcolor"),
+                22: () => popThenLast("weight"),
+                23: () => popThenLast("italic"),
+                24: () => popThenLast("underline"),
+                7: () => popThenLast("inverse"),
+                29: () => popThenLast("strikethrough")
             }
-            return text.replace(/\x1b\[\d+(;\d+)*m/g, (sub) => {
-                if (sub in endHandlers) {
-                    return endHandlers[sub]() || sub;
-                } else if (sub in beginHandlers) {
-                    beginHandlers[sub]();
+            return text.replace(/\x1b\[(\d+)m/g, (sub, codeText) => {
+                let code = parseInt(codeText);
+                if (code in endHandlers) {
+                    return endHandlers[code]() || sub;
+                } else if (code in beginHandlers) {
+                    beginHandlers[code]();
                     return sub;
                 } else {
                     return sub;
