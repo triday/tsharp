@@ -779,6 +779,11 @@ describe("String", () => {
             let actual = "abc".toColorful("blue")
             assert.equal(actual, "\x1B[34mabc\x1B[39m");
         });
+        it('redBright',function(){
+            let actual = "abc".toColorful("redBright");
+            assert.equal(actual, "\x1B[91mabc\x1B[39m");
+        }
+        )
         it(`abc toColorful("blue","cyanBG") == "\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m"`, function () {
             let actual = "abc".toColorful("blue", "bgCyan")
             assert.equal(actual, "\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m");
