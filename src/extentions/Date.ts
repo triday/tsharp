@@ -20,44 +20,102 @@ interface Date {
 }
 
 if (!Date.prototype.toFormat) {
-    Date.prototype.toFormat = function (fmt: string=""): string {
+    Date.prototype.toFormat = function (fmt: string = ""): string {
         function padStart(str: string, length: number, pad: string): string {
             if (!str || str.length >= length) return str;
             return `${Array((length + 1) - str.length).join(pad)}${str}`
         }
-        const weeks: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-            timeZone: number = this.getTimezoneOffset() / 60,
-            timeZoneString: string = padStart(String(timeZone * -1).replace(/^(.)?(\d)/, '$10$200'), 5, '+'),
-            mYear: number = this.getFullYear(),
-            mMonth: number = this.getMonth(),
-            mDay: number = this.getDate(),
-            mWeek: number = this.getDay(),
-            mHour: number = this.getHours(),
-            mMinute: number = this.getMinutes(),
-            mSecond: number = this.getSeconds()
-        return fmt.replace(/Y{2,4}|M{1,2}|D{1,2}|H{1,2}|m{1,2}|s{1,2}|Z{1}/ig, (match) => {
-            switch (match) {
-                case 'YYYY':
-                case 'yyyy':
-                    return String(mYear)
-                case 'MM':
-                    return padStart(String(mMonth + 1), 2, '0')
-                case 'DD':
-                case 'dd':
-                    return padStart(String(mDay), 2, '0')
-                case 'HH':
-                case 'hh':
-                    return padStart(String(mHour), 2, '0')
-                case 'mm':
-                    return padStart(String(mMinute), 2, '0')
-                case 'ss':
-                    return padStart(String(mSecond), 2, '0')
+        function padStartZero(str: string, length: number): string {
+            return padStart(str, length, '0');
+        }
+        let isUTC = false,
+            me: Date = this;
+        //https://docs.microsoft.com/zh-cn/dotnet/standard/base-types/custom-date-and-time-format-strings?view=netframework-4.7.2
+
+
+        function formatYear(len: number, maxLength = 4): string {
+            let year = isUTC ? me.getUTCFullYear() : me.getFullYear();
+            return padStartZero(year.toString(), Math.min(len, maxLength)).slice(-len);
+        }
+        function formatMonth(len: number, maxLength = 2): string {
+            let month = isUTC ? me.getUTCMonth() + 1 : me.getMonth() + 1;
+            return padStartZero(String(month), Math.min(len, maxLength));
+        }
+        function formatDay(len: number, maxLength = 2): string {
+            let day = isUTC ? me.getUTCDate() : me.getDate();
+            return padStartZero(String(day), Math.min(len, maxLength));
+        }
+        function formatHour12(len: number, maxLength = 2): string {
+            let hour = isUTC ? me.getUTCHours() % 12 : me.getHours() % 12;
+            return padStartZero(String(hour), Math.min(len, maxLength));
+        }
+        function formatHour24(len: number, maxLength = 2): string {
+            let hour = isUTC ? me.getUTCHours() : me.getHours();
+            return padStartZero(String(hour), Math.min(len, maxLength));
+        }
+        function formatMinute(len: number, maxLength = 2): string {
+            let minute = isUTC ? me.getUTCMinutes() : me.getMinutes();
+            return padStartZero(String(minute), Math.min(len, maxLength));
+        }
+        function formatSecond(len: number, maxLength = 2): string {
+            let second = isUTC ? me.getUTCSeconds() : me.getSeconds();
+            return padStartZero(String(second), Math.min(len, maxLength));
+        }
+        function formatMiliSecond(len: number, maxLength = 3): string {
+            let miniSecond = isUTC ? me.getUTCMilliseconds() : me.getMilliseconds();
+            let resultLen = Math.min(len, maxLength);
+            let partValue = Math.round(miniSecond / 1000 * Math.pow(10, resultLen))
+            return padStartZero(String(partValue), resultLen);
+        }
+        function formatTimeZone(len: number, maxLength = 3): string {
+            let resultLen = Math.min(len, maxLength);
+            let timeZoneOffset = isUTC ? 0 : me.getTimezoneOffset();
+            let sign = timeZoneOffset > 0 ? '-' : '+'
+            let hour = Math.floor(Math.abs(timeZoneOffset) / 60);
+            let min = Math.abs(timeZoneOffset) % 60;
+            switch (resultLen) {
+                case 1:
+                    return `${sign}${hour}`;
+                case 2:
+                    return `${sign}${padStartZero(String(hour), 2)}`;
+                default:
+                    return `${sign}${padStartZero(String(hour), 2)}:${padStartZero(String(min), 2)}`
+            }
+
+        }
+        let trimfmt = fmt.replace(/\[utc\]/ig, (match) => {
+            isUTC = match.toLowerCase() === "[utc]";
+            return ''
+        });
+
+        return trimfmt.replace(/%?([Yy]+|M+|[Dd]+|H+|h+|m+|[Ss]+|[Ff]+|[Zz]+)/g, (match) => {
+            if (match[0] === '%') return match.slice(1);
+            const code = match[0];
+            const len = match.length;
+            switch (code) {
+                case 'y':
+                case 'Y':
+                    return formatYear(len);
+                case 'M':
+                    return formatMonth(len);
+                case 'd':
+                case 'D':
+                    return formatDay(len);
+                case 'H':
+                    return formatHour24(len);
+                case 'h':
+                    return formatHour12(len);
+                case 'm':
+                    return formatMinute(len);
+                case 's':
+                case 'S':
+                    return formatSecond(len);
+                case 'f':
+                case 'F':
+                    return formatMiliSecond(len);
+                case 'z':
                 case 'Z':
-                    return `${timeZoneString.slice(0, -2)}:00`
-                default: {
-                    new Error(`${match} is not a valid format`)
-                    return match
-                }
+                    return formatTimeZone(len)
             }
         })
     };
