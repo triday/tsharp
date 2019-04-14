@@ -713,7 +713,18 @@ if (!String.prototype.toFormat) {
             let funName = fmt in funMaps ? funMaps[fmt] : fmt;
             let fun = this[funName];
             if (typeof fun === "function") {
-                return String(fun.call(this));
+                let reg = /\x1b\[.+?m/g;
+                let formatResult = '', startIndex = 0;
+                do {
+                    let match = reg.exec(this);
+                    if (!match) break;
+                    formatResult += String(fun.call(this.substring(startIndex, match.index)));
+                    formatResult += match[0];
+                    startIndex=match.index+match[0].length;
+                }
+                while (true);
+                formatResult+=String(fun.call(this.substring(startIndex)));
+                return formatResult;
             } else {
                 throw new Error(`can not find function ${fmt} in String.prototype`);
             }

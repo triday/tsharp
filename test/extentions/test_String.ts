@@ -99,7 +99,11 @@ describe("String", () => {
             let actual=String.format('{0,-8#green:f2}+{1#red#bold}={2,10 # # blue #bgRed ### :f3}', 2, 3, 5);
             assert.equal(actual,expected);
         });
-
+        it("format styled text",function(){
+            let expected='  \x1B[32mABC\x1B[39m';
+            let actual= String.format("{0,5:upper}","abc".toColorful('green'))
+            assert.equal(actual,expected)
+        });
         it("'{0,-2}*{1,2} = {2:f2}' with args [8,9,72] format result is '8 * 9= 72.00'", () => {
             assert.equal(String.format('{0,-2}*{1,2} = {2:f2}', 8, 9, 72), '8 * 9 = 72.00');
         });
