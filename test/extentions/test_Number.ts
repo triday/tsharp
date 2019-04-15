@@ -399,6 +399,26 @@ describe("Number", () => {
                 assert.equal(num.toFormat('X4'), "-0100");
             });
         });
+
+        describe("format with 'S'", () => {
+            const datas: [number, string, string][] = [
+                [0, 's', '0b'],
+                [0, 'S3', '0B'],
+                [1024, 's0', '1kb'],
+                [1024, 'S0', '1KB'],
+                [1024, 's2', '1.00kb'],
+                [1024, 'S2', '1.00KB'],
+                [1048576, 's0', '1mb'],
+                [1048576, 'S0', '1MB'],
+            ]
+            datas.forEach(([num, fmt, res]) => {
+                it(`${num} format "${fmt}" get "${res}"`, function () {
+                    assert.equal(num.toFormat(fmt), res);
+                });
+            });
+
+
+        });
     });
 
 })

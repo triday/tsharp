@@ -25,6 +25,7 @@ interface Number {
      * p 表示格式化为百分数，其中数字部分使用千分位的数字表示法；\
      * r 表示格式化为可以往返至相同数字的字符串；\
      * x 表示格式化为十六进制的字符串，格式化前首先对数字取整（支持大写E,表示结果中的字符转为大写字符）；\
+     * s 表示格式化为容量大小（b,kb,mb,gb,...) （支持大写S，表示数据单位为大写）
      * 
      * @returns 返回格式化后的数字。
      */
@@ -50,36 +51,39 @@ if (!Number.prototype.limitRange) {
 }
 if (!Number.prototype.toFormat) {
     /*参考 https://docs.microsoft.com/zh-cn/dotnet/standard/base-types/standard-numeric-format-strings*/
-    Number.prototype.toFormat = function (fmt:string="") {
+    Number.prototype.toFormat = function (fmt: string = "") {
         if (!fmt) return this.toString();
-        let match = fmt.match(/^([DdEeFfGgNnPpRrXx])(\d{0,2})$/);
+        let match = fmt.match(/^([DdEeFfGgNnPpRrXxSs])(\d{0,2})$/);
         if (!match) throw new Error(`Invalid format text "${fmt}"`);
         if (isNaN(this) || !isFinite(this)) return this.toString()
         let kind = match[1];
         let len = (match[2]) ? Number(match[2]) : NaN;
         if (kind === 'D' || kind === 'd') {
-            return formatKindD(this, len);
+            return formatKindD(Number(this), len);
         }
         if (kind === 'E' || kind === 'e') {
-            return formatKindE(this, len, kind === 'E');
+            return formatKindE(Number(this), len, kind === 'E');
         }
         if (kind === 'F' || kind === 'f') {
-            return formatKindF(this, len);
+            return formatKindF(Number(this), len);
         }
         if (kind === 'G' || kind === 'g') {
-            return formatKindG(this, len, kind === 'G');
+            return formatKindG(Number(this), len, kind === 'G');
         }
         if (kind === 'N' || kind === 'n') {
-            return formatKindN(this, len);
+            return formatKindN(Number(this), len);
         }
         if (kind === 'R' || kind === 'r') {
-            return formatKindR(this, len);
+            return formatKindR(Number(this), len);
         }
         if (kind === 'P' || kind === 'p') {
-            return formatKindP(this, len);
+            return formatKindP(Number(this), len);
         }
         if (kind === 'X' || kind === 'x') {
-            return formatKindX(this, len, kind === 'X');
+            return formatKindX(Number(this), len, kind === 'X');
+        }
+        if (kind === 'S' || kind === 's') {
+            return formatKindS(Number(this), len, kind === 'S');
         }
         return this.toString();
         function formatKindD(value: number, len: number): string {
@@ -111,6 +115,15 @@ if (!Number.prototype.toFormat) {
         }
         function formatKindP(value: number, len: number): string {
             return `${formatKindN(value * 100, len)}%`
+        }
+        function formatKindS(value: number, len: number, toUpper: boolean): string {
+            const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+            const K = 1024;
+            let sizeIndex = !value  ? 0 :
+                Math.min(Math.floor(Math.log(Math.abs(value)) / Math.log(K)), sizes.length - 1);
+            let sizeValue = formatKindN(value / Math.pow(K, sizeIndex), sizeIndex===0?0:len);
+            let unit = toUpper ? sizes[sizeIndex] : sizes[sizeIndex].toLowerCase();
+            return `${sizeValue}${unit}`;
         }
         function formatKindX(value: number, len: number, toUpper: boolean): string {
             let valueStr = Math.round(value).toString(16);
