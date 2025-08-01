@@ -1,8 +1,7 @@
 import "../../src/extentions/Object";
 import "../../src/extentions/Date";
 import "../../src/extentions/Number";
-import "mocha";
-import * as assert from "assert";
+import { describe, it, expect } from 'vitest';
 
 describe("Object", () => {
     interface Data {
@@ -18,14 +17,14 @@ describe("Object", () => {
                 c: o
             })
             o.m = 10000
-            assert.deepEqual(data_c, {
+            expect(data_c).toEqual({
                 a: 1,
                 b: 2,
                 c: {
                     m: 10,
                     n: 20
                 }
-            }, 'deep not equal')
+            });
         });
 
         it('deep clone data_a array', () => {
@@ -37,7 +36,7 @@ describe("Object", () => {
             })
             o.m = 10000
             o[0].m = 10000
-            assert.deepEqual(data_c, {
+            expect(data_c).toEqual({
                 a: 1,
                 b: 2,
                 c: [
@@ -46,26 +45,26 @@ describe("Object", () => {
                         n: 20
                     }
                 ]
-            }, 'deep not equal')
+            });
         })
         it('deep clone  array', () => {
             let arraya = [1, 2, 3];
             let arrayb = [1, 2, 3];
-            assert.deepEqual(Object.clone(arraya), arrayb);
+            expect(Object.clone(arraya)).toEqual(arrayb);
         });
         it('clone null return null', () => {
-            assert.equal(Object.clone(null), null);
+            expect(Object.clone(null)).toBe(null);
         });
         it('clone custom clone', () => {
             let date = new Date('2018-11-11');
             let cloneDate = Object.clone(date);
-            assert.notEqual(date, cloneDate);
-            assert.equal(date.valueOf(), cloneDate.valueOf());
+            expect(date).not.toBe(cloneDate);
+            expect(date.valueOf()).toBe(cloneDate.valueOf());
         });
         it('clone no plain obj', () => {
             let reg = /\d+/;
             let cloneReg = Object.clone(reg);
-            assert.equal(reg, cloneReg);
+            expect(reg).toBe(cloneReg);
         });
     })
 
@@ -78,7 +77,7 @@ describe("Object", () => {
         ];
         datas.forEach((item, index) => {
             it(`case ${index.toFormat('d2')} : ${item[0]}`, () => {
-                assert.deepEqual(Object.extend(item[1], ...item[2]), item[3]);
+                expect(Object.extend(item[1], ...item[2])).toEqual(item[3]);
             });
         });
     })
@@ -130,9 +129,9 @@ describe("Object", () => {
         ]
         datas.forEach((item, index) => {
             it(`case ${index.toFormat('d2')} : ${item[1]}`, () => {
-                assert.equal(Object.equals(item[2], item[3]), item[0]);
+                expect(Object.equals(item[2], item[3])).toBe(item[0]);
 
-                assert.equal(Object.equals(item[3], item[2]), item[0]);
+                expect(Object.equals(item[3], item[2])).toBe(item[0]);
             });
         });
 
@@ -140,22 +139,22 @@ describe("Object", () => {
 
     describe("isNullOrUndefined", () => {
         it('Object.isNullOrUndefined(null) returns true', () => {
-            assert.equal(Object.isNullOrUndefined(null), true);
+            expect(Object.isNullOrUndefined(null)).toBe(true);
         });
         it('Object.isNullOrUndefined(undefined) returns true', () => {
-            assert.equal(Object.isNullOrUndefined(undefined), true);
+            expect(Object.isNullOrUndefined(undefined)).toBe(true);
         });
         it('Object.isNullOrUndefined("null") returns true', () => {
-            assert.equal(Object.isNullOrUndefined('null'), false);
+            expect(Object.isNullOrUndefined('null')).toBe(false);
         });
         it('Object.isNullOrUndefined("") returns true', () => {
-            assert.equal(Object.isNullOrUndefined(''), false);
+            expect(Object.isNullOrUndefined('')).toBe(false);
         });
         it('Object.isNullOrUndefined("0") returns true', () => {
-            assert.equal(Object.isNullOrUndefined('0'), false);
+            expect(Object.isNullOrUndefined('0')).toBe(false);
         });
         it('Object.isNullOrUndefined({}) returns true', () => {
-            assert.equal(Object.isNullOrUndefined({}), false);
+            expect(Object.isNullOrUndefined({})).toBe(false);
         });
     });
 });

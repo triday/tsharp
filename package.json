@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "mocha --reporter mochawesome",
-    "cover": "nyc npm test",
-    "check": "nyc --check-coverage --lines 80 --functions 80 --branches 80 npm test"
+    "test": "vitest run",
+    "cover": "vitest run --coverage",
+    "check": "vitest run --coverage --threshold.lines 80 --threshold.functions 80 --threshold.branches 80"
   },
   "repository": {
     "type": "git",
@@ -19,37 +19,13 @@
     "url": "https://github.com/triday/tsharp/issues"
   },
   "homepage": "https://github.com/triday/tsharp#readme",
-  "nyc": {
-    "include": [
-      "src/**/*.ts"
-    ],
-    "exclude": [
-      "test/**/*.ts"
-    ],
-    "extension": [
-      ".ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ],
-    "reporter": [
-      "text",
-      "text-summary",
-      "html"
-    ],
-    "sourceMap": true,
-    "instrument": true
-  },
   "devDependencies": {
     "@types/assert": "^1.5.11",
-    "@types/mocha": "^10.0.10",
+    "@vitest/coverage-v8": "^1.6.0",
     "assert": "^2.1.0",
-    "mocha": "^11.7.1",
-    "mochawesome": "^7.1.3",
-    "nyc": "^17.1.0",
     "path": "^0.12.7",
     "requiredir": "^1.0.7",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^1.6.0"
   }
 }

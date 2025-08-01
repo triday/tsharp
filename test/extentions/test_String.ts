@@ -2,206 +2,205 @@ import "../../src/extentions/String";
 import "../../src/extentions/Number";
 import "../../src/extentions/Date";
 
-import "mocha"
-import * as assert from "assert";
+import { describe, it, expect } from 'vitest';
 describe("String", () => {
     describe("String.isNullOrEmpty", () => {
         it("null is nullOrEmpty", () => {
-            assert.equal(String.isNullOrEmpty(null), true);
+            expect(String.isNullOrEmpty(null)).toBe(true);
         });
         it("undefined is nullOrEmpty", () => {
-            assert.equal(String.isNullOrEmpty(undefined), true);
+            expect(String.isNullOrEmpty(undefined)).toBe(true);
         });
         it("'' is nullOrEmpty", () => {
-            assert.equal(String.isNullOrEmpty(''), true);
+            expect(String.isNullOrEmpty('')).toBe(true);
         });
         it("'abc' is not nullOrEmpty", () => {
-            assert.equal(String.isNullOrEmpty('abc'), false);
+            expect(String.isNullOrEmpty('abc')).toBe(false);
         });
         it("' ' is not nullOrEmpty", () => {
-            assert.equal(String.isNullOrEmpty(' '), false);
+            expect(String.isNullOrEmpty(' ')).toBe(false);
         });
         it("'\\t' is not nullOrEmpty", () => {
-            assert.equal(String.isNullOrEmpty('\t'), false);
+            expect(String.isNullOrEmpty('\t')).toBe(false);
         });
         it("'\\n' is not nullOrEmpty", () => {
-            assert.equal(String.isNullOrEmpty('\n'), false);
+            expect(String.isNullOrEmpty('\n')).toBe(false);
         });
         it("'\\r' is not nullOrEmpty", () => {
-            assert.equal(String.isNullOrEmpty('\r'), false);
+            expect(String.isNullOrEmpty('\r')).toBe(false);
         });
         it("'\\r\\n' is not nullOrEmpty", () => {
-            assert.equal(String.isNullOrEmpty('\r\n'), false);
+            expect(String.isNullOrEmpty('\r\n')).toBe(false);
         });
         it("'0' is not nullOrEmpty", () => {
-            assert.equal(String.isNullOrEmpty('0'), false);
+            expect(String.isNullOrEmpty('0')).toBe(false);
         });
     });
     describe("String.isNullOrWhiteSpace", () => {
         it("null is nullOrWhiteSpace", () => {
-            assert.equal(String.isNullOrWhiteSpace(null), true);
+            expect(String.isNullOrWhiteSpace(null)).toBe(true);
         });
         it("undefined is nullOrWhiteSpace", () => {
-            assert.equal(String.isNullOrWhiteSpace(undefined), true);
+            expect(String.isNullOrWhiteSpace(undefined)).toBe(true);
         });
         it("'' is nullOrWhiteSpace", () => {
-            assert.equal(String.isNullOrWhiteSpace(''), true);
+            expect(String.isNullOrWhiteSpace('')).toBe(true);
         });
         it("'abc' is not nullOrWhiteSpace", () => {
-            assert.equal(String.isNullOrWhiteSpace('abc'), false);
+            expect(String.isNullOrWhiteSpace('abc')).toBe(false);
         });
         it("' ' is nullOrWhiteSpace", () => {
-            assert.equal(String.isNullOrWhiteSpace(' '), true);
+            expect(String.isNullOrWhiteSpace(' ')).toBe(true);
         });
         it("'\\t' is nullOrWhiteSpace", () => {
-            assert.equal(String.isNullOrWhiteSpace('\t'), true);
+            expect(String.isNullOrWhiteSpace('\t')).toBe(true);
         });
         it("'\\n' is nullOrWhiteSpace", () => {
-            assert.equal(String.isNullOrWhiteSpace('\n'), true);
+            expect(String.isNullOrWhiteSpace('\n')).toBe(true);
         });
         it("'\\r' is nullOrWhiteSpace", () => {
-            assert.equal(String.isNullOrWhiteSpace('\r'), true);
+            expect(String.isNullOrWhiteSpace('\r')).toBe(true);
         });
         it("'\\r\\n' is nullOrWhiteSpace", () => {
-            assert.equal(String.isNullOrWhiteSpace('\r\n'), true);
+            expect(String.isNullOrWhiteSpace('\r\n')).toBe(true);
         });
         it("'0' is not nullOrWhiteSpace", () => {
-            assert.equal(String.isNullOrWhiteSpace('0'), false);
+            expect(String.isNullOrWhiteSpace('0')).toBe(false);
         });
     });
     describe("String.format", () => {
         it("null format result is null", () => {
-            assert.equal(String.format(null), null);
+            expect(String.format(null)).toBe(null);
         });
         it("'' format result is ''", () => {
-            assert.equal(String.format(''), '');
+            expect(String.format('')).toBe('');
         });
         it("format null or undefined value", () => {
-            assert.equal(String.format('ab{0}c', null), "abc");
-            assert.equal(String.format('ab{0}c', undefined), "abc");
+            expect(String.format('ab{0}c', null)).toBe("abc");
+            expect(String.format('ab{0}c', undefined)).toBe("abc");
         });
         it('no custom format', () => {
-            assert.equal(String.format('{0:f2}', {}), '[object Object]');
+            expect(String.format('{0:f2}', {})).toBe('[object Object]');
         });
         it("format width is ok", () => {
-            assert.equal(String.format("a{0,3}b", 12), "a 12b");
-            assert.equal(String.format("a{0,-3}b", 12), "a12 b");
-            assert.equal(String.format("a{0,3}b", 123), "a123b");
-            assert.equal(String.format("a{0,-3}b", 123), "a123b");
-            assert.equal(String.format("a{0,3}b", 1234), "a1234b");
-            assert.equal(String.format("a{0,-3}b", 1234), "a1234b");
+            expect(String.format("a{0,3}b", 12)).toBe("a 12b");
+            expect(String.format("a{0,-3}b", 12)).toBe("a12 b");
+            expect(String.format("a{0,3}b", 123)).toBe("a123b");
+            expect(String.format("a{0,-3}b", 123)).toBe("a123b");
+            expect(String.format("a{0,3}b", 1234)).toBe("a1234b");
+            expect(String.format("a{0,-3}b", 1234)).toBe("a1234b");
         });
         it("'{0}+{1}={2}' with args [2,3,5] format result is '2+3=5'", () => {
-            assert.equal(String.format('{0}+{1}={2}', 2, 3, 5), '2+3=5');
+            expect(String.format('{0}+{1}={2}', 2, 3, 5)).toBe('2+3=5');
         });
         it("'{0,-8#green:f2}+{1#red#bold}={2,10 # # blue #bgRed ### :f3}' with args [2,3,5] format result is '...'", () => {
             let expected="\x1B[32m2.00\x1B[39m    +\x1B[1m\x1B[31m3\x1B[39m\x1B[22m=     \x1B[41m\x1B[34m5.000\x1B[39m\x1B[49m";
             let actual=String.format('{0,-8#green:f2}+{1#red#bold}={2,10 # # blue #bgRed ### :f3}', 2, 3, 5);
-            assert.equal(actual,expected);
+            expect(actual).toBe(expected);
         });
         it("format styled text",function(){
             let expected='  \x1B[32mABC\x1B[39m';
             let actual= String.format("{0,5:upper}","abc".toColorful('green'))
-            assert.equal(actual,expected)
+            expect(actual).toBe(expected);
         });
         it("'{0,-2}*{1,2} = {2:f2}' with args [8,9,72] format result is '8 * 9= 72.00'", () => {
-            assert.equal(String.format('{0,-2}*{1,2} = {2:f2}', 8, 9, 72), '8 * 9 = 72.00');
+            expect(String.format('{0,-2}*{1,2} = {2:f2}', 8, 9, 72)).toBe('8 * 9 = 72.00');
         });
 
         it("format datetime is ok.", () => {
-            assert.equal(String.format('北京时间:{time:YYYY年MM月DD日 HH:mm:ss}', { time: new Date('2018-11-10 23:58:40') }), '北京时间:2018年11月10日 23:58:40');
+            expect(String.format('北京时间:{time:YYYY年MM月DD日 HH:mm:ss}', { time: new Date('2018-11-10 23:58:40') })).toBe('北京时间:2018年11月10日 23:58:40');
         });
         it("'[{name},{age}]' with args {name:'zhangsan',age:17} format result is '[zhangsan,17]'", () => {
-            assert.equal(String.format('[{name},{age}]', { name: 'zhangsan', age: 17 }), '[zhangsan,17]');
+            expect(String.format('[{name},{age}]', { name: 'zhangsan', age: 17 })).toBe('[zhangsan,17]');
         });
     });
     describe("String.from", () => {
         it("String.from(' ', 5) equals '     '", () => {
-            assert.equal(String.from(' ', 5), '     ');
+            expect(String.from(' ', 5)).toBe('     ');
         });
         it("String.from('ab', 3) equals 'ababab'", () => {
-            assert.equal(String.from('ab', 3), 'ababab');
+            expect(String.from('ab', 3)).toBe('ababab');
         });
 
         it("String.from('', 10) equals ''", () => {
-            assert.equal(String.from('', 10), '');
+            expect(String.from('', 10)).toBe('');
         });
         it("String.from(null, 10) equals null", () => {
-            assert.equal(String.from(null, 10), "");
+            expect(String.from(null, 10)).toBe("");
         });
 
         it("String.from(undefined, 10) equals undefined", () => {
-            assert.equal(String.from(undefined, 10), "");
+            expect(String.from(undefined, 10)).toBe("");
         });
     });
     describe("startWithPattern", () => {
         it("abc start with pattern abc", () => {
-            assert.equal('abc'.startsWithPattern(/abc/), true);
+            expect('abc'.startsWithPattern(/abc/)).toBe(true);
         });
         it("abc start with pattern a", () => {
-            assert.equal('abc'.startsWithPattern(/a/), true);
+            expect('abc'.startsWithPattern(/a/)).toBe(true);
         });
         it("123abc start with pattern ^\\d", () => {
-            assert.equal('123abc'.startsWithPattern(/^\d/), true);
+            expect('123abc'.startsWithPattern(/^\d/)).toBe(true);
         });
         it("abc not start with pattern b", () => {
-            assert.equal('abc'.startsWithPattern(/b/), false);
+            expect('abc'.startsWithPattern(/b/)).toBe(false);
         });
         it("abc start with pattern \\w", () => {
-            assert.equal('abc'.startsWithPattern(/\w/), true);
+            expect('abc'.startsWithPattern(/\w/)).toBe(true);
         });
         it("abc123 start with pattern \\w+", () => {
-            assert.equal('abc123'.startsWithPattern(/\w+/), true);
+            expect('abc123'.startsWithPattern(/\w+/)).toBe(true);
         });
         it("abc123 not start with pattern \\d+", () => {
-            assert.equal('abc123'.startsWithPattern(/\d+/), false);
+            expect('abc123'.startsWithPattern(/\d+/)).toBe(false);
         });
         it("123abc start with pattern \\d+", () => {
-            assert.equal('123abc'.startsWithPattern(/\d+/), true);
+            expect('123abc'.startsWithPattern(/\d+/)).toBe(true);
         });
         it("'' not start with pattern \\d+", () => {
-            assert.equal(''.startsWithPattern(/\\d+/), false);
+            expect(''.startsWithPattern(/\\d+/)).toBe(false);
         });
         it("'' start with pattern \\d*", () => {
-            assert.equal(''.startsWithPattern(/\d*/), true);
+            expect(''.startsWithPattern(/\d*/)).toBe(true);
         });
         it(' start with null pattern throws error', () => {
-            assert.throws(() => { ''.startsWithPattern(null) });
+            expect(() => { ''.startsWithPattern(null) }).toThrow();
         });
     });
     describe("endsWithPattern", () => {
         it("abc end with pattern abc", () => {
-            assert.equal('abc'.endsWithPattern(/abc/), true);
+            expect('abc'.endsWithPattern(/abc/)).toBe(true);
         });
         it("abc end with pattern c", () => {
-            assert.equal('abc'.endsWithPattern(/c/), true);
+            expect('abc'.endsWithPattern(/c/)).toBe(true);
         });
         it("abc123 end with pattern \\d+$", () => {
-            assert.equal('abc123'.endsWithPattern(/\d+$/), true);
+            expect('abc123'.endsWithPattern(/\d+$/)).toBe(true);
         });
         it("abc end end with pattern b", () => {
-            assert.equal('abc'.endsWithPattern(/b/), false);
+            expect('abc'.endsWithPattern(/b/)).toBe(false);
         });
         it("abc end with pattern \\w", () => {
-            assert.equal('abc'.endsWithPattern(/\w/), true);
+            expect('abc'.endsWithPattern(/\w/)).toBe(true);
         });
         it("abc123 not end with pattern \\w+", () => {
-            assert.equal('abc123'.endsWithPattern(/\w+/), true);
+            expect('abc123'.endsWithPattern(/\w+/)).toBe(true);
         });
         it("abc123 end with pattern \\d+", () => {
-            assert.equal('abc123'.endsWithPattern(/\d+/), true);
+            expect('abc123'.endsWithPattern(/\d+/)).toBe(true);
         });
         it("123abc not end with pattern \\d+", () => {
-            assert.equal('123abc'.endsWithPattern(/\d+/), false);
+            expect('123abc'.endsWithPattern(/\d+/)).toBe(false);
         });
         it("'' not end with pattern \\d+", () => {
-            assert.equal(''.endsWithPattern(/\d+/), false);
+            expect(''.endsWithPattern(/\d+/)).toBe(false);
         });
         it("'' end with pattern \\d*", () => {
-            assert.equal(''.endsWithPattern(/\d*/), true);
+            expect(''.endsWithPattern(/\d*/)).toBe(true);
         });
         it(' end with null pattern throws error', () => {
-            assert.throws(() => { ''.endsWithPattern(null) });
+            expect(() => { ''.endsWithPattern(null) }).toThrow();
         });
     });
     describe("trimStart", () => {
@@ -212,356 +211,356 @@ describe("String", () => {
             assert.equal(" abc".trimStart(), "abc")
         });
         it("'\\tabc' trim start equals 'abc'", () => {
-            assert.equal("\tabc".trimStart(), "abc")
+            expect("\tabc".trimStart()).toBe("abc")
         });
         it("'\\nabc' trim start equals 'abc'", () => {
-            assert.equal("\nabc".trimStart(), "abc")
+            expect("\nabc".trimStart()).toBe("abc")
         });
         it("'\\rabc' trim start equals 'abc'", () => {
-            assert.equal("\rabc".trimStart(), "abc")
+            expect("\rabc".trimStart()).toBe("abc")
         });
         it("'  \\r\\n\\t abc' trim start equals 'abc'", () => {
-            assert.equal("  \r\n\t abc".trimStart(), "abc")
+            expect("  \r\n\t abc".trimStart()).toBe("abc");
         });
         it("'  \\r\\n\\t abc ' trim start equals 'abc '", () => {
-            assert.equal("  \r\n\t abc ".trimStart(), "abc ")
+            expect("  \r\n\t abc ".trimStart()).toBe("abc ");
         });
 
     });
     describe("trimEnd", () => {
         it("'abc' trim end equals 'abc'", () => {
-            assert.equal("abc".trimEnd(), "abc");
+            expect("abc".trimEnd()).toBe("abc");
         });
         it("'abc ' trim end equals 'abc'", () => {
-            assert.equal("abc ".trimEnd(), "abc");
+            expect("abc ".trimEnd()).toBe("abc");
         });
         it("'abc\\t' trim end equals 'abc'", () => {
-            assert.equal("abc\t".trimEnd(), "abc");
+            expect("abc\t".trimEnd()).toBe("abc");
         });
         it("'abc\\n' trim end equals 'abc'", () => {
-            assert.equal("abc\n".trimEnd(), "abc");
+            expect("abc\n".trimEnd()).toBe("abc");
         });
         it("'abc\\r' trim end equals abc", () => {
-            assert.equal("abc\r".trimEnd(), "abc");
+            expect("abc\r".trimEnd()).toBe("abc");
         });
         it("'abc  \\r\\n\\t ' trim end equals abc", () => {
-            assert.equal("abc  \r\n\t ".trimEnd(), "abc");
+            expect("abc  \r\n\t ".trimEnd()).toBe("abc");
         });
-        it("'abc  \\r\\n\\t ' trim end equals ' abc'", () => {
-            assert.equal(" abc  \r\n\t ".trimEnd(), " abc");
+        it("'abc  \r\n\t ' trim end equals ' abc'", () => {
+            expect(" abc\r\n\t".trimEnd()).toBe(" abc");
         });
 
     });
     describe("trimChars", () => {
         it(`" abc " trimChars(null) get "abc"`, function () {
-            assert.equal(" abc ".trimChars(null), "abc");
+            expect(" abc ".trimChars(null)).toBe("abc");
         })
         it(`" abc " trimChars() get "abc"`, function () {
-            assert.equal(" abc ".trimChars(""), "abc");
+            expect(" abc ".trimChars("")).toBe("abc");
         })
         it(`" abc d" trimChars() get "abc d"`, function () {
-            assert.equal(" abc d".trimChars(""), "abc d");
+            expect(" abc d".trimChars("")).toBe("abc d");
         })
         it(`"      " trimChars() get ""`, function () {
-            assert.equal("      ".trimChars(""), "");
+            expect("      ".trimChars("")).toBe("");
         })
         it(`"aaaa" trimChars(a) get ""`, function () {
-            assert.equal("aaaa".trimChars("a"), "");
+            expect("aaaa".trimChars("a")).toBe("");
         })
         it(`" aaaa" trimChars(a) get " "`, function () {
-            assert.equal(" aaaa".trimChars("a"), " ");
+            expect(" aaaa".trimChars("a")).toBe(" ");
         })
         it(`" aaaa " trimChars(a) get " aaaa "`, function () {
-            assert.equal(" aaaa ".trimChars("a"), " aaaa ");
+            expect(" aaaa ".trimChars("a")).toBe(" aaaa ");
         })
         it(`"abaaab" trimChars(ab) get ""`, function () {
-            assert.equal("abaaab".trimChars("ab"), "");
+            expect("abaaab".trimChars("ab")).toBe("");
         })
         it(`"abcabcabc" trimChars(ab) get "cabcabc"`, function () {
-            assert.equal("abcabcabc".trimChars("ab"), "cabcabc");
+            expect("abcabcabc".trimChars("ab")).toBe("cabcabc");
         })
     });
     describe("replaceAll", () => {
         it("'abc' replaceall 'b' to '#' get 'a#c'", () => {
-            assert.equal("abc".replaceAll('b', '#'), "a#c");
+            expect("abc".replaceAll('b', '#')).toBe("a#c");
         });
         it("'abcabcabc' replaceall 'b' to '#' get 'a#ca#ca#c'", () => {
-            assert.equal("abcabcabc".replaceAll('b', '#'), "a#ca#ca#c");
+            expect("abcabcabc".replaceAll('b', '#')).toBe("a#ca#ca#c");
         });
         it("'abcabcabc' replaceall 'b' to '' get 'acacac'", () => {
-            assert.equal("abcabcabc".replaceAll('b', ''), "acacac");
+            expect("abcabcabc".replaceAll('b', '')).toBe("acacac");
         });
         it("'abcabcabc' replaceall '' to '##' get 'abcabcabc'", () => {
-            assert.equal("abcabcabc".replaceAll('', '##'), "abcabcabc");
+            expect("abcabcabc".replaceAll('', '##')).toBe("abcabcabc");
         });
         it("'abcabcabc' replaceall null to '##' get 'abcabcabc'", () => {
-            assert.equal("abcabcabc".replaceAll(null, '##'), "abcabcabc");
+            expect("abcabcabc".replaceAll(null, '##')).toBe("abcabcabc");
         });
         it("'abcabcabc' replaceall ' ' to '##' get 'abcabcabc'", () => {
-            assert.equal("abcabcabc".replaceAll(' ', '##'), "abcabcabc");
+            expect("abcabcabc".replaceAll(' ', '##')).toBe("abcabcabc");
         });
     });
     describe("equals", () => {
         it("'abc' equals 'abc'", () => {
-            assert.equal("abc".equals("abc"), true);
+            expect("abc".equals("abc")).toBe(true);
         });
         it("'abc' not equals null", () => {
-            assert.equal("abc".equals(null), false);
+            expect("abc".equals(null)).toBe(false);
         });
         it("'abc' not equals ''", () => {
-            assert.equal("abc".equals(''), false);
+            expect("abc".equals('')).toBe(false);
         });
         it("'' equals ''", () => {
-            assert.equal("".equals(''), true);
+            expect("".equals('')).toBe(true);
         });
         it("'' not equals null", () => {
-            assert.equal("".equals(null), false);
+            expect("".equals(null)).toBe(false);
         });
         it("'' not equals ' '", () => {
-            assert.equal("".equals(" "), false);
+            expect("".equals(" ")).toBe(false);
         });
         it("'abc' not equals 'Abc'", () => {
-            assert.equal("abc".equals("Abc"), false);
+            expect("abc".equals("Abc")).toBe(false);
         });
         it("'abc' equals 'Abc' if ignore case", () => {
-            assert.equal("abc".equals("Abc", true), true);
+            expect("abc".equals("Abc", true)).toBe(true);
         });
         it("'abc' not equals 'ABCD' if ignore case", () => {
-            assert.equal("abc".equals("ABCD", true), false);
+            expect("abc".equals("ABCD", true)).toBe(false);
         });
     });
     describe("contains", () => {
         it("'abcde' contains 'bcd'", () => {
-            assert.equal("abcde".contains("bcd"), true);
+            expect("abcde".contains("bcd")).toBe(true);
         });
         it("'abcde' contains 'abcde'", () => {
-            assert.equal("abcde".contains("abcde"), true);
+            expect("abcde".contains("abcde")).toBe(true);
         });
         it("'abcde' not contains 'abcdef'", () => {
-            assert.equal("abcde".contains("abcdef"), false);
+            expect("abcde".contains("abcdef")).toBe(false);
         });
         it("'abcde' contains ''", () => {
-            assert.equal("abcde".contains(""), true);
+            expect("abcde".contains("")).toBe(true);
         });
         it("'abcde' not contains null", () => {
-            assert.equal("abcde".contains(null), false);
+            expect("abcde".contains(null)).toBe(false);
         });
         it("'abcde' not contains 'BCD'", () => {
-            assert.equal("abcde".contains('BCD'), false);
+            expect("abcde".contains('BCD')).toBe(false);
         });
         it("'abcde' contains 'BCD' if ignore case", () => {
-            assert.equal("abcde".contains('BCD', true), true);
+            expect("abcde".contains('BCD', true)).toBe(true);
         });
         it("'abcde' contains 'ABCDE' if ignore case", () => {
-            assert.equal("abcde".contains('ABCDE', true), true);
+            expect("abcde".contains('ABCDE', true)).toBe(true);
         });
         it("'abcde' not contains 'ABCDEF' if ignore case", () => {
-            assert.equal("abcde".contains('ABCDEF', true), false);
+            expect("abcde".contains('ABCDEF', true)).toBe(false);
         });
     });
     describe("reverse", () => {
         it("'abc'reverse() equals 'cba'", () => {
-            assert.equal("abc".reverse(), "cba");
+            expect("abc".reverse()).toBe("cba");
         });
     });
     describe("toCharArray", () => {
         it("'abc'toCharArray() equals ['a','b','c']", () => {
-            assert.deepEqual("abc".toCharArrays(), ['a', 'b', 'c']);
+            expect("abc".toCharArrays()).toEqual(['a', 'b', 'c']);
         })
     });
     describe("isLower", () => {
         it("'abc'isLower() is true", () => {
-            assert.equal("abc".isLower(), true);
+            expect("abc".isLower()).toBe(true);
         });
 
         it("''isLower() is false", () => {
-            assert.equal("".isLower(), false);
+            expect("".isLower()).toBe(false);
         });
         it("'abc123'isLower() is false", () => {
-            assert.equal("abc123".isLower(), false);
+            expect("abc123".isLower()).toBe(false);
         });
         it("'Abc'isLower() is false", () => {
-            assert.equal("Abc".isLower(), false);
+            expect("Abc".isLower()).toBe(false);
         })
     });
     describe("isUpper", () => {
         it("'ABC'isUpper() is true", () => {
-            assert.equal("ABC".isUpper(), true);
+            expect("ABC".isUpper()).toBe(true);
         });
         it("''isUpper() is false", () => {
-            assert.equal("".isUpper(), false);
+            expect("".isUpper()).toBe(false);
         });
         it("'ABC123'isUpper() is true", () => {
-            assert.equal("ABC123".isUpper(), false);
+            expect("ABC123".isUpper()).toBe(false);
         });
         it("'Abc'isUpper() is false", () => {
-            assert.equal("Abc".isUpper(), false);
+            expect("Abc".isUpper()).toBe(false);
         })
     });
 
     describe("isSpace", () => {
         it("' \\t\\n\\t\\r'isSpace() is true", () => {
-            assert.equal(" \t\n\t\r".isSpace(), true);
+            expect(" \t\n\t\r".isSpace()).toBe(true);
         });
         it("''isSpace() is false", () => {
-            assert.equal("".isSpace(), false);
+            expect("".isSpace()).toBe(false);
         });
         it("' a 'isSpace() is false", () => {
-            assert.equal(" a ".isSpace(), false);
+            expect(" a ".isSpace()).toBe(false);
         });
 
     });
 
     describe("isDigit", () => {
         it("'123'isDigit() is true", () => {
-            assert.equal("123".isDigit(), true);
+            expect("123".isDigit()).toBe(true);
         });
         it("''isDigit() is false", () => {
-            assert.equal("".isDigit(), false);
+            expect("".isDigit()).toBe(false);
         });
         it("'123abc'isDigit() is false", () => {
-            assert.equal("123abc".isDigit(), false);
+            expect("123abc".isDigit()).toBe(false);
         });
         it("'abc123'isDigit() is false", () => {
-            assert.equal("abc123".isDigit(), false);
+            expect("abc123".isDigit()).toBe(false);
         })
     });
     describe("isLowerOrDigit", () => {
         it("'123'isLowerOrDigit() is true", () => {
-            assert.equal("123".isLowerOrDigit(), true);
+            expect("123".isLowerOrDigit()).toBe(true);
         });
         it("'abc'isLowerOrDigit() is true", () => {
-            assert.equal("abc".isLowerOrDigit(), true);
+            expect("abc".isLowerOrDigit()).toBe(true);
         });
         it("''isLowerOrDigit() is false", () => {
-            assert.equal("".isLowerOrDigit(), false);
+            expect("".isLowerOrDigit()).toBe(false);
         });
         it("'123abc123'isLowerOrDigit() is true", () => {
-            assert.equal("123abc123".isLowerOrDigit(), true);
+            expect("123abc123".isLowerOrDigit()).toBe(true);
         });
         it("'123ABC123'isLowerOrDigit() is false", () => {
-            assert.equal("123ABC123".isLowerOrDigit(), false);
+            expect("123ABC123".isLowerOrDigit()).toBe(false);
         });
     });
     describe("isUpperOrDigit", () => {
         it("'123'isUpperOrDigit() is true", () => {
-            assert.equal("123".isUpperOrDigit(), true);
+            expect("123".isUpperOrDigit()).toBe(true);
         });
         it("'ABC'isUpperOrDigit() is true", () => {
-            assert.equal("ABC".isUpperOrDigit(), true);
+            expect("ABC".isUpperOrDigit()).toBe(true);
         });
         it("''isUpperOrDigit() is false", () => {
-            assert.equal("".isUpperOrDigit(), false);
+            expect("".isUpperOrDigit()).toBe(false);
         });
         it("'123abc123'isUpperOrDigit() is false", () => {
-            assert.equal("123abc123".isUpperOrDigit(), false);
+            expect("123abc123".isUpperOrDigit()).toBe(false);
         });
         it("'123ABC123'isUpperOrDigit() is true", () => {
-            assert.equal("123ABC123".isUpperOrDigit(), true);
+            expect("123ABC123".isUpperOrDigit()).toBe(true);
         });
     });
     describe("isAlpha", () => {
         it("'abc'isAlpha() is true", () => {
-            assert.equal("abc".isAlpha(), true);
+            expect("abc".isAlpha()).toBe(true);
         });
         it("'ABC'isAlpha() is true", () => {
-            assert.equal("ABC".isAlpha(), true);
+            expect("ABC".isAlpha()).toBe(true);
         });
         it("'abcABC'isAlpha() is true", () => {
-            assert.equal("abcABC".isAlpha(), true);
+            expect("abcABC".isAlpha()).toBe(true);
         });
         it("''isAlpha() is false", () => {
-            assert.equal("".isAlpha(), false);
+            expect("".isAlpha()).toBe(false);
         });
         it("'123abcABC'isAlpha() is false", () => {
-            assert.equal("123abcABC".isAlpha(), false);
+            expect("123abcABC".isAlpha()).toBe(false);
         });
     });
     describe("isAlphaOrDigit", () => {
         it("'abc'isAlphaOrDigit() is true", () => {
-            assert.equal("abc".isAlphaOrDigit(), true);
+            expect("abc".isAlphaOrDigit()).toBe(true);
         });
         it("'ABC'isAlphaOrDigit() is true", () => {
-            assert.equal("ABC".isAlphaOrDigit(), true);
+            expect("ABC".isAlphaOrDigit()).toBe(true);
         });
         it("'abcABC'isAlphaOrDigit() is true", () => {
-            assert.equal("abcABC".isAlphaOrDigit(), true);
+            expect("abcABC".isAlphaOrDigit()).toBe(true);
         });
         it("'123abcABC'isAlphaOrDigit() is true", () => {
-            assert.equal("123abcABC".isAlphaOrDigit(), true);
+            expect("123abcABC".isAlphaOrDigit()).toBe(true);
         });
         it("''isAlphaOrDigit() is false", () => {
-            assert.equal("".isAlphaOrDigit(), false);
+            expect("".isAlphaOrDigit()).toBe(false);
         });
         it("'Hello,World'isAlphaOrDigit() is false", () => {
-            assert.equal("Hello,World".isAlphaOrDigit(), false);
+            expect("Hello,World".isAlphaOrDigit()).toBe(false);
         });
     });
     describe("isBoolean", () => {
         it("'true' is boolean", () => {
-            assert.equal('true'.isBoolean(), true);
+            expect('true'.isBoolean()).toBe(true);
         });
         it("'TRUE' is boolean", () => {
-            assert.equal('TRUE'.isBoolean(), true);
+            expect('TRUE'.isBoolean()).toBe(true);
         });
         it("'True' is boolean", () => {
-            assert.equal('True'.isBoolean(), true);
+            expect('True'.isBoolean()).toBe(true);
         });
         it("'+True' is not boolean", () => {
-            assert.equal('+True'.isBoolean(), false);
+            expect('+True'.isBoolean()).toBe(false);
         });
         it("'false' is boolean", () => {
-            assert.equal('false'.isBoolean(), true);
+            expect('false'.isBoolean()).toBe(true);
         });
         it("'FALSE' is boolean", () => {
-            assert.equal('FALSE'.isBoolean(), true);
+            expect('FALSE'.isBoolean()).toBe(true);
         });
         it("'False' is boolean", () => {
-            assert.equal('False'.isBoolean(), true);
+            expect('False'.isBoolean()).toBe(true);
         });
         it("'-False' is not boolean", () => {
-            assert.equal('-False'.isBoolean(), false);
+            expect('-False'.isBoolean()).toBe(false);
         });
         it("'' is not boolean", () => {
-            assert.equal(''.isBoolean(), false);
+            expect(''.isBoolean()).toBe(false);
         });
         it("'abc' is not boolean", () => {
-            assert.equal('abc'.isBoolean(), false);
+            expect('abc'.isBoolean()).toBe(false);
         });
     });
     describe("isNumber", () => {
         it("'123' is number", () => {
-            assert.equal('123'.isNumber(), true);
+            expect('123'.isNumber()).toBe(true);
         });
         it("'.123' is number", () => {
-            assert.equal('.123'.isNumber(), true);
+            expect('.123'.isNumber()).toBe(true);
         });
         it("'-.123' is number", () => {
-            assert.equal('-.123'.isNumber(), true);
+            expect('-.123'.isNumber()).toBe(true);
         });
         it("'+.123' is number", () => {
-            assert.equal('+.123'.isNumber(), true);
+            expect('+.123'.isNumber()).toBe(true);
         });
         it("'123a' is not number", () => {
-            assert.equal('123a'.isNumber(), false);
+            expect('123a'.isNumber()).toBe(false);
         });
         it("'abc' is not number", () => {
-            assert.equal('abc'.isNumber(), false);
+            expect('abc'.isNumber()).toBe(false);
         });
 
         it('Infinity is not number', () => {
-            assert.equal((1 / 0).toString().isNumber(), false);
+            expect((1 / 0).toString().isNumber()).toBe(false);
         });
     });
     describe("isPattern", () => {
         it("'123' is '\\d+' pattern ", () => {
-            assert.equal('123'.isPattern(/\d+/), true);
+            expect('123'.isPattern(/\d+/)).toBe(true);
         });
         it("'abc' is not '\\d+' pattern ", () => {
-            assert.equal('abc'.isPattern(/\d+/), false);
+            expect('abc'.isPattern(/\d+/)).toBe(false);
         });
         it("throw error if pattern is null ", () => {
-            assert.throws(() => { 'abc'.isPattern(null) });
+            expect(() => { 'abc'.isPattern(null) }).toThrow();
         });
     });
     describe("isEmail", () => {
@@ -594,7 +593,7 @@ describe("String", () => {
         describe('valid email address', () => {
             validEmails.forEach(text => {
                 it(`'${text} is valid email'`, () => {
-                    assert.equal(text.isEmail(), true);
+                    expect(text.isEmail()).toBe(true);
                 });
 
             });
@@ -602,7 +601,7 @@ describe("String", () => {
         describe('invalid eamil address', () => {
             invalidEmails.forEach(text => {
                 it(`'${text} is invalid email'`, () => {
-                    assert.equal(text.isEmail(), false);
+                    expect(text.isEmail()).toBe(false);
                 });
             });
         });
@@ -628,7 +627,7 @@ describe("String", () => {
         describe('valid var name', () => {
             validNames.forEach(text => {
                 it(`'${text} is valid var name'`, () => {
-                    assert.equal(text.isVarName(), true);
+                    expect(text.isVarName()).toBe(true);
                 });
 
             });
@@ -636,7 +635,7 @@ describe("String", () => {
         describe('invalid var name', () => {
             invalidNames.forEach(text => {
                 it(`'${text} is invalid var name'`, () => {
-                    assert.equal(text.isVarName(), false);
+                    expect(text.isVarName()).toBe(false);
                 });
             });
         });
@@ -650,27 +649,27 @@ describe("String", () => {
             let hashCode1 = text1.hashCode();
             let hashCode2 = text2.hashCode();
             if (text1 === text2) {
-                assert.equal(hashCode1, hashCode2);
+                expect(hashCode1).toBe(hashCode2);
             } else {
-                assert.notEqual(hashCode1, hashCode2);
+                expect(hashCode1).not.toBe(hashCode2);
             }
         })
     });
     describe("truncat", () => {
         it("'abcde' truncat 10 is 'abcde'", () => {
-            assert.equal('abcde'.truncat(10), 'abcde');
+            expect('abcde'.truncat(10)).toBe('abcde');
         });
         it("'abcde' truncat 5 is 'abcde'", () => {
-            assert.equal('abcde'.truncat(5), 'abcde');
+            expect('abcde'.truncat(5)).toBe('abcde');
         });
         it("'abcdef' truncat 5 is 'abcde'", () => {
-            assert.equal('abcdef'.truncat(5), 'ab...');
+            expect('abcdef'.truncat(5)).toBe('ab...');
         });
         it("'abcdef' truncat(5,'##') is 'abcde'", () => {
-            assert.equal('abcdef'.truncat(5, '##'), 'abc##');
+            expect('abcdef'.truncat(5, '##')).toBe('abc##');
         });
         it('throws error if the ends text too long', () => {
-            assert.throws(() => { 'abc'.truncat(2) });
+            expect(() => { 'abc'.truncat(2) }).toThrow();
         });
     });
 
@@ -687,7 +686,7 @@ describe("String", () => {
         ]
         datas.forEach(([text, encode]) => {
             it(`htmlencode "${text}" get "${encode}"`, () => {
-                assert.equal(encode, text.htmlEncode());
+                expect(encode).toBe(text.htmlEncode());
             })
         })
     });
@@ -704,7 +703,7 @@ describe("String", () => {
         ]
         datas.forEach(([text, encode]) => {
             it(`htmldecode "${encode}" get "${text}"`, () => {
-                assert.equal(text, encode.htmlDocode());
+                expect(text).toBe(encode.htmlDocode());
             })
         })
     });
@@ -719,7 +718,7 @@ describe("String", () => {
         ];
         data.forEach(([from, to]) => {
             it(`"${from}" toTileCase get "${to}"`, function () {
-                assert.equal(from.toTitleCase(), to);
+                expect(from.toTitleCase()).toBe(to);
             });
         });
     });
@@ -740,7 +739,7 @@ describe("String", () => {
         ];
         data.forEach(([from, to]) => {
             it(`"${from}" toCamelCase get "${to}"`, function () {
-                assert.equal(from.toCamelCase(), to);
+                expect(from.toCamelCase()).toBe(to);
             });
         });
         const data2 = [
@@ -759,7 +758,7 @@ describe("String", () => {
         ];
         data2.forEach(([from, to]) => {
             it(`"${from}" toCamelCase with firstWorldUpper get "${to}"`, function () {
-                assert.equal(from.toCamelCase(true), to);
+                expect(from.toCamelCase(true)).toBe(to);
             });
         });
     });
@@ -774,48 +773,48 @@ describe("String", () => {
         ];
         data.forEach(([from, to]) => {
             it(`"${from}" toCssName  get "${to}"`, function () {
-                assert.equal(from.toCssName(), to);
+                expect(from.toCssName()).toBe(to);
             });
         })
     });
     describe("toColorful", () => {
         it(`abc toColorful("blue") == "\x1B[34mabc\x1B[39m"`, function () {
             let actual = "abc".toColorful("blue")
-            assert.equal(actual, "\x1B[34mabc\x1B[39m");
+            expect(actual).toBe("\x1B[34mabc\x1B[39m");
         });
         it('redBright',function(){
             let actual = "abc".toColorful("redBright");
-            assert.equal(actual, "\x1B[91mabc\x1B[39m");
+            expect(actual).toBe("\x1B[91mabc\x1B[39m");
         }
         )
         it(`abc toColorful("blue","cyanBG") == "\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m"`, function () {
             let actual = "abc".toColorful("blue", "bgCyan")
-            assert.equal(actual, "\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m");
+            expect(actual).toBe("\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m");
         });
         it(`abc toColorful("blue","cyanBG","bold","italic") == "\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m"`, function () {
             let actual = "abc".toColorful("blue", "bgCyan", "bold", "italic")
-            assert.equal(actual, "\x1B[3m\x1B[1m\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m\x1B[22m\x1B[23m");
+            expect(actual).toBe("\x1B[3m\x1B[1m\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m\x1B[22m\x1B[23m");
         });
 
         it(`nested colorful works ok`,function(){
             let actual=`a${'b'.toColorful('red')}c`.toColorful('blue');
             let expected='\x1B[34ma\x1B[31mb\x1B[34mc\x1B[39m';
-            assert.equal(actual,expected);
+            expect(actual).toBe(expected);
         })
 
     });
     describe("clearColorful", () => {
         it(`"abc" clearColorful() == "abc"`, function () {
             let actual = "abc".clearColurful();
-            assert.equal(actual, "abc");
+            expect(actual).toBe("abc");
         });
         it(`"\x1B[34mabc\x1B[39m" clearColorful() == "abc"`, function () {
             let actual = "\x1B[34mabc\x1B[39m".clearColurful();
-            assert.equal(actual, "abc");
+            expect(actual).toBe("abc");
         });
         it(`"\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m" clearColorful() == "abc"`, function () {
             let actual = "\x1B[46m\x1B[34mabc\x1B[39m\x1B[49m".clearColurful()
-            assert.equal(actual, "abc");
+            expect(actual).toBe("abc");
         });
 
 
@@ -830,7 +829,7 @@ describe("String", () => {
         ]
         data.forEach(([text, fmt, res]) => {
             it(`"${text}".toFormat(${fmt})=="${res}"`, function () {
-                assert.equal(text.toFormat(fmt as any), res);
+                expect(text.toFormat(fmt as any)).toBe(res);
             })
         });
         

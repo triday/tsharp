@@ -1,7 +1,6 @@
 import "../../src/tsharp/TreeNode";
 import "../../src/extentions/String";
-import "mocha"
-import * as assert from "assert";
+import { describe, it, expect } from "vitest";
 describe("TreeNode", () => {
     const datas = [
         { name: "node1", id: "X001", parent: "" },
@@ -18,14 +17,14 @@ describe("TreeNode", () => {
 
         it("datas to tree has 3 root node", () => {
             let res = datas.toTree(p => p.id, p => p.parent);
-            assert.equal(res.length, 3);
+            expect(res.length).toBe(3);
 
         });
         it("datas to tree and foreachBefore", () => {
             let res = datas.toTree(p => p.id, p => p.parent, (a, b) => {
                 return a.name === b.name ? 0 : (a.name > b.name ? 1 : -1);
             });
-            assert.equal(res.length, 3);
+            expect(res.length).toBe(3);
             const expected = [
                 "├──node1",
                 "   ├──node5",
@@ -42,7 +41,7 @@ describe("TreeNode", () => {
                 lines.push(`${String.from(' ', 3 * depth)}├──${v.name}`);
             }));
             console.log(lines);
-            assert.deepEqual(lines, expected);
+            expect(lines).toEqual(expected);
         });
         it("datas to tree and foreachAfter", () => {
             let res = datas.toTree(p => p.id, p => p.parent, (a, b) => {
@@ -65,7 +64,7 @@ describe("TreeNode", () => {
                 lines.push(`${String.from(' ', 3 * depth)}├──${v.name}`);
             }));
             console.log(lines);
-            assert.deepEqual(lines, expected);
+            expect(lines).toEqual(expected);
         });
     });
 

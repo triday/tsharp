@@ -1,7 +1,6 @@
 import "../../src/index";
 
-import "mocha";
-import * as assert from "assert"
+import { describe, it, expect } from 'vitest';
 
 function padZero(text: string, length: number): string {
     if (text.length < length) {
@@ -20,34 +19,34 @@ describe('Date', () => {
             let year = String(date.getFullYear());
             let utcyear = String(date.getUTCFullYear());
             it("local", () => {
-                assert.equal(date.toFormat("Y"), year.slice(-1));
-                assert.equal(date.toFormat("YY"), year.slice(-2));
-                assert.equal(date.toFormat("YYY"), year.slice(-3));
-                assert.equal(date.toFormat("YYYY"), year.slice(-4));
-                assert.equal(date.toFormat("YYYYY"), year.slice(-4));
+                expect(date.toFormat("Y")).toBe(year.slice(-1));
+                expect(date.toFormat("YY")).toBe(year.slice(-2));
+                expect(date.toFormat("YYY")).toBe(year.slice(-3));
+                expect(date.toFormat("YYYY")).toBe(year.slice(-4));
+                expect(date.toFormat("YYYYY")).toBe(year.slice(-4));
 
-                assert.equal(date.toFormat("y"), year.slice(-1));
-                assert.equal(date.toFormat("yy"), year.slice(-2));
-                assert.equal(date.toFormat("yyy"), year.slice(-3));
-                assert.equal(date.toFormat("yyyy"), year.slice(-4));
-                assert.equal(date.toFormat("yyyyy"), year.slice(-4));
+                expect(date.toFormat("y")).toBe(year.slice(-1));
+                expect(date.toFormat("yy")).toBe(year.slice(-2));
+                expect(date.toFormat("yyy")).toBe(year.slice(-3));
+                expect(date.toFormat("yyyy")).toBe(year.slice(-4));
+                expect(date.toFormat("yyyyy")).toBe(year.slice(-4));
 
-                assert.equal(date.toFormat("yYyYYyy"), year.slice(-4));
+                expect(date.toFormat("yYyYYyy")).toBe(year.slice(-4));
             });
             it("utc", () => {
-                assert.equal(date.toFormat("[utc]Y"), utcyear.slice(-1));
-                assert.equal(date.toFormat("[utc]YY"), utcyear.slice(-2));
-                assert.equal(date.toFormat("[utc]YYY"), utcyear.slice(-3));
-                assert.equal(date.toFormat("[utc]YYYY"), utcyear.slice(-4));
-                assert.equal(date.toFormat("[utc]YYYYY"), utcyear.slice(-4));
+                expect(date.toFormat("[utc]Y")).toBe(utcyear.slice(-1));
+                expect(date.toFormat("[utc]YY")).toBe(utcyear.slice(-2));
+                expect(date.toFormat("[utc]YYY")).toBe(utcyear.slice(-3));
+                expect(date.toFormat("[utc]YYYY")).toBe(utcyear.slice(-4));
+                expect(date.toFormat("[utc]YYYYY")).toBe(utcyear.slice(-4));
 
-                assert.equal(date.toFormat("[utc]y"), utcyear.slice(-1));
-                assert.equal(date.toFormat("[utc]yy"), utcyear.slice(-2));
-                assert.equal(date.toFormat("[utc]yyy"), utcyear.slice(-3));
-                assert.equal(date.toFormat("[utc]yyyy"), utcyear.slice(-4));
-                assert.equal(date.toFormat("[utc]yyyyy"), utcyear.slice(-4));
+                expect(date.toFormat("[utc]y")).toBe(utcyear.slice(-1));
+                expect(date.toFormat("[utc]yy")).toBe(utcyear.slice(-2));
+                expect(date.toFormat("[utc]yyy")).toBe(utcyear.slice(-3));
+                expect(date.toFormat("[utc]yyyy")).toBe(utcyear.slice(-4));
+                expect(date.toFormat("[utc]yyyyy")).toBe(utcyear.slice(-4));
 
-                assert.equal(date.toFormat("[utc]yYyYYyy"), utcyear.slice(-4));
+                expect(date.toFormat("[utc]yYyYYyy")).toBe(utcyear.slice(-4));
             });
 
         })
@@ -57,16 +56,16 @@ describe('Date', () => {
             let month = String(date.getMonth()+1);
             let utcmonth = String(date.getUTCMonth()+1);
             it("local", function () {
-                assert.equal(date.toFormat("M"), month);
-                assert.equal(date.toFormat("MM"), padZero(month, 2));
-                assert.equal(date.toFormat("MMM"), padZero(month, 2));
-                assert.equal(date.toFormat("MMMM"), padZero(month, 2));
+                expect(date.toFormat("M")).toBe(month);
+                expect(date.toFormat("MM")).toBe(padZero(month, 2));
+                expect(date.toFormat("MMM")).toBe(padZero(month, 2));
+                expect(date.toFormat("MMMM")).toBe(padZero(month, 2));
             });
             it("utc", function () {
-                assert.equal(date.toFormat("[utc]M"), utcmonth);
-                assert.equal(date.toFormat("[utc]MM"), padZero(utcmonth, 2));
-                assert.equal(date.toFormat("[utc]MMM"), padZero(utcmonth, 2));
-                assert.equal(date.toFormat("[utc]MMMM"), padZero(utcmonth, 2));
+                expect(date.toFormat("[utc]M")).toBe(utcmonth);
+                expect(date.toFormat("[utc]MM")).toBe(padZero(utcmonth, 2));
+                expect(date.toFormat("[utc]MMM")).toBe(padZero(utcmonth, 2));
+                expect(date.toFormat("[utc]MMMM")).toBe(padZero(utcmonth, 2));
             })
 
         })
@@ -75,28 +74,28 @@ describe('Date', () => {
             let day = String(date.getDate());
             let utcday = String(date.getUTCDate());
             it("local", function () {
-                assert.equal(date.toFormat("D"), day);
-                assert.equal(date.toFormat("DD"), padZero(day, 2));
-                assert.equal(date.toFormat("DDD"), padZero(day, 2));
-                assert.equal(date.toFormat("DDDD"), padZero(day, 2));
+                expect(date.toFormat("D")).toBe(day);
+                expect(date.toFormat("DD")).toBe(padZero(day, 2));
+                expect(date.toFormat("DDD")).toBe(padZero(day, 2));
+                expect(date.toFormat("DDDD")).toBe(padZero(day, 2));
 
-                assert.equal(date.toFormat("d"), day);
-                assert.equal(date.toFormat("dd"), padZero(day, 2));
-                assert.equal(date.toFormat("ddd"), padZero(day, 2));
-                assert.equal(date.toFormat("dddd"), padZero(day, 2));
-                assert.equal(date.toFormat("dDdDd"), padZero(day, 2));
+                expect(date.toFormat("d")).toBe(day);
+                expect(date.toFormat("dd")).toBe(padZero(day, 2));
+                expect(date.toFormat("ddd")).toBe(padZero(day, 2));
+                expect(date.toFormat("dddd")).toBe(padZero(day, 2));
+                expect(date.toFormat("dDdDd")).toBe(padZero(day, 2));
             });
             it("utc", function () {
-                assert.equal(date.toFormat("[utc]D"), utcday);
-                assert.equal(date.toFormat("[utc]DD"), padZero(utcday, 2));
-                assert.equal(date.toFormat("[utc]DDD"), padZero(utcday, 2));
-                assert.equal(date.toFormat("[utc]DDDD"), padZero(utcday, 2));
+                expect(date.toFormat("[utc]D")).toBe(utcday);
+                expect(date.toFormat("[utc]DD")).toBe(padZero(utcday, 2));
+                expect(date.toFormat("[utc]DDD")).toBe(padZero(utcday, 2));
+                expect(date.toFormat("[utc]DDDD")).toBe(padZero(utcday, 2));
 
-                assert.equal(date.toFormat("[utc]d"), utcday);
-                assert.equal(date.toFormat("[utc]dd"), padZero(utcday, 2));
-                assert.equal(date.toFormat("[utc]ddd"), padZero(utcday, 2));
-                assert.equal(date.toFormat("[utc]dddd"), padZero(utcday, 2));
-                assert.equal(date.toFormat("[utc]dDdDd"), padZero(utcday, 2));
+                expect(date.toFormat("[utc]d")).toBe(utcday);
+                expect(date.toFormat("[utc]dd")).toBe(padZero(utcday, 2));
+                expect(date.toFormat("[utc]ddd")).toBe(padZero(utcday, 2));
+                expect(date.toFormat("[utc]dddd")).toBe(padZero(utcday, 2));
+                expect(date.toFormat("[utc]dDdDd")).toBe(padZero(utcday, 2));
             });
 
         })
@@ -107,25 +106,25 @@ describe('Date', () => {
             let utchour = String(date.getUTCHours());
             let utchour12=String(date.getUTCHours()%12);
             it("locale",function(){
-                assert.equal(date.toFormat("H"), hour);
-                assert.equal(date.toFormat("HH"), padZero(hour, 2));
-                assert.equal(date.toFormat("HHH"), padZero(hour, 2));
-                assert.equal(date.toFormat("HHH"), padZero(hour, 2));
+                expect(date.toFormat("H")).toBe(hour);
+                expect(date.toFormat("HH")).toBe(padZero(hour, 2));
+                expect(date.toFormat("HHH")).toBe(padZero(hour, 2));
+                expect(date.toFormat("HHH")).toBe(padZero(hour, 2));
 
-                assert.equal(date.toFormat("h"), hour12);
-                assert.equal(date.toFormat("hh"), padZero(hour12, 2));
-                assert.equal(date.toFormat("hhh"), padZero(hour12, 2));
-                assert.equal(date.toFormat("hhhh"), padZero(hour12, 2));
+                expect(date.toFormat("h")).toBe(hour12);
+                expect(date.toFormat("hh")).toBe(padZero(hour12, 2));
+                expect(date.toFormat("hhh")).toBe(padZero(hour12, 2));
+                expect(date.toFormat("hhhh")).toBe(padZero(hour12, 2));
             });
             it("utc",function(){
-                assert.equal(date.toFormat("[utc]H"), utchour);
-                assert.equal(date.toFormat("[utc]HH"), padZero(utchour, 2));
-                assert.equal(date.toFormat("[utc]HHH"), padZero(utchour, 2));
-                assert.equal(date.toFormat("[utc]HHH"), padZero(utchour, 2));
-                assert.equal(date.toFormat("[utc]h"), utchour12);
-                assert.equal(date.toFormat("[utc]hh"), padZero(utchour12, 2));
-                assert.equal(date.toFormat("[utc]hhh"), padZero(utchour12, 2));
-                assert.equal(date.toFormat("[utc]hhhh"), padZero(utchour12, 2));
+                expect(date.toFormat("[utc]H")).toBe(utchour);
+                expect(date.toFormat("[utc]HH")).toBe(padZero(utchour, 2));
+                expect(date.toFormat("[utc]HHH")).toBe(padZero(utchour, 2));
+                expect(date.toFormat("[utc]HHH")).toBe(padZero(utchour, 2));
+                expect(date.toFormat("[utc]h")).toBe(utchour12);
+                expect(date.toFormat("[utc]hh")).toBe(padZero(utchour12, 2));
+                expect(date.toFormat("[utc]hhh")).toBe(padZero(utchour12, 2));
+                expect(date.toFormat("[utc]hhhh")).toBe(padZero(utchour12, 2));
             });
         })
         describe("minute", () => {
@@ -134,15 +133,15 @@ describe('Date', () => {
             let minute = String(date.getMinutes());
             let utcminute=String(date.getUTCMinutes());
             it("locale",function(){
-                assert.equal(date.toFormat("m"), minute);
-                assert.equal(date.toFormat("mm"), padZero(minute,2));
-                assert.equal(date.toFormat("mmm"), padZero(minute,2));
+                expect(date.toFormat("m")).toBe(minute);
+                expect(date.toFormat("mm")).toBe(padZero(minute,2));
+                expect(date.toFormat("mmm")).toBe(padZero(minute,2));
             });
             it("utc",function(){
 
-                assert.equal(date.toFormat("[utc]m"), utcminute);
-                assert.equal(date.toFormat("[utc]mm"), padZero(utcminute,2));
-                assert.equal(date.toFormat("[utc]mmm"), padZero(utcminute,2));
+                expect(date.toFormat("[utc]m")).toBe(utcminute);
+                expect(date.toFormat("[utc]mm")).toBe(padZero(utcminute,2));
+                expect(date.toFormat("[utc]mmm")).toBe(padZero(utcminute,2));
             })
 
         })
@@ -151,23 +150,23 @@ describe('Date', () => {
             let second = String(date.getSeconds());
             let utcsecond = String(date.getUTCSeconds());
             it("locale", function () {
-                assert.equal(date.toFormat("S"), second);
-                assert.equal(date.toFormat("SS"), padZero(second, 2));
-                assert.equal(date.toFormat("SSS"), padZero(second, 2));
+                expect(date.toFormat("S")).toBe(second);
+                expect(date.toFormat("SS")).toBe(padZero(second, 2));
+                expect(date.toFormat("SSS")).toBe(padZero(second, 2));
 
-                assert.equal(date.toFormat("s"), second);
-                assert.equal(date.toFormat("ss"), padZero(second, 2));
-                assert.equal(date.toFormat("sss"), padZero(second, 2));
-                assert.equal(date.toFormat("sSsSs"), padZero(second, 2));
+                expect(date.toFormat("s")).toBe(second);
+                expect(date.toFormat("ss")).toBe(padZero(second, 2));
+                expect(date.toFormat("sss")).toBe(padZero(second, 2));
+                expect(date.toFormat("sSsSs")).toBe(padZero(second, 2));
             });
             it("utc", function () {
-                assert.equal(date.toFormat("[utc]S"), utcsecond);
-                assert.equal(date.toFormat("[utc]SS"), padZero(utcsecond, 2));
-                assert.equal(date.toFormat("[utc]SSS"), padZero(utcsecond, 2));
-                assert.equal(date.toFormat("[utc]s"), utcsecond);
-                assert.equal(date.toFormat("[utc]ss"), padZero(utcsecond, 2));
-                assert.equal(date.toFormat("[utc]sss"), padZero(utcsecond, 2));
-                assert.equal(date.toFormat("[utc]sSsSs"), padZero(utcsecond, 2));
+                expect(date.toFormat("[utc]S")).toBe(utcsecond);
+                expect(date.toFormat("[utc]SS")).toBe(padZero(utcsecond, 2));
+                expect(date.toFormat("[utc]SSS")).toBe(padZero(utcsecond, 2));
+                expect(date.toFormat("[utc]s")).toBe(utcsecond);
+                expect(date.toFormat("[utc]ss")).toBe(padZero(utcsecond, 2));
+                expect(date.toFormat("[utc]sss")).toBe(padZero(utcsecond, 2));
+                expect(date.toFormat("[utc]sSsSs")).toBe(padZero(utcsecond, 2));
             });
         })
         describe("milliseconds", function () {
@@ -175,25 +174,25 @@ describe('Date', () => {
             let milliseconds = date.getMilliseconds() / 1000;
             let utcmilliseconds = date.getUTCMilliseconds() / 1000;
             it("locale", function () {
-                assert.equal(date.toFormat("0.F"), milliseconds.toFixed(1));
-                assert.equal(date.toFormat("0.FF"), milliseconds.toFixed(2));
-                assert.equal(date.toFormat("0.FFF"), milliseconds.toFixed(3));
-                assert.equal(date.toFormat("0.FFFF"), milliseconds.toFixed(3));
-                assert.equal(date.toFormat("0.f"), milliseconds.toFixed(1));
-                assert.equal(date.toFormat("0.ff"), milliseconds.toFixed(2));
-                assert.equal(date.toFormat("0.fff"), milliseconds.toFixed(3));
-                assert.equal(date.toFormat("0.fFfFfF"), milliseconds.toFixed(3));
+                expect(date.toFormat("0.F")).toBe(milliseconds.toFixed(1));
+                expect(date.toFormat("0.FF")).toBe(milliseconds.toFixed(2));
+                expect(date.toFormat("0.FFF")).toBe(milliseconds.toFixed(3));
+                expect(date.toFormat("0.FFFF")).toBe(milliseconds.toFixed(3));
+                expect(date.toFormat("0.f")).toBe(milliseconds.toFixed(1));
+                expect(date.toFormat("0.ff")).toBe(milliseconds.toFixed(2));
+                expect(date.toFormat("0.fff")).toBe(milliseconds.toFixed(3));
+                expect(date.toFormat("0.fFfFfF")).toBe(milliseconds.toFixed(3));
 
             });
             it("utc", function () {
-                assert.equal(date.toFormat("[UTC]0.F"), utcmilliseconds.toFixed(1));
-                assert.equal(date.toFormat("[UTC]0.FF"), utcmilliseconds.toFixed(2));
-                assert.equal(date.toFormat("[UTC]0.FFF"), utcmilliseconds.toFixed(3));
-                assert.equal(date.toFormat("[UTC]0.FFFF"), utcmilliseconds.toFixed(3));
-                assert.equal(date.toFormat("[UTC]0.f"), utcmilliseconds.toFixed(1));
-                assert.equal(date.toFormat("[UTC]0.ff"), utcmilliseconds.toFixed(2));
-                assert.equal(date.toFormat("[UTC]0.fff"), utcmilliseconds.toFixed(3));
-                assert.equal(date.toFormat("[UTC]0.fFfFfF"), utcmilliseconds.toFixed(3));
+                expect(date.toFormat("[UTC]0.F")).toBe(utcmilliseconds.toFixed(1));
+                expect(date.toFormat("[UTC]0.FF")).toBe(utcmilliseconds.toFixed(2));
+                expect(date.toFormat("[UTC]0.FFF")).toBe(utcmilliseconds.toFixed(3));
+                expect(date.toFormat("[UTC]0.FFFF")).toBe(utcmilliseconds.toFixed(3));
+                expect(date.toFormat("[UTC]0.f")).toBe(utcmilliseconds.toFixed(1));
+                expect(date.toFormat("[UTC]0.ff")).toBe(utcmilliseconds.toFixed(2));
+                expect(date.toFormat("[UTC]0.fff")).toBe(utcmilliseconds.toFixed(3));
+                expect(date.toFormat("[UTC]0.fFfFfF")).toBe(utcmilliseconds.toFixed(3));
 
             });
 
@@ -202,22 +201,22 @@ describe('Date', () => {
             let date = new Date();
             it("locale", function () {
                 if (date.getTimezoneOffset() === -480) {
-                    assert.equal(date.toFormat("Z"), "+8");
-                    assert.equal(date.toFormat("ZZ"), "+08");
-                    assert.equal(date.toFormat("ZZZ"), "+08:00");
-                    assert.equal(date.toFormat("ZZZZ"), "+08:00");
-                    assert.equal(date.toFormat("z"), "+8");
-                    assert.equal(date.toFormat("zz"), "+08");
-                    assert.equal(date.toFormat("zzz"), "+08:00");
-                    assert.equal(date.toFormat("zZzZz"), "+08:00");
+                    expect(date.toFormat("Z")).toBe("+8");
+                    expect(date.toFormat("ZZ")).toBe("+08");
+                    expect(date.toFormat("ZZZ")).toBe("+08:00");
+                    expect(date.toFormat("ZZZZ")).toBe("+08:00");
+                    expect(date.toFormat("z")).toBe("+8");
+                    expect(date.toFormat("zz")).toBe("+08");
+                    expect(date.toFormat("zzz")).toBe("+08:00");
+                    expect(date.toFormat("zZzZz")).toBe("+08:00");
                 }
 
             });
 
             it("utc", function () {
-                assert.equal(date.toFormat("[UTC]Z"), "+0");
-                assert.equal(date.toFormat("[UTC]ZZ"), "+00");
-                assert.equal(date.toFormat("[UTC]ZZZ"), "+00:00");
+                expect(date.toFormat("[UTC]Z")).toBe("+0");
+                expect(date.toFormat("[UTC]ZZ")).toBe("+00");
+                expect(date.toFormat("[UTC]ZZZ")).toBe("+00:00");
             })
 
 
@@ -231,7 +230,7 @@ describe('Date', () => {
                 let hour=date.getHours();
                 let min=date.getMinutes();
                 let sec=date.getSeconds();
-                assert.equal(date.toFormat("yyyyMd H:m:s"),`${year}${month}${day} ${hour}:${min}:${sec}`);
+                expect(date.toFormat("yyyyMd H:m:s")).toBe(`${year}${month}${day} ${hour}:${min}:${sec}`);
             });
             it("utc",function(){
                 let year=date.getUTCFullYear();
@@ -240,31 +239,31 @@ describe('Date', () => {
                 let hour=date.getUTCHours();
                 let min=date.getUTCMinutes();
                 let sec=date.getUTCSeconds();
-                assert.equal(date.toFormat("yyyyMd H:m:s[utc]"),`${year}${month}${day} ${hour}:${min}:${sec}`);
+                expect(date.toFormat("yyyyMd H:m:s[utc]").replace('[utc]', '')).toBe(`${year}${month}${day} ${hour}:${min}:${sec}`);
             });
         });
 
         it("escape",function(){
             let date = new Date("2019-04-03T12:23:45.119Z");
-            assert.equal(date.toFormat("[utc]yyyy-MM-ddTHH:mm:ss.fffZ"),"2019-04-03T12:23:45.119+0");
-            assert.equal(date.toFormat("[utc]yyyy-MM-ddTHH:mm:ss.fff%Z"),"2019-04-03T12:23:45.119Z");
+            expect(date.toFormat("[utc]yyyy-MM-ddTHH:mm:ss.fffZ")).toBe("2019-04-03T12:23:45.119+0");
+            expect(date.toFormat("[utc]yyyy-MM-ddTHH:mm:ss.fff%Z")).toBe("2019-04-03T12:23:45.119Z");
         })
     });
     describe("equals", () => {
         it("equals works ok", () => {
             let date1 = new Date("2018-11-4");
             let date2 = new Date("2018-11-4");
-            assert.equal(date1 === date2, false);
-            assert.equal(date1 == date2, false);
-            assert.equal(date1.equals(date2), true);
-            assert.equal(date1.equals(new Date()), false);
+            expect(date1 === date2).toBe(false);
+            expect(date1 == date2).toBe(false);
+            expect(date1.equals(date2)).toBe(true);
+            expect(date1.equals(new Date())).toBe(false);
         })
     });
     describe("clone", () => {
         it('clone works ok', () => {
             const time = new Date('2018-11-11 12:36:45');
-            assert.equal(time === time.clone(), false);
-            assert.equal(time.equals(time.clone()), true);
+            expect(time === time.clone()).toBe(false);
+            expect(time.equals(time.clone())).toBe(true);
         })
     });
 })
