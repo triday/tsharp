@@ -29,7 +29,7 @@ interface Number {
      * 
      * @returns 返回格式化后的数字。
      */
-    toFormat(fmt: string): string;
+    toFormat(fmt: string | null | undefined): string;
 }
 
 if (!Number.prototype.inRange) {
@@ -51,7 +51,7 @@ if (!Number.prototype.limitRange) {
 }
 if (!Number.prototype.toFormat) {
     /*参考 https://docs.microsoft.com/zh-cn/dotnet/standard/base-types/standard-numeric-format-strings*/
-    Number.prototype.toFormat = function (fmt: string = "") {
+    Number.prototype.toFormat = function (fmt: string | null | undefined = "") {
         if (!fmt) return this.toString();
         let match = fmt.match(/^([DdEeFfGgNnPpRrXxSs])(\d{0,2})$/);
         if (!match) throw new Error(`Invalid format text "${fmt}"`);

@@ -4,34 +4,34 @@ interface StringConstructor {
      * @param value 要测试的字符串。
      * @returns 如果 true 参数为 value 或空字符串 ("")，则为 null；否则为 false。
      */
-    isNullOrEmpty(value: string): boolean;
+    isNullOrEmpty(value: string | null | undefined): boolean;
     /**
      * 指示指定的字符串是 null、空还是仅由空白字符组成。
      * @param value  要测试的字符串。
      * @returns 如果 true 参数为 value 或 null，或者如果 "" 仅由空白字符组成，则为 value。
      */
-    isNullOrWhiteSpace(value: string): boolean;
+    isNullOrWhiteSpace(value: string | null | undefined): boolean;
     /**
      * 将指定字符串中的格式项替换为指定对象中的属性值。
      * @param format 复合格式字符串。
      * @param argObj 一个对象，包含要替换的属性值。
      * @returns format 的副本，其中格式项已替换为 argObj 中相应属性的字符串表示形式。
      */
-    format(format: string, argObj: { [key: string]: any }): string;
+    format(format: string | null | undefined, argObj: { [key: string]: any }): string;
     /**
      * 将指定字符串中的格式项替换为指定数组中相应对象的字符串表示形式。
      * @param format 复合格式字符串。
      * @param args  一个对象数组，其中包含零个或多个要设置格式的对象。
      * @returns format 的副本，其中格式项已替换为 args 中相应对象的字符串表示形式。
      */
-    format(format: string, ...args: any[]): string;
+    format(format: string | null | undefined, ...args: any[]): string;
     /**
      * 由指定的字符串和重复次数构成新字符串。
      * @param value 指定的字符串,如果该字符串为null或者undefined，则当空字符串处理。
      * @param repeatCount 重复次数。
      * @returns 指定的字符串按照指定次数重复后生成的新字符串。
      */
-    from(value: string, repeatCount: number): string;
+    from(value: string | null | undefined, repeatCount: number): string;
 
     /**
      * 判断指定的字符编码是否属于全角编码
@@ -49,13 +49,13 @@ interface String {
      * @param pattern 正则表达式。
      * @returns 如果是以指定的模式开始，则为 true，否则为 false。
      */
-    startsWithPattern(pattern: RegExp): boolean;
+    startsWithPattern(pattern: RegExp | null | undefined): boolean;
     /**
      * 判断字符串的开头是否以指定的正则表达式结束。
      * @param pattern 正则表达式字符串。
      * @returns 如果是以指定的模式开始，则为 true，否则为 false。
      */
-    endsWithPattern(pattern: RegExp): boolean;
+    endsWithPattern(pattern: RegExp | null | undefined): boolean;
     /**
      * 从当前字符串中移除前导空白字符。
      * @returns 移除前导空白字符后的结果。
@@ -70,28 +70,28 @@ interface String {
      * 从当前字符串中移除数组中指定的一组字符的所有前导匹配项和尾部匹配项。
      * @returns 从当前字符串的开头移除所出现的所有 chars 参数中的字符后剩余的字符串。 如果 chars 为 null 或空字符串，则改为移除空白字符。 如果从当前实例无法删除字符，此方法返回未更改的当前实例。
      */
-    trimChars(chars: string): string;
+    trimChars(chars: string | null | undefined): string;
     /**
      * 返回一个新字符串，其中当前实例中出现的所有指定字符串都替换为另一个指定的字符串。
      * @param substr 要替换的字符串。
      * @param newSubStr 要替换 substr 的所有匹配项的字符串。
      * @returns 等效于当前字符串（除了 substr 的所有实例都已替换为 newSubStr 外）的字符串。如果在当前实例中找不到 substr，此方法返回未更改的当前实例。
      */
-    replaceAll(substr: string, newSubStr: string): string;
+    replaceAll(substr: string | null | undefined, newSubStr: string): string;
     /**
      * 确定此实例是否与另一个指定的字符串是否相等。
      * @param other 要进行比较的字符串。
      * @param ignoreCase 是否忽略大小写，默认为 false ，即区分大小写。
      * @returns 如果 true 参数的值与此实例的值相同，则为 value；否则为 false。
      */
-    equals(other: string, ignoreCase?: boolean): boolean;
+    equals(other: string | null | undefined, ignoreCase?: boolean): boolean;
     /**
      * 返回一个值，该值指示指定的子串是否出现在此字符串中。
      * @param substr 要搜寻的子串。
      * @param ignoreCase 匹配时是否忽略大小写，默认为 false ，即区分大小写。
      * @returns 如果为 true 表示包含了子串，否则表示不包含子串。
      */
-    contains(substr: string, ignoreCase?: boolean): boolean;
+    contains(substr: string | null | undefined, ignoreCase?: boolean): boolean;
     /**
      * 反序字符串中字符的顺序。
      * @returns 返回反序组成的字符串。
@@ -157,7 +157,7 @@ interface String {
      * @param pattern 要测试的正则表达式。
      * @returns 返回一个值，该值表示该字符串是否符合指定的正则表达式。
      */
-    isPattern(pattern: RegExp): boolean;
+    isPattern(pattern: RegExp | null | undefined): boolean;
     /**
      * 判断字符串是否是合法的电子邮箱格式。
      * @returns 返回一个值，该值表示该字符串是否是合法的电子邮箱格式。
@@ -238,10 +238,10 @@ interface String {
 
 
 if (!String.isNullOrEmpty) {
-    String.isNullOrEmpty = (val: string) => !val;
+    String.isNullOrEmpty = (val: string | null | undefined) => !val;
 }
 if (!String.isNullOrWhiteSpace) {
-    String.isNullOrWhiteSpace = (val: string) => !val || !(val.trim())
+    String.isNullOrWhiteSpace = (val: string | null | undefined) => !val || !(val?.trim())
 }
 if (!String.format) {
     String.format = (fmt: string, ...args: any[]) => {
@@ -284,7 +284,7 @@ if (!String.format) {
     }
 }
 if (!String.from) {
-    String.from = (value: string, count: number) => {
+    String.from = (value: string | null | undefined, count: number) => {
         let res = ""
         for (let i = 0; i < count; i++) {
             res += (value || '');
@@ -330,7 +330,7 @@ if (!String.isFullwidthCode) {
     }
 }
 if (!String.prototype.startsWithPattern) {
-    String.prototype.startsWithPattern = function (pattern: RegExp) {
+    String.prototype.startsWithPattern = function (pattern: RegExp | null | undefined) {
         if (!pattern) throw new Error('pattern can not be null.')
         if (pattern.source[0] === '^') {
             return pattern.test(this);
@@ -340,7 +340,7 @@ if (!String.prototype.startsWithPattern) {
     }
 }
 if (!String.prototype.endsWithPattern) {
-    String.prototype.endsWithPattern = function (pattern: RegExp) {
+    String.prototype.endsWithPattern = function (pattern: RegExp | null | undefined) {
         if (!pattern) throw new Error('pattern can not be null.')
         if (pattern.source[pattern.source.length - 1] === '$') {
             return pattern.test(this);
@@ -360,7 +360,7 @@ if (!String.prototype.trimEnd) {
     }
 }
 if (!String.prototype.trimChars) {
-    String.prototype.trimChars = function (chars: string): string {
+    String.prototype.trimChars = function (chars: string | null | undefined): string {
         if (chars && chars.length > 0) {
             let charsSet = chars.split('').reduce((prev: { [key: string]: boolean }, curr) => {
                 prev[curr] = true
@@ -377,22 +377,22 @@ if (!String.prototype.trimChars) {
 }
 
 if (!String.prototype.replaceAll) {
-    String.prototype.replaceAll = function (substr: string, newSubStr: string) {
-        return String.isNullOrEmpty(substr) ? this : this.replace(new RegExp(substr, "gm"), newSubStr);
+    String.prototype.replaceAll = function (substr: string | null | undefined, newSubStr: string) {
+        return (substr ===null|| substr===undefined) ? this : this.replace(new RegExp(substr, "gm"), newSubStr);
     }
 }
 
 if (!String.prototype.equals) {
-    String.prototype.equals = function (other: string, ignoreCase = false) {
+    String.prototype.equals = function (other: string | null | undefined, ignoreCase = false) {
         if (ignoreCase && other) {
-            return this.toLowerCase() === other.toLowerCase();
+            return this.toLowerCase() === (other || '').toLowerCase();
         } else {
             return this.valueOf() === other;
         }
     }
 }
 if (!String.prototype.contains) {
-    String.prototype.contains = function (substr: string, ignoreCase = false) {
+    String.prototype.contains = function (substr: string | null | undefined, ignoreCase = false) {
         if (substr === null || substr === undefined) return false;
         if (!ignoreCase) {
             return this.indexOf(substr) >= 0;
@@ -464,8 +464,8 @@ if (!String.prototype.isNumber) {
     }
 }
 if (!String.prototype.isPattern) {
-    String.prototype.isPattern = function (pattern: RegExp): boolean {
-        if (!pattern) throw new Error('pattern can not be null')
+    String.prototype.isPattern = function (pattern: RegExp | null | undefined): boolean {
+        if (pattern === null || pattern === undefined) throw new Error('pattern can not be null or undefined')
         return pattern.test(this);
     }
 }
@@ -720,10 +720,10 @@ if (!String.prototype.toFormat) {
                     if (!match) break;
                     formatResult += String(fun.call(this.substring(startIndex, match.index)));
                     formatResult += match[0];
-                    startIndex=match.index+match[0].length;
+                    startIndex = match.index + match[0].length;
                 }
                 while (true);
-                formatResult+=String(fun.call(this.substring(startIndex)));
+                formatResult += String(fun.call(this.substring(startIndex)));
                 return formatResult;
             } else {
                 throw new Error(`can not find function ${fmt} in String.prototype`);

@@ -1,5 +1,6 @@
 import "../../src/extentions/Object";
 import "../../src/extentions/Date";
+import "../../src/extentions/Number"
 import { describe, it, expect } from 'vitest';
 
 describe("Object", () => {

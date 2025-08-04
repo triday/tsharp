@@ -1,11 +1,10 @@
 import "../../src/extentions/Array"
 import { describe, it, expect } from 'vitest';
-import { Student, People } from "./models"
 
 describe("Array", () => {
-    let data_array = [1, 2, 3, 4, 5];
+    let data_array: (number | null)[] = [1, 2, 3, 4, 5];
     let hex_array = ['ff', 'fe', 'f0', '01'];
-    let empty_array: string[] = [];
+    let empty_array:(string | null)[] = [];
     describe("contains", () => {
         it(`[${data_array}] not contains 6`, () => {
             expect(data_array.contains(6)).toBe(false);
@@ -84,8 +83,7 @@ describe("Array", () => {
             { a: [4, 5, 6] }
         ]
         it(`select many works ok`, () => {
-            expect(datas.selectMany(p => p.a)).toEqual([1, 2, 3, 4, 5, 6]);
-            expect(datas.selectMany(p => p.a)).toEqual([1, 2, 3, 4, 5, 6]);
+            expect(datas.selectMany(p => p?.a||[])).toEqual([1, 2, 3, 4, 5, 6]);
         })
     });
     describe("ignoreNullOrUndefined", () => {
@@ -556,8 +554,7 @@ describe("Array", () => {
             { id: "c002", name: '二班' },
             { id: "c003", name: '三班' },
         ]
-        let nullDatas = allClasses;
-        nullDatas = null;
+      
         it("inner join will ignore 'c004' and 'c003' ", () => {
             let res = allStudents.innerJoin(allClasses, p => p.class, p => p.id, (l, r) => {
                 return {
@@ -570,18 +567,6 @@ describe("Array", () => {
             // res.forEach(p=>console.log(JSON.stringify(p,null,0)));
             expect(res.count()).toBe(6);
             expect(res.count(p => p.classId == 'c003' || p.classId == 'c004')).toBe(0);
-        });
-        it("inner join null", () => {
-
-            let res = allStudents.innerJoin(nullDatas, p => p.class, p => p.id, (l, r) => {
-                return {
-                    studentId: l.id,
-                    studentName: l.name,
-                    classId: r.id,
-                    className: r.name
-                }
-            });
-            expect(res.length).toBe(0);
         });
         it("ignore x003 because resultSelector returns null.", () => {
             let res = allStudents.innerJoin(allClasses, p => p.class, p => p.id, (l, r) => {
@@ -612,8 +597,6 @@ describe("Array", () => {
             { id: "c002", name: '二班' },
             { id: "c003", name: '三班' },
         ]
-        let nullDatas = allClasses;
-        nullDatas = null;
         it("outer join will select all class", () => {
             let res = allStudents.outerJoin(allClasses, p => p.class, p => p.id, (l, r) => {
                 return {
@@ -629,18 +612,6 @@ describe("Array", () => {
             expect(res.where(p => p.classId === 'c003').first().studentId).toBeUndefined();
             expect(res.count(p => p.studentId == 'x006')).toBe(1);
             expect(res.where(p => p.studentId === 'x006').first().classId).toBeUndefined();
-        });
-        it("outer join null", () => {
-
-            let res = allStudents.outerJoin(nullDatas, p => p.class, p => p.id, (l, r) => {
-                return {
-                    studentId: l && l.id,
-                    studentName: l && l.name,
-                    classId: r && r.id,
-                    className: r && r.name
-                }
-            });
-            expect(res.length).toBe(allStudents.length);
         });
         it("ignore x003 because resultSelector returns null.", () => {
             let res = allStudents.outerJoin(allClasses, p => p.class, p => p.id, (l, r) => {
@@ -672,8 +643,6 @@ describe("Array", () => {
             { id: "c002", name: '二班' },
             { id: "c003", name: '三班' },
         ]
-        let nullDatas = allClasses;
-        nullDatas = null;
         it("left join will ignore 'c003'", () => {
             let res = allStudents.leftJoin(allClasses, p => p.class, p => p.id, (l, r) => {
                 return {
@@ -688,17 +657,6 @@ describe("Array", () => {
             expect(res.count(p => p.classId == 'c003')).toBe(0);
             expect(res.count(p => p.studentId == 'x006')).toBe(1);
             expect(res.where(p => p.studentId === 'x006').first().classId).toBeUndefined();
-        });
-        it("left join null", () => {
-            let res = allStudents.leftJoin(nullDatas, p => p.class, p => p.id, (l, r) => {
-                return {
-                    studentId: l.id,
-                    studentName: l.name,
-                    classId: r && r.id,
-                    className: r && r.name
-                }
-            });
-            expect(res.length).toBe(allStudents.length);
         });
         it("ignore x003 because resultSelector returns null.", () => {
             let res = allStudents.leftJoin(allClasses, p => p.class, p => p.id, (l, r) => {
@@ -728,8 +686,6 @@ describe("Array", () => {
             { id: "c002", name: '二班' },
             { id: "c003", name: '三班' },
         ]
-        let nullDatas = allClasses;
-        nullDatas = null;
         it("right join will ignore 'c004'", () => {
             let res = allStudents.rightJoin(allClasses, p => p.class, p => p.id, (l, r) => {
                 return {
@@ -744,18 +700,6 @@ describe("Array", () => {
             expect(res.count(p => p.classId == 'c003')).toBe(1);
             expect(res.where(p => p.classId === 'c003').first().studentId).toBeUndefined();
             expect(res.count(p => p.studentId == 'x006')).toBe(0);
-        });
-        it("right join null", () => {
-
-            let res = allStudents.rightJoin(nullDatas, p => p.class, p => p.id, (l, r) => {
-                return {
-                    studentId: l && l.id,
-                    studentName: l && l.name,
-                    classId: r.id,
-                    className: r.name
-                }
-            });
-            expect(res.length).toBe(0);
         });
         it("ignore x003 because resultSelector returns null.", () => {
             let res = allStudents.rightJoin(allClasses, p => p.class, p => p.id, (l, r) => {

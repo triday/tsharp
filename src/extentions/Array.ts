@@ -166,21 +166,21 @@ interface Array<T> {
      * @param comparer 用于比较两个元素是否相等的比较函数。
      * @returns 返回结果差集组成的新数组。
      */
-    except(other: T[], comparer?: (a: T, b: T) => boolean): T[];
+    except(other: T[] | null | undefined, comparer?: (a: T, b: T) => boolean): T[];
     /**
      * 计算该数组与指定数组的交集。
      * @param other 与之计算交集的数组。
      * @param comparer 用于比较两个元素是否相等的比较函数。
      * @returns 返回结果交集组成的新数组。
      */
-    intersect(other: T[], comparer?: (a: T, b: T) => boolean): T[];
+    intersect(other: T[] | null | undefined, comparer?: (a: T, b: T) => boolean): T[];
     /**
      * 计算该数组与指定数组的并集。
      * @param other 与之计算并集的数组。
      * @param comparer 用于比较两个元素是否相等的比较函数。
      * @returns 返回结果并集组成的新数组。
      */
-    union(other: T[], comparer?: (a: T, b: T) => boolean): T[];
+    union(other: T[] | null | undefined, comparer?: (a: T, b: T) => boolean): T[];
     /**
      * 跳过指定数量的元素，然后返回由剩余的元素组成的数组。
      * @param count 要跳过的元素数量。
@@ -368,14 +368,14 @@ interface ArrayConstructor {
      * @param obj 要转换的对象。
      * @returns 返回键值对元组的数组。
      */
-    fromObject<T>(obj: { [key: string]: T }): [string, T][];
+    fromObject<T>(obj: { [key: string]: T } | null | undefined): [string, T][];
     /**
      * 根据转换函数从字典对象转换为数组。
      * @param obj 要转换的对象。
      * @param selector 数组元素的转换函数。
      * @returns 返回转换后的对象数组。
      */
-    fromObject<T, U>(obj: { [key: string]: T }, selector: (key: string, value: T) => U): U[];
+    fromObject<T, U>(obj: { [key: string]: T } | null | undefined, selector: (key: string, value: T) => U): U[];
 }
 
 
@@ -811,7 +811,7 @@ if (!Array.range) {
     }
 }
 if (!Array.fromObject) {
-    Array.fromObject = function <T, U>(obj: { [key: string]: T }, selector?: (key: string, value: T) => U): any[] {
+    Array.fromObject = function <T, U>(obj: { [key: string]: T } | null | undefined, selector?: (key: string, value: T) => U): any[] {
         let res: any[] = [];
         if (obj) {
             for (let key in obj) {

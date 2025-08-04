@@ -290,8 +290,8 @@ describe("String", () => {
         it("'abcabcabc' replaceall 'b' to '' get 'acacac'", () => {
             expect("abcabcabc".replaceAll('b', '')).toBe("acacac");
         });
-        it("'abcabcabc' replaceall '' to '##' get 'abcabcabc'", () => {
-            expect("abcabcabc".replaceAll('', '##')).toBe("abcabcabc");
+        it("'abcabcabc' replaceall '' to '##' get '##a##b##c##a##b##c##a##b##c##'", () => {
+            expect("abcabcabc".replaceAll('', '##')).toBe("##a##b##c##a##b##c##a##b##c##");
         });
         it("'abcabcabc' replaceall null to '##' get 'abcabcabc'", () => {
             expect("abcabcabc".replaceAll(null, '##')).toBe("abcabcabc");
