@@ -451,10 +451,11 @@ describe("Array", () => {
             expect(res[5]).toEqual({ id: "x001", name: '张三', age: 13 });
             expect(res[6]).toEqual({ id: "x004", name: '吴六', age: 11 });
         });
-        it("order by object", () => {
-            let res = allStudents.orderBy(p => p)
+        it("order by id", () => {
+            let res = allStudents.orderBy(p => p.id)
             expect(res === allStudents).toBe(false);
-            expect(res).toEqual(allStudents);
+            expect(res[0].id).toBe('x001');
+            expect(res[6].id).toBe('x007');
         });
     });
 

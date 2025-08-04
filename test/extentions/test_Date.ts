@@ -1,5 +1,4 @@
-import "../../src/index";
-
+import "../../src/extentions/Date";
 import { describe, it, expect } from 'vitest';
 
 function padZero(text: string, length: number): string {

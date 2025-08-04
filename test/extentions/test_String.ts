@@ -205,10 +205,10 @@ describe("String", () => {
     });
     describe("trimStart", () => {
         it("abc trim start equals 'abc'", () => {
-            assert.equal("abc".trimStart(), "abc")
+            expect("abc".trimStart()).toBe("abc")
         });
         it("' abc' trim start equals 'abc'", () => {
-            assert.equal(" abc".trimStart(), "abc")
+            expect(" abc".trimStart()).toBe("abc")
         });
         it("'\\tabc' trim start equals 'abc'", () => {
             expect("\tabc".trimStart()).toBe("abc")
