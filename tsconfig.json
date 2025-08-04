@@ -3,7 +3,8 @@
     "outDir": "./dist/",
     "sourceMap": true,
     "noImplicitAny": true,
-    
+    "skipLibCheck": true,
+    "moduleResolution": "node",
     "module": "commonjs",
     "target": "es5",
     "jsx": "react",

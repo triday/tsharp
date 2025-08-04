@@ -1,0 +1,25 @@
+name: Push CI
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build-test-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build
+        run: pnpm run build # 假设项目中有build脚本，如果没有，可能需要调整或添加
+      - name: Test
+        run: pnpm test
+      - name: Lint
+        run: pnpm lint

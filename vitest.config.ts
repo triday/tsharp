@@ -6,9 +6,15 @@ export default defineConfig({
     include: ['test/**/*.ts'],
     exclude: ['node_modules'],
     coverage: {
+      provider: 'v8',
       include: ['src/**/*.ts'],
       exclude: ['test/**/*.ts'],
       reporter: ['text', 'html'],
+      threshold: {
+        lines: 80,
+        functions: 80,
+        branches: 80,
+      },
     },
     typecheck: {
       enabled: true,

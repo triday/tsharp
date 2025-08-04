@@ -8,9 +8,9 @@
   "scripts": {
     "test": "vitest run",
     "cover": "vitest run --coverage",
-    "check": "vitest run --coverage --threshold.lines 80 --threshold.functions 80 --threshold.branches 80",
     "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\"",
-    "lint:fix": "eslint \"src/**/*.ts\" \"test/**/*.ts\" --fix"
+    "lint:fix": "eslint \"src/**/*.ts\" \"test/**/*.ts\" --fix",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
