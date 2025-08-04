@@ -1,7 +1,7 @@
 {
   "name": "tsharp",
   "type": "module",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
