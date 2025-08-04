@@ -10,7 +10,9 @@
     "cover": "vitest run --coverage",
     "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint:fix": "eslint \"src/**/*.ts\" \"test/**/*.ts\" --fix",
-    "build": "tsc"
+    "build": "tsc",
+    "prepublishOnly": "pnpm run build",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
