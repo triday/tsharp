@@ -1,3 +1,4 @@
+import "../../src/extentions/Array";
 import "../../src/tsharp/TreeNode";
 import "../../src/extentions/String";
 import { describe, it, expect } from "vitest";
@@ -47,7 +48,7 @@ describe("TreeNode", () => {
             let res = datas.toTree(p => p.id, p => p.parent, (a, b) => {
                 return a.name === b.name ? 0 : (a.name > b.name ? 1 : -1);
             });
-            assert.equal(res.length, 3);
+            expect(res.length).toBe(3);
             const expected = [
                 "   ├──node5",
                 "├──node1",

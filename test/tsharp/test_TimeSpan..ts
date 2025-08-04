@@ -1,3 +1,4 @@
+import "../../src/extentions/Number"
 import "../../src/tsharp/TimeSpan"
 import { describe, it, expect } from "vitest";
 describe("TimeSpan", () => {
@@ -46,7 +47,8 @@ describe("TimeSpan", () => {
 
         it("tostring", () => {
             let timespan1 = new Date('2018-11-17').diff(new Date('2018-11-11'));
-            let timespan2 = new Date('2018-11-18').diff(new Date('2018-11-11')); expect(timespan1.toString()).toBe('6.00:00:00.000');
+            let timespan2 = new Date('2018-11-18').diff(new Date('2018-11-11')); 
+            expect(timespan1.toString()).toBe('6.00:00:00.000');
             expect(timespan2.toString()).toBe('7.00:00:00.000');
         });
         it("valueof", () => {

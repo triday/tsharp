@@ -1,5 +1,4 @@
 node_modules
-mochawesome-report
 dist
 dist-*
 deploy

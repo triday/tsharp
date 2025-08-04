@@ -20,9 +20,7 @@
   },
   "homepage": "https://github.com/triday/tsharp#readme",
   "devDependencies": {
-    "@types/assert": "^1.5.11",
     "@vitest/coverage-v8": "^1.6.0",
-    "assert": "^2.1.0",
     "path": "^0.12.7",
     "requiredir": "^1.0.7",
     "typescript": "^5.9.2",
